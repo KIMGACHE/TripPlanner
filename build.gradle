@@ -24,18 +24,35 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	// 기본
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+    // JPA
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// REDIS (RefreshToken)
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// Oauth2 (소셜로그인)
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	// lombok
+	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	// DB
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// thymeleaf (테스트용)
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 }
 
 tasks.named('test') {
