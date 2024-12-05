@@ -21,7 +21,7 @@ WEB PROJECT PLANING
 ## ▶️ 참가 인원 
 |NAME|ROLE|GITHUB_LINK|
 |------|---|---|
-|김병관|조장-BACKEND/CONTROLLER | -
+|김병관|조장-BACKEND|-|
 |이영훈|조원-BACKEND|-|
 |박대해|조원-BACKEND|-|
 |진찬민|조원-BACKEND|-|
