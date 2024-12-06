@@ -42,6 +42,7 @@ public class SecurityConfig {
 //        });
 
 
+
         // 세션 비활성화
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
