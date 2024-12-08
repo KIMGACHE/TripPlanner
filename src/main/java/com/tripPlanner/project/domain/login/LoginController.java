@@ -12,37 +12,28 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-//@Controller
 @Slf4j
-@RestController
+@Controller
 public class LoginController {
 
     @Autowired
     LoginService loginService;
 
-    @Autowired
-    LoginRepository loginRepository;
+//    @Autowired
+//    LoginRepository loginRepository;
 
     @GetMapping("/login")
     public void login(){
-
     log.info("LOGIN PAGE GET");
-
-//        loginService.userLogin(loginDto);
-
-//        model.addAttribute("model",model);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<> login_post(
-            @RequestBody LoginDto loginDto
+    public ResponseEntity<LoginDto> login_post(
+            @ModelAttribute LoginDto loginDto
     ){
-
-
-
-     loginService.findByUser(loginDto);
-    return new ResponseEntity<>(, HttpStatus.OK);
-
+     loginService.findByUser(loginDto); //loginDto 로 유저정보를 조회함
+    return new ResponseEntity<>(loginDto, HttpStatus.OK); //Http리스폰과 함꼐 다시 정보를 리턴
+    //근데 json 데이터로 전달해야하잖아.
     }
 
 
