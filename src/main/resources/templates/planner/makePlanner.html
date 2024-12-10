@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Planner Add</title>
+
+    <!-- leaflet    -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Leaflet Plugins: Leaflet.KoreanTmsProviders 추가  -->
+    <script src="/js/KoreanTmsProviders/lib/proj4.js"></script>
+    <script src="/js/KoreanTmsProviders/lib/proj4leaflet.js"></script>
+    <script src="/js/KoreanTmsProviders/src/Leaflet.KoreanTmsProviders.js"></script>
+
+    <!-- GEOCODER   -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <!-- axios -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js" integrity="sha512-DdX/YwF5e41Ok+AI81HI8f5/5UsoxCVT9GKYZRIzpLxb8Twz4ZwPPX+jQMwMhNQ9b5+zDEefc+dcvQoPWGNZ3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <div id="map" style="width:100%;height:100vh;"></div>
+    <script th:inline="javascript">
+      var accomList = JSON.parse([[${accomList}]]);
+      var foodList = JSON.parse([[${foodList}]]);
+
+      // 지도 기본타일 적용
+       var map = new L.Map('map', {
+            center: new L.LatLng(35.22056346726476,126.85320496487589),
+            zoom: 8,
+            crs: L.Proj.CRS.Daum,
+            worldCopyJump: false
+      });
+
+      var baseLayers = L.tileLayer.koreaProvider('DaumMap.Street').addTo(map);
+      var markers = L.layerGroup().addTo(map);
+
+    // 숙소 아이콘 설정
+    var AccomIcon = L.icon({
+        iconUrl: '/image/accom.png',
+        iconSize: [20, 20],
+        iconAnchor: [20, 0],
+        popupAnchor: [-3, -76],
+    });
+    // 식당 아이콘 설정
+    var FoodIcon = L.icon({
+        iconUrl: '/image/food.png',
+        iconSize: [30, 30],
+        iconAnchor: [20, 0],
+        popupAnchor: [0, 0],
+    });
+
+
+    // 리스트로 받아온 데이터들 모두 마커를 생성 , 툴팁, 팝업창 생성 및 클릭이벤트 작성
+    accomList.forEach((el)=>{
+        // 마커 생성
+        var centerMarker = L.marker([el.yCoordinate,el.xCoordinate],{icon: AccomIcon}).addTo(markers);
+        // 툴팁 생성
+        centerMarker.bindTooltip(`<b>${el.businessName}</>`,{direction:'top',permanent:false,offset:[0,0]});
+        // 팝업 생성
+        centerMarker.bindPopup(`<div style="width:200px;height:200px;background-color:white">${el.businessName}</div>`);
+
+        // 팝업 이벤트
+        centerMarker.on('click', function(e) {
+            this.openPopup();
+        })
+        centerMarker.on('mouseout', function(e) {
+            this.closePopup();
+        })
+    });
+
+    foodList.forEach((el)=>{
+        // 마커 생성
+        var centerMarker = L.marker([el.yCoordinate,el.xCoordinate],{icon: FoodIcon}).addTo(markers);
+<!--        // 툴팁 생성-->
+<!--        centerMarker.bindTooltip(`<b>${el.businessName}</>`,{direction:'top',permanent:false,offset:[0,0]});-->
+        // 팝업 생성
+        centerMarker.bindPopup(`<div style="width:200px;height:200px;background-color:white">${el.businessName}</div>`);
+
+        // 팝업 이벤트
+        centerMarker.on('mouseover', function(e) {
+            this.openPopup();
+        })
+        centerMarker.on('mouseout', function(e) {
+            this.closePopup();
+        })
+    });
+
+
+
+
+
+      // 중심좌표 얻기
+      map.on('zoom', function(zoom) {
+        var center = map.getCenter(); // 현재 지도 중심 좌표를 가져옵니다.
+        console.log(center);
+        console.log(zoom);
+        datas = {
+            latitude: center.lat, // 위도
+            longitude: center.lng, // 경도
+            zoomlevel: zoom._zoom
+        }
+        axios.post('/planner/makePlanner', datas, {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+              .then(resp=>{
+                markers.clearLayers();
+                console.log(resp);
+                foodList = resp.data.foodList;
+                foodList.forEach((el)=>{
+                  console.log(el.ycoordinate);
+                  centerMarker = L.marker([el.yCoordinate,el.xCoordinate]).addTo(markers);
+                  centerMarker.bindTooltip(`<b>${el.businessName}</>`,{direction:'top',permanent:false,offset:[0,0]});
+                });
+<!--                accomList = resp.data;-->
+              })
+              .catch(err=>{console.log(err);});
+      });
+    </script>
+</body>
+</html>
