@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -28,14 +29,13 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginDto> login_post(
-            @ModelAttribute LoginDto loginDto
+    @ResponseBody
+    public ResponseEntity<Map<String,String>> login_post(
+            @RequestBody LoginDto loginDto
     ){
-     loginService.findByUser(loginDto); //loginDto 로 유저정보를 조회함
-    return new ResponseEntity<>(loginDto, HttpStatus.OK); //Http리스폰과 함꼐 다시 정보를 리턴
-    //근데 json 데이터로 전달해야하잖아.
+      Map<String,String> map= loginService.findByUser(loginDto); //loginDto 로 유저정보를 조회함
+    return ResponseEntity.ok(map); //Json 데이터로 전달
     }
-
 
 }
 
