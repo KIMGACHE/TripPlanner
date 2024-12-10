@@ -1,6 +1,6 @@
 package com.tripPlanner.project.domain.login.auth;
 
-import com.tripPlanner.project.domain.User;
+import com.tripPlanner.project.domain.user.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PrincipalDetail implements UserDetails {
 
-    private User user;
+    private UserEntity userEntity;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -18,12 +18,12 @@ public class PrincipalDetail implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return userEntity.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUserid();
+        return userEntity.getUserid();
     }
 
     @Override

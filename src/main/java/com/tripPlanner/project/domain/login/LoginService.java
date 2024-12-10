@@ -1,44 +1,62 @@
 package com.tripPlanner.project.domain.login;
 
-import com.tripPlanner.project.domain.User;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tripPlanner.project.domain.user.UserEntity;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
-@Slf4j
+@RequiredArgsConstructor
+@Transactional
 public class LoginService {
+    //비밀번호 정규 표현식. 하나 이상의 영어 대문자 , 하나 이상의 특수기호 , 하나 이상의 숫자 , 8글자 13글자 사이
+   //private static final String USERPW_RegExp = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&]{8,13}/";
 
 
-    private LoginRepository loginRepository;
+    private final UserRepository userRepository;
+//  private final BCryptPasswordEncoder passwordEncoder;  //비밀번호 암호화
 
-    private User user;
+    public boolean checkLoginIdDuplicate(String userid){ //아이디 중복 체크
+        return userRepository.existsByUserid(userid);
+    }
 
-    public Map<String, String> findByUser(LoginDto dto){
-    Map<String,String> loginData = new HashMap<>();
+    public boolean checkUsernameDuplicate(String username){ //닉네임 중복 체크
+        return userRepository.existsByUsername(username);
+    }
 
-    Optional<LoginEntity> optionalEntity = loginRepository.findByUserid(dto.getUserid());
+    public UserEntity login(LoginRequest loginRequest){ //로그인 기능
+        Optional<UserEntity> optionalUser = userRepository.findByUserid(loginRequest.getUserid());
+        emptyCheckUserIdAndPassword(loginRequest.getUserid(),loginRequest.getPassword());
+        if(optionalUser.isEmpty()){ //loginId와 일치하는 user없으면 null 리턴
+            return null;
+        }
 
-    if(optionalEntity.isPresent()){  //User 정보가 존재하는지 확인
-        LoginEntity entity = optionalEntity.get();
-        loginData.put("userid",dto.getUserid());
-        loginData.put("password",dto.getPassword());
-    }else{
-        throw new RuntimeException("User not Found"); //User 정보가 없다면 예외 발생
+        UserEntity userEntity = optionalUser.get(); 
+        
+        if(userEntity.getPassword().equals(loginRequest.getPassword())){ //User의 password와 입력 password가 다르면 null 리턴
+            return null;
+        }
+        return userEntity;
+    }
+
+    private void emptyCheckUserIdAndPassword(String userid,String userpw){ //빈칸 검사
+        if(userid == null || userid.trim().isEmpty()){
+            throw new IllegalArgumentException("아이디를 입력해주세요");
+        }
+
+        if(userpw==null || userpw.trim().isEmpty()){
+            throw new IllegalArgumentException("비밀번호를 입력해주세요");
+        }
+
+
     }
 
 
-        return loginData;
-    }
-    
-    
-public void loginValid(UserDto userDto){
-        String userid = userDto.
-}
+
+
+
 
 
 }
