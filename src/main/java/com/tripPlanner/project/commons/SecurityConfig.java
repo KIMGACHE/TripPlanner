@@ -26,14 +26,12 @@ public class SecurityConfig {
         http.formLogin(AbstractHttpConfigurer::disable);
 
         // 정적 경로
-        http.authorizeHttpRequests(auth -> auth
-<<<<<<< HEAD
-                .requestMatchers("/").permitAll() // 인증 없이 허용할 경로
-=======
-                .requestMatchers("/*", "/*/*","/static/**", "/assets/**").permitAll() // 인증 없이 허용할 경로
->>>>>>> 5e725b8 (.)
-//                .requestMatchers("").denyAll() // 인증 없으면 허용하지 않을 경로
-                .anyRequest().authenticated());
+//        http.authorizeHttpRequests(auth -> auth
+//
+//                .requestMatchers("/*", "/*/*","/static/**", "/assets/**").permitAll() // 인증 없이 허용할 경로
+//
+////                .requestMatchers("").denyAll() // 인증 없으면 허용하지 않을 경로
+//                .anyRequest().authenticated());
 
         // 로그아웃
 //        http.logout((logout) -> logout.logoutSuccessUrl("/").invalidateHttpSession(true));

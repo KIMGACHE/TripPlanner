@@ -1,8 +1,6 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:c="http://www.w3.org/1999/XSL/Transform">
 <head>
-
-
     <!-- BS5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -11,172 +9,227 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
         .material-symbols-outlined {
-          font-variation-settings:
-          'FILL' 0,
-          'wght' 400,
-          'GRAD' 0,
-          'opsz' 24
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
     </style>
 
     <!-- axios.cdn -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js" integrity="sha512-DdX/YwF5e41Ok+AI81HI8f5/5UsoxCVT9GKYZRIzpLxb8Twz4ZwPPX+jQMwMhNQ9b5+zDEefc+dcvQoPWGNZ3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+<!--    &lt;!&ndash; KAKAO 주소 API &ndash;&gt;
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>-->
+
+
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>Document</title>
 </head>
 <body>
 
 <h1>JOIN PAGE</h1>
-<form action = "/user/join" method="post"  encType="multipart/form-data">
+<form action="/user/join" method="post" enctype="multipart/form-data" id="joinForm">
     <div class="m-3" style="position:relative;">
-
         <div class="profileBox" style="margin:15px auto;width:150px;height:150px;border:1px solid lightgray;border-radius:50%;">
-            <img src="/assets/anonymous.jpg"    style="width:100%;height:100%;border : 1px solid;border-radius:50%;"/>
+            <img src="/assets/anonymous.jpg" id="profileImg" style="width:100%;height:100%;border : 1px solid;border-radius:50%;" />
         </div>
+        <input type="file" class="profileBox" name="profileImage" id="profileImageInput" style="display:none;" />
         <div class="profileUploadBtn" style="padding:5px;position:absolute;left:67%;top:80%;cursor:pointer">
             <span class="material-symbols-outlined">image</span>
         </div>
     </div>
     <br>
-    <div class="mb-3 mt-3" >
-        <label>ID를 입력하시오</label> <br>
-        <input type = "text" name="userid" class="userid" id="userid"><br>
+    <div class="mb-3 mt-3">
+        <label>ID를 입력하시오</label><br>
+        <input type="text" name="userid" class="userid" id="userid"><br>
     </div>
+    <div id="iddMessage" style="color:red;"></div>
     <br>
-    <label>이름을 입력하시오</label> <br>
-    <input type = "text" name="username" ><br>
-    <script>
-
-
-    </script>
+    <label>이름을 입력하시오</label><br>
+    <input type="text" name="username"><br>
     <br>
-    <label>Password를 입력하시오.</label> <br>
-    <input type = "password" name="password" required ><br>
+    <label>Password를 입력하시오.</label><br>
+    <input type="password" id="password"  name="password" required><br>
+    <div id="passwordMessage" style="color:red;"></div>
     <br>
     <label>Password를 다시 입력하시오.</label><br>
-    <input type = "text" name = "repassword"><br>
+    <input type="text" name="repassword"><br>
+    <div id="repasswordMessage" style="color:red;"></div>
     <br>
     <label>Email을 입력하시오</label><br>
-    <input type="text" name = "email"><br>
+    <input type="text" name="email"><br>
     <br>
-    <label>주소를 입력하시오.</label><br>
-    <input type = "text" name ="addr"><br>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+                // 예제를 참고하여 다양한 활용법을 확인해 보세요.
+            }
+        }).open();
+    </script>
     <br>
     <label for="date">생년월일을 입력하시오 </label><br>
-    <label>숫자만 입력하시오.</label><br><label style=" font-size: 0.8rem">ex) 19970924</label><br>
-    <input type="text" id="date" oninput="onlyNumber()"  name="birth"><br>
+    <label>숫자만 입력하시오.</label><br>
+    <label style=" font-size: 0.8rem">ex) 19970924</label><br>
+    <input type="text" id="date" oninput="onlyNumber()" name="birth"><br>
+
+    <input type="submit" value="회원가입">
 
 
 
-    <input type="submit" value = "회원가입">
 
     <c:if test="${param.error == 'password'}">
         <div class="alert alert-danger">Password cannot be empty. Please enter a valid password.</div>
     </c:if>
-    <script>
-        console.log("user/join.js")
-
-const formData = new FormData();
-
-
-const profileBoxEl = document.querySelector(".profileBox");
-const profileUploadBtn = document.querySelector(".profileUploadBtn");
-
-
-profileBoxEl.addEventListener('dragover',(e)=>{
-console.log("dragover",e)
-e.preventDefault();
-})
-profileBoxEl.addEventListener('drop',(e)=>{
-console.log("drop",e)
-console.log("drop",e.dataTransfer)
-console.log("drop",e.dataTransfer.files)
-console.log("drop",e.dataTransfer.files[0])
-const file = e.dataTransfer.files[0];
-
-if(file.type.startsWith("image/")){
-console.log("IMAGE파일..")
-
-//기존 img 태그 삭제
-while(profileBoxEl.firstChild){
-    profileBoxEl.removeChild(profileBoxEl.firstChild);
-}
-
-const imgTg=document.createElement('img')
-imgTg.src=URL.createObjectURL(file)
-imgTg.setAttribute("style","width:100%;height:100%;border-radius:50%;")
-profileBoxEl.appendChild(imgTg)
-
-//
-formData.append("profileImage",file);
-<!--formData.append("profileName",file.name);-->
-}
-
-e.preventDefault();
-
-})
-
-
-
-//이미지 업로드 버튼 클릭 이벤트
-profileUploadBtn.addEventListener("click",function(e){
-
-console.log("profileUploadBtn clicked..");
-
-
-//post('url','param','header-type')
-axios
-.post(
-'/user/join' ,
-formData,
-{ headers:{'Content-Type' :'multipart/form-data'} }
-)
-.then(resp=>{ console.log(resp); })
-.catch(err=>{ console.log(err); } )
-
-
-});
-
-<!-- 생일 -->
-function onlyNumber(){
-const reg = /\D/g;
-event.target.value = event.target.value.replace(reg, "");
-}
-let date = document.querySelector("#date");
-
-// 문자열, 하이픈을 막기 위해 input event 사용
-date.addEventListener("input", () => {
-
-// 사용자 입력값은 모두 숫자만 받는다.(나머지는 ""처리)
-let val = date.value.replace(/\D/g, "");
-let leng = val.length;
-
-// 출력할 결과 변수
-let result = '';
-
-// 5개일때 - 20221 : 바로 출력
-if(leng < 6) result = val;
-   // 6~7일 때 - 202210 : 2022-101으로 출력
-else if(leng < 8){
-   result += val.substring(0,4);
-   result += "-";
-   result += val.substring(4);
-   // 8개 일 때 - 2022-1010 : 2022-10-10으로 출력
-} else{
-   result += val.substring(0,4);
-   result += "-";
-   result += val.substring(4,6);
-   result += "-";
-   result += val.substring(6);
-}
-date.value = result;
-});
-    </script>
 </form>
 
+
+
+
+<script>
+
+    // 프로필 사진 업로드
+    const profileBoxEl = document.querySelector(".profileBox");
+    const profileUploadBtn = document.querySelector(".profileUploadBtn");
+    const profileImageInput = document.querySelector("#profileImageInput");
+
+    // 업로드 버튼 클릭 시, 파일 선택 창 열기
+    profileUploadBtn.addEventListener("click", function() {
+        profileImageInput.click(); // 이미지 업로드 입력 클릭
+    });
+
+    // 파일이 선택되면 이미지 업로드
+    profileImageInput.addEventListener("change", function(event) {
+        const file = event.target.files[0]; // 선택한 파일
+
+        if (file && file.type.startsWith("image/")) {
+            const formData = new FormData();
+            formData.append("profileImage", file);  // FormData에 이미지 파일 추가
+
+            // 서버로 파일 전송 (이미지 저장)
+            axios.post('/user/join', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            .then(function(response) {
+                console.log('Image uploaded successfully');
+                // 업로드한 이미지 미리 보기
+                const imgTg = document.createElement('img');
+                imgTg.src = URL.createObjectURL(file);  // 업로드한 이미지 URL을 생성
+                imgTg.style = "width:100%;height:100%;border-radius:50%;";
+                profileBoxEl.innerHTML = '';  // 기존 이미지를 제거
+                profileBoxEl.appendChild(imgTg);
+            })
+            .catch(function(error) {
+                console.error('Error uploading image', error);
+            });
+        }
+    });
+
+// 아이디 유효성 체크
+    const validateUserId = async (userid) => {
+        const regex = /^[a-zA-Z0-9]{1,10}$/;
+
+        const response = await axios.post('/user/check-id', {userid});
+        if (!response.data.available) {
+            return { valid: false, message: response.data.message };
+        }
+        return { valid: true, message: "사용 가능한 아이디입니다." };
+    };
+
+    const useridInput = document.querySelector("#userid");
+    const iddMessageEl = document.querySelector("#iddMessage");
+
+    useridInput.addEventListener("input", async () => {
+        const result = await validateUserId(useridInput.value);
+        iddMessageEl.textContent = result.message;  // ID 유효성 메시지 업데이트
+        iddMessageEl.style.color = result.valid ? "green" : "red";  // 유효성에 따른 색상 변경
+    });
+
+
+
+// 비밀번호 유효성 체크
+const validatePassword = async (password) => {
+    const regex = /^[a-zA-Z0-9]+$/; // 영문자와 숫자만 허용
+
+if (password.length < 8) {
+        return { valid: false, message: "비밀번호는 최소 8자리 이상이어야 합니다." };
+    } else if (!regex.test(password)) {
+        return { valid: false, message: "비밀번호는 띄어쓰기와 특수문자를 포함할 수 없습니다." };
+    } else if (password.length > 15) {
+        return { valid: false, message: "비밀번호는 최대 15자리까지만 가능합니다." };
+    }
+    return { valid: true, message: "사용 가능한 비밀번호입니다." };
+};
+
+// 비밀번호 입력 이벤트 리스너 추가
+const passwordInput = document.querySelector("#password");
+const passwordMessage = document.querySelector("#passwordMessage");
+
+passwordInput.addEventListener("input", async () => {
+    const result = await validatePassword(passwordInput.value);
+    passwordMessage.textContent = result.message; // 메시지 업데이트
+    if (result.valid) {
+        passwordMessage.style.color = "green"; // 유효한 비밀번호 메시지 색상 변경
+    } else {
+        passwordMessage.style.color = "red"; // 유효하지 않은 비밀번호 메시지 색상 변경
+    }
+});
+
+    //번호와 비밀번호 확인 유효성 체크
+    const validateRePassword = () => {
+        const password = document.querySelector("#password").value;
+        const repassword = document.querySelector("input[name='repassword']").value;
+        const repasswordMessage = document.querySelector("#repasswordMessage");
+
+        if (password !== repassword) {
+            repasswordMessage.textContent = "비밀번호가 일치하지 않습니다.";
+            repasswordMessage.style.color = "red";
+        } else {
+            repasswordMessage.textContent = "비밀번호가 일치합니다.";
+            repasswordMessage.style.color = "green";
+        }
+    };
+
+    // 비밀번호 입력 이벤트 리스너
+    document.querySelector("#password").addEventListener("input", validateRePassword);
+
+    // 비밀번호 확인 입력 이벤트 리스너
+    document.querySelector("input[name='repassword']").addEventListener("input", validateRePassword);
+
+
+
+
+    // 생년월일 입력값 숫자만 허용
+    function onlyNumber() {
+        const reg = /\D/g;
+        event.target.value = event.target.value.replace(reg, "");
+    }
+
+    let date = document.querySelector("#date");
+
+    // 문자열, 하이픈을 막기 위해 input event 사용
+    date.addEventListener("input", () => {
+        let val = date.value.replace(/\D/g, "");
+        let leng = val.length;
+        let result = '';
+
+        if (leng < 6) result = val;
+        else if (leng < 8) {
+            result += val.substring(0, 4);
+            result += "-";
+            result += val.substring(4);
+        } else {
+            result += val.substring(0, 4);
+            result += "-";
+            result += val.substring(4, 6);
+            result += "-";
+            result += val.substring(6);
+        }
+        date.value = result;
+    });
+</script>
 
 </body>
 </html>
