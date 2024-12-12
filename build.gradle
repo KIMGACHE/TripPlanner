@@ -54,6 +54,13 @@ dependencies {
 	// thymeleaf (테스트용)
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+
+	// WebClient (API 요청 보내기 위한 의존성 추가)
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	// Jackson (JSON 파싱용)
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+
 }
 
 tasks.named('test') {
