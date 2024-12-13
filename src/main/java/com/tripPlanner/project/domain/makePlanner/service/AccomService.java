@@ -14,21 +14,22 @@ import java.util.List;
 @Slf4j
 public class AccomService {
 
+    private double zoomLevel[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0.00005};  // 4~13 zoomlevel의 x,y변동 값
+
     @Autowired 
     private AccomRepository accomRepository;
 
-    public List<AccomDto> test1(double x, double y) {
-        double xStart = x-0.005;
-        double yStart = y-0.005;
-        double xEnd = x+0.005;
-        double yEnd = y+0.005;
+    public List<AccomDto> test1(double x, double y, int zoom_level) {
+        double xStart = x-zoomLevel[zoom_level];
+        double yStart = y-zoomLevel[zoom_level];
+        double xEnd = x+zoomLevel[zoom_level];
+        double yEnd = y+zoomLevel[zoom_level];
         List<Accom> accoms = accomRepository.selectMiddle(xStart,yStart,xEnd,yEnd);
         List<AccomDto> list = new ArrayList<AccomDto>();
 
         accoms.forEach(el->{
             list.add(AccomDto.entityToDto(el));
         });
-        System.out.println(list);
         return list;
     }
 }

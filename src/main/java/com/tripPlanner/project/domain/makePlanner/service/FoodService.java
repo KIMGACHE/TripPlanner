@@ -16,25 +16,25 @@ import java.util.Optional;
 @Slf4j
 public class FoodService {
 
+    private double zoomLevel[] = {0,0,0,0,0,0,0,0,0,0,0,0,0.0015,0.00055};  // 8~13 zoomlevel의 x,y변동 값
+
     @Autowired 
     private FoodRepository foodRepository;
 
-    public List<FoodDto> test1(double x, double y) {
-        double xStart = x-0.005;
-        double yStart = y-0.005;
-        double xEnd = x+0.005;
-        double yEnd = y+0.005;
-        List<Food> foods = foodRepository.selectFoodAll(xStart,yStart,xEnd,yEnd);
-//        Optional<Food> food = foodRepository.findById("3000000-101-1899-10737");
+    public List<FoodDto> test1(double x, double y,int zoom_level) {
+        double xStart = x-zoomLevel[zoom_level];
+        double yStart = y-zoomLevel[zoom_level];
+        double xEnd = x+zoomLevel[zoom_level];
+        double yEnd = y+zoomLevel[zoom_level];
 
-//        System.out.println("제ㅔ에에에에에에에발"+food.get());
+        List<Food> foods = foodRepository.selectFoodAll(xStart,yStart,xEnd,yEnd);
+
         List<FoodDto> list = new ArrayList<FoodDto>();
 
         FoodDto foodDto = new FoodDto();
         foods.forEach(el->{
             list.add(foodDto.entityToDto(el));
         });
-        log.info("Food Service : ", list);
         return list;
     }
 }

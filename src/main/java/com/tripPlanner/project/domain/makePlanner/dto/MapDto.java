@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class MapDto {
     private double latitude;
     private double longitude;
-    private double zoomlevel;
+    private int zoomlevel;
 }
