@@ -38,7 +38,8 @@ const searchFilter = document.getElementById('searchFilter');
 
 // 검색어를 URL 인코딩하는 함수
 function encodeUTF8() {
-    currentEncodedData = encodeURIComponent(searchFilter.value);
+    console.log('searchFilter.value.trim() : ', searchFilter.value.trim());
+    currentEncodedData = encodeURIComponent(searchFilter.value.trim());
 }
 
 
@@ -47,15 +48,15 @@ function encodeUTF8() {
 async function getSearchKeyword() {
 
     try {
-        const response = await axios.get('/api/getSearchKeyword', {
-            params : {
+        const response = await axios.post('/api/getSearchKeyword', {
+            data : {
                 keyword: currentEncodedData,
                 pageNo: currentPage,
                 hashtag: currentHashtag,
                 regionCode : currentRegion
             }
         });
-        console.log(response);
+        console.log('getSearchKeyword"s response : ', response);
         return response;
     } catch (error) {
         console.log('getSearchKeyword의 error : ', error);
@@ -63,23 +64,6 @@ async function getSearchKeyword() {
 }
 
 
-// 지역 및 해시태그에 맞춰 데이터를 가져오는 함수
-async function getAreaBasedList() {
-    try {
-        const response = await axios.get('/api/getAreaBasedList', {
-            params : {
-                regionCode: currentRegion,
-                hashtag: currentHashtag,
-                pageNo: currentPage
-            }
-        });
-        console.log(response);
-        return response;
-    } catch (error) {
-        console.log('getAreaBasedList의 error : ', error);
-    }
-
-}
 
 
 //// 상세 정보를 표시할 axios요청
@@ -100,25 +84,7 @@ async function getAreaBasedList() {
 //
 //}
 
-// 검색을 할 때 만약 지역이나, 태그를 선택했을 때 실행할 함수
-// 제공 API에 키워드, 지역, 태그를 전부 포함하는 요청이 없어서 직접 구현
-async function getSearchFilter() {
-    try {
-        const response = await axios.get('/api/searchFilter', {
-            params : {
-                regionCode: currentRegion,
-                hashtag: currentHashtag,
-                pageNo: currentPage,
-                keyword: currentEncodedData
-            }
-        });
-        console.log(response);
-        return response;
-    } catch(error) {
-        console.log(error);
-    }
 
-}
 
 
 // 요소들 클릭 시 ContentId를 받아서 상세 정보를 가져오는 함수
@@ -147,8 +113,8 @@ async function getDetailInfo(contentId) {
 
 // 코스 데이터를 HTML로 변환하여 페이지에 삽입하는 함수
 async function renderCourseData(jsonData) {
-    courseData = jsonData.data.response.body.items.item;
-    totalCount = jsonData.data.response.body.totalCount;
+    courseData = jsonData.data.items.item;
+    totalCount = jsonData.data.totalCount;
     console.log('totalCount : ', totalCount);
     const newUl = document.createElement('ul');
     const totalCnt = document.querySelector('.total-count');
@@ -301,15 +267,15 @@ function getHashtag(category) {
     }
 }
 
-// 페이지 버튼을 생성하는 함수
+// 페이지 버튼을 생성하는 함수 (페이징 처리)
 function createPageButtons(totalPages) {
     buttonBox.innerHTML = ''; // 기존 버튼 삭제
 
     const maxVisibleButtons = 5; // 한 번에 보이는 최대 버튼 수
-    const halfVisible = Math.floor(maxVisibleButtons / 2);
+    const currentBlock = Math.floor((currentPage - 1) / maxVisibleButtons); // 현재 블록 계산
 
-    const startPage = Math.max(currentPage - halfVisible, 1);
-    const endPage = Math.min(currentPage + halfVisible, totalPages);
+    const startPage = currentBlock * maxVisibleButtons + 1; // 현재 블록의 시작 페이지
+    const endPage = Math.min(startPage + maxVisibleButtons - 1, totalPages); // 현재 블록의 마지막 페이지
 
     // '처음' 버튼
     if (currentPage > 1) {
@@ -324,18 +290,18 @@ function createPageButtons(totalPages) {
     }
 
     // '이전' 버튼
-    if (currentPage > 1) {
+    if (currentBlock > 0) {
         const prevButton = document.createElement('button');
         prevButton.textContent = '이전';
         prevButton.classList.add('pageButton');
         prevButton.addEventListener('click', () => {
-            currentPage -= 5;
+            currentPage = startPage - 1; // 이전 블록의 마지막 페이지로 이동
             renderCourses(); // 새 페이지 데이터 렌더링
         });
         buttonBox.appendChild(prevButton);
     }
 
-    // 현재 페이지 기준으로 버튼 생성
+    // 현재 블록 기준으로 버튼 생성
     for (let i = startPage; i <= endPage; i++) {
         const button = document.createElement('button');
         button.textContent = i;
@@ -351,12 +317,12 @@ function createPageButtons(totalPages) {
     }
 
     // '다음' 버튼
-    if (currentPage < totalPages) {
+    if (endPage < totalPages) {
         const nextButton = document.createElement('button');
         nextButton.textContent = '다음';
         nextButton.classList.add('pageButton');
         nextButton.addEventListener('click', () => {
-            currentPage += 5;
+            currentPage = endPage + 1; // 다음 블록의 첫 페이지로 이동
             renderCourses(); // 새 페이지 데이터 렌더링
         });
         buttonBox.appendChild(nextButton);
@@ -376,33 +342,23 @@ function createPageButtons(totalPages) {
 }
 
 
+
 // 코스를 렌더링하는 함수 (데이터 요청, 페이지네이션, HTML 생성)
 async function renderCourses() {
     try {
         courseContent.innerHTML = ''; // 기존 내용 제거
 
         let jsonData;
-    jsonData = await getSearchKeyword();
-        // 검색어만 입력했을 시에 실행
-//        if (currentEncodedData) {
-//            jsonData = await getSearchKeyword();
-//            if (currentHashtag || currentRegion) {
-//                jsonData = await getSearchFilter();
-//            }
-//            else {
-//                jsonData = await getSearchKeyword();
-//            }
-//        } else {
-//            jsonData = await getAreaBasedList();
-//        }
+        jsonData = await getSearchKeyword();
+
         console.log('currentEncodedData(검색어) : ', currentEncodedData);
         console.log('currentHashtag(태그) : ', currentHashtag);
         console.log('currentRegion(지역) : ', currentRegion);
 
         console.log('jsonData : ', jsonData);
 
-        const courseData = jsonData.data.response.body.items.item;
-        const totalPages = Math.ceil(jsonData.data.response.body.totalCount / 10);
+        const courseData = jsonData.data.items.item;
+        const totalPages = Math.ceil(jsonData.data.totalCount / 10);
 
         await renderCourseData(jsonData);
         createPageButtons(totalPages);
@@ -417,6 +373,8 @@ filterButton.addEventListener('click', () => {
     currentPage = 1; // 첫 페이지로 초기화
     currentRegion = regionFilter.value; // 선택된 지역 값 업데이트
     currentHashtag = hashtagFilter.value; // 선택된 해시태그 값 업데이트
-    currentEncodedData = encodeURIComponent(searchFilter.value); // 검색어를 URL 인코딩
+    currentEncodedData = encodeURIComponent(searchFilter.value.trim()); // 검색어를 URL 인코딩
+    console.log('click시 currentEncodedData', currentEncodedData);
+//    currentEncodedData = searchFilter.value;
     renderCourses(); // 필터와 검색어에 맞춘 데이터를 다시 렌더링
 });

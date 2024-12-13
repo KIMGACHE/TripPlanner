@@ -22,6 +22,9 @@ public class SecurityConfig {
         // csrf 비활성화
         http.csrf(AbstractHttpConfigurer::disable);
 
+        // cors 설정
+        http.cors(httpSecurityCorsConfigurer -> corsConfigurationSource());
+
         // httpBasic 비활성화
         http.httpBasic(AbstractHttpConfigurer::disable);
 
@@ -68,7 +71,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:9000"); // 필요한 도메인 추가
+        configuration.addAllowedOrigin("http://localhost:3000"); // 필요한 도메인 추가
+        configuration.addAllowedOrigin("http://localhost:9000");
         configuration.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
         configuration.addAllowedHeader("*"); // 모든 헤더 허용
         configuration.setAllowCredentials(true); // 쿠키 허용
