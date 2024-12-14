@@ -1,9 +1,12 @@
 package com.tripPlanner.project.commons;
 
+import com.tripPlanner.project.domain.login.auth.CustomOAuth2UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,9 +14,10 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    //
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // csrf 비활성화
@@ -27,19 +31,19 @@ public class SecurityConfig {
 
         // 정적 경로
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/").permitAll() // 인증 없이 허용할 경로
+                .requestMatchers("/**").permitAll() // 인증 없이 허용할 경로
 //                .requestMatchers("").denyAll() // 인증 없으면 허용하지 않을 경로
                 .anyRequest().authenticated());
 
         // 로그아웃
 //        http.logout((logout) -> logout.logoutSuccessUrl("/").invalidateHttpSession(true));
 
-
-        // 소셜 로그인 (입맛에 맞춰 쓰면 됩니다)
-//        http.oauth2Login(oauth2 -> {
-//            oauth2.loginPage("/login").userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService))
-//                    .successHandler(oAuth2SuccessHandler).failureHandler(oAuth2ErrorHandler);
-//        });
+//         //소셜 로그인 (입맛에 맞춰 쓰면 됩니다)
+        http.oauth2Login(oauth2 -> oauth2
+                .loginPage("/login")
+                .defaultSuccessUrl("/") //로그인 성공시 리다이렉트 경로
+                .failureUrl("/login?error=true")
+                );
 
 
         // 세션 비활성화
@@ -55,10 +59,14 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // 정적 자원 경로 허용
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//            return (web) -> web.ignoring().requestMatchers("/favicon.ico");
+
+
+
+//    @Bean   //정적 자원 허용 경로
+//    public WebSecurityCustomizer webSecurityCustomizer() { // security를 적용하지 않을 리소스
+//        return web -> web.ignoring()
+//                // error endpoint를 열어줘야 함, favicon.ico 추가!
+//                .requestMatchers("/error", "/favicon.ico","/static/**");
 //    }
 
 
