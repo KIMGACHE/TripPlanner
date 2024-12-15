@@ -37,7 +37,7 @@ public class ApiController {
         String pageNo = searchRequest.getPageNo();
         System.out.println("keyword : " + keyword);
         System.out.println("regionCode : " + regionCode);
-        System.out.println("hashtag : " +hashtag );
+        System.out.println("hashtag : " + hashtag);
         System.out.println("pageNo : " + pageNo);
 
         // 모든 값이 비었을 경우
@@ -76,27 +76,29 @@ public class ApiController {
                 .doOnTerminate(() -> System.out.println("findCommonDataByCat2AndAreaCode 호출 종료"));
     }
 
+    @GetMapping("/travelcourse-info")
+    public Mono<String> getTravelCourseInfo(@RequestParam(value = "id") String contentId) {
+        System.out.println("contentId : " + contentId);
+//        System.out.println("pageNo : " + pageNo);
+        String pageNo = "";
+        if (!contentId.isEmpty()) {
+            return apiService.getDetailInfo(contentId, pageNo);
+        }
+        return null;
+    }
 
-//    // 코스 ID로 상세 데이터 요청
-//    @GetMapping("/api/getDetailCommon")
-//    public Mono<String> getDetailCommon(@RequestParam(value = "courseId") long courseId, @RequestParam(value = "pageNo") String pageNo) {
-//        return apiService.getDetailCommon(courseId, pageNo);
-//    }
-//
-//    // 지역, 해시태그로 데이터 요청
-//    @GetMapping("/api/getAreaBasedList")
-//    public Mono<String> getAreaBasedList(@RequestParam(value = "regionCode") String regionCode, @RequestParam(name = "hashtag") String hashtag, @RequestParam(value = "pageNo") String pageNo) {
-//        return apiService.getAreaBasedList(regionCode, hashtag, pageNo);
-//    }
-//
-//    // 상세 정보 요청
-//    @GetMapping("/api/getDetailInfo")
-//    public Mono<String> getDetailInfo(@RequestParam(value = "contentId") long contentId, @RequestParam(value = "pageNo") String pageNo) {
-//        return apiService.getDetailInfo(contentId, pageNo);
-//    }
+    @GetMapping("/travelcourse-info-detailCommon")
+    public Mono<String> getTravelCourseCommons(@RequestParam(value = "id") String contentId) {
+        System.out.println("contentId : " + contentId);
+//        System.out.println("pageNo : " + pageNo);
+        String pageNo = "";
+        if (!contentId.isEmpty()) {
+            return apiService.getDetailCommon(contentId, pageNo);
+        }
+        return null;
+    }
 
-    // 검색을 할 때 만약 지역이나, 태그를 선택했을 때 Rest요청을 받을 함수
-    // 제공 API에 키워드, 지역, 태그를 전부 포함하는 요청이 없어서 직접 구현
+
 
 
 }

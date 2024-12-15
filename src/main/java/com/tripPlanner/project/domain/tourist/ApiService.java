@@ -146,41 +146,7 @@ public class ApiService {
                 });
     }
 
-    // 코스 ID를 바탕으로 상세 데이터를 가져오는 함수
-    public Mono<String> getDetailCommon(long courseId, String pageNo) {
-        // URL을 수동으로 구성
-        String url = "https://apis.data.go.kr/B551011/KorService1/detailCommon1"
-                + "?serviceKey=" + serviceKey
-                + "&pageNo=" + pageNo
-                + "&numOfRows=10"
-                + "&MobileApp=AppTest"
-                + "&MobileOS=ETC"
-                + "&contentId=" + courseId
-                + "&contentTypeId=25"
-                + "&overviewYN=Y"
-                + "&_type=json";
 
-        // WebClient를 사용하여 API 호출
-        return webClient.get()
-                .uri(url)  // 인코딩 없이 URL을 그대로 전달
-                .retrieve()
-                .bodyToMono(String.class)
-                .flatMap(response -> {
-                    try {
-                        // JSON 응답을 파싱하여 JsonNode로 변환
-                        JsonNode responseNode = new ObjectMapper().readTree(response);
-
-                        // body 데이터만 추출하여 반환
-                        JsonNode items = responseNode.path("response").path("body");
-
-                        // JsonNode 그대로 반환
-                        return Mono.just(items.toString());  // JsonNode를 그대로 JSON 형식의 문자열로 반환
-
-                    } catch (JsonProcessingException e) {
-                        return Mono.error(new RuntimeException("Error processing JSON", e));  // JSON 처리 중 오류가 발생하면 에러 반환
-                    }
-                });
-    }
 
     // 지역 및 해시태그에 맞춰 데이터를 가져오는 함수
     public Mono<String> getAreaBasedList(String regionCode, String hashtag, String pageNo) {
@@ -225,19 +191,19 @@ public class ApiService {
                 });
     }
 
-    // 상세 정보를 가져오는 함수 (ContentId)
-    public Mono<String> getDetailInfo(long contentId, String pageNo) {
+    // 코스 ID를 바탕으로 상세 데이터를 가져오는 함수
+    public Mono<String> getDetailInfo(String courseId, String pageNo) {
         // URL을 수동으로 구성
         String url = "https://apis.data.go.kr/B551011/KorService1/detailInfo1"
                 + "?serviceKey=" + serviceKey
                 + "&pageNo=" + pageNo
+                + "&numOfRows=10"
                 + "&MobileApp=AppTest"
                 + "&MobileOS=ETC"
-                + "&_type=json"
-                + "&contentId=" + contentId
+                + "&contentId=" + courseId
                 + "&contentTypeId=25"
-                + "&numOfRows=10";
-
+                + "&_type=json";
+        System.out.println("url : " + url);
         // WebClient를 사용하여 API 호출
         return webClient.get()
                 .uri(url)  // 인코딩 없이 URL을 그대로 전달
@@ -259,4 +225,45 @@ public class ApiService {
                     }
                 });
     }
+
+    // 코스 ID를 바탕으로 상세 데이터를 가져오는 함수 (홈페이지, 상세 설명 등 포함된 정보)
+    public Mono<String> getDetailCommon(String courseId, String pageNo) {
+        // URL을 수동으로 구성
+        String url = "https://apis.data.go.kr/B551011/KorService1/detailCommon1"
+                + "?serviceKey=" + serviceKey
+                + "&pageNo=" + pageNo
+                + "&numOfRows=10"
+                + "&MobileApp=AppTest"
+                + "&MobileOS=ETC"
+                + "&contentId=" + courseId
+                + "&contentTypeId=25"
+                + "&defaultYN=Y"
+                + "firstImageYN=Y"
+                + "&addrinfoYN=Y"
+                + "&mapinfoYN=Y"
+                + "&overviewYN=Y"
+                + "&_type=json";
+        System.out.println("url : " + url);
+        // WebClient를 사용하여 API 호출
+        return webClient.get()
+                .uri(url)  // 인코딩 없이 URL을 그대로 전달
+                .retrieve()
+                .bodyToMono(String.class)
+                .flatMap(response -> {
+                    try {
+                        // JSON 응답을 파싱하여 JsonNode로 변환
+                        JsonNode responseNode = new ObjectMapper().readTree(response);
+
+                        // body 데이터만 추출하여 반환
+                        JsonNode items = responseNode.path("response").path("body");
+
+                        // JsonNode 그대로 반환
+                        return Mono.just(items.toString());  // JsonNode를 그대로 JSON 형식의 문자열로 반환
+
+                    } catch (JsonProcessingException e) {
+                        return Mono.error(new RuntimeException("Error processing JSON", e));  // JSON 처리 중 오류가 발생하면 에러 반환
+                    }
+                });
+    }
+
 }

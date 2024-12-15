@@ -8,13 +8,4 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/tourist")
 public class TouristController {
 
-    @GetMapping("/travelcourse")
-    public void tourist() {
-
-    }
-
-    @GetMapping("/travelcourse-info")
-    public void touristInfo() {
-
-    }
 }
