@@ -1,5 +1,6 @@
 package com.tripPlanner.project.domain.login.auth;
 
+import com.tripPlanner.project.domain.login.LoginRequest;
 import com.tripPlanner.project.domain.login.UserRepository;
 import com.tripPlanner.project.domain.user.UserEntity;
 import lombok.RequiredArgsConstructor;
@@ -31,18 +32,37 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String providerId = getProviderId(oAuth2User,provider);
         String userid = provider + "_" + providerId;
 
+        log.info("userid 는 ? " + userid);
+
         Optional<UserEntity> optionalUser = userRepository.findByUserid(userid);
         UserEntity userEntity;
 
+        LoginRequest loginRequest = null;
         if(optionalUser.isEmpty()){ //로그인 할 때 사용자 정보가 없다면 그대로 회원가입이 되도록 진행
             userEntity = createUserEntity(userid,oAuth2User,provider, providerId);
             userRepository.save(userEntity);
+
+            loginRequest = LoginRequest.builder()
+                    .userid(userid)
+                    .password(userEntity.getPassword()) //비밀번호는 인코딩 된걸로 사용하게 변경
+                    .provider(provider)
+                    .providerId(providerId)
+                    .build();
         }else{
             userEntity = optionalUser.get();
+             loginRequest = LoginRequest.builder()
+                    .userid(userid)
+                    .password(userEntity.getPassword())
+                    .provider(provider)
+                    .providerId(providerId)
+                    .build();
         }
 
         // UserDetails 객체로 반환
-        return new PrincipalDetail(userEntity,oAuth2User.getAttributes());
+        PrincipalDetail principalDetail = new PrincipalDetail();
+        principalDetail.setLoginRequest(loginRequest);
+        principalDetail.setAttributes(oAuth2User.getAttributes());
+        return principalDetail;
     }
     
     //provider 에 따라 providerId를 다르게 처리
@@ -76,8 +96,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 email = (String) ((Map<String,Object>) oAuth2User.getAttribute("response")).get("email");
                 break;
             case "kakao" :
-                username = (String) ((Map<String,Object>) ((Map<String,Object>) oAuth2User.getAttribute("kakao_acount")).get("profile")).get("nickname");
-                email = (String) ((Map<String,Object>) oAuth2User.getAttribute("kakao_acount")).get("email");
+                Map<String, Object> properties = oAuth2User.getAttribute("properties");
+                username = (String) properties.get("nickname");
+                Map<String, Object> kakaoAccount = oAuth2User.getAttribute("kakao_account");
+                email = (String) kakaoAccount.get("email");
                 break;
             case "instagram" :
                 username = ""; //아직 미정

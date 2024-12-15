@@ -2,6 +2,9 @@ package com.tripPlanner.project.domain.login.auth;
 
 import com.tripPlanner.project.domain.login.LoginRequest;
 import com.tripPlanner.project.domain.user.UserEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -10,14 +13,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class PrincipalDetail implements UserDetails, OAuth2User {
 
     private LoginRequest loginRequest;
     private Map<String, Object> attributes;
 
-    public PrincipalDetail(UserEntity userEntity,Map<String,Object> attributes){
+    public PrincipalDetail(LoginRequest loginRequest){
         this.loginRequest = loginRequest;
-        this.attributes = attributes;
     }
 
     @Override
@@ -41,28 +46,29 @@ public class PrincipalDetail implements UserDetails, OAuth2User {
     }
 
     @Override
+    public String getName() {
+        return loginRequest.getUsername();
+    }
+
+    @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+       return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return true;
     }
 
-    @Override
-    public String getName() {
-        return null;
-    }
 
 }

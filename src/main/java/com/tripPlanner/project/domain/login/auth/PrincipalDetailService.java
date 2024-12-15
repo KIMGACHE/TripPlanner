@@ -1,5 +1,6 @@
 package com.tripPlanner.project.domain.login.auth;
 
+import com.tripPlanner.project.domain.login.LoginRequest;
 import com.tripPlanner.project.domain.user.UserEntity;
 import com.tripPlanner.project.domain.login.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,12 @@ public class PrincipalDetailService implements UserDetailsService {
         UserEntity userEntity = userRepository.findByUserid(username)
                 .orElseThrow(()-> new UsernameNotFoundException("유저 정보를 찾을 수 없습니다 : " + username));
 
-        return new PrincipalDetail(userEntity,null);
+        LoginRequest loginRequest = LoginRequest.builder()
+                .userid(userEntity.getUserid())
+                .password(userEntity.getPassword())
+                .build();
+
+        return new PrincipalDetail(loginRequest);
     }
 }
 
