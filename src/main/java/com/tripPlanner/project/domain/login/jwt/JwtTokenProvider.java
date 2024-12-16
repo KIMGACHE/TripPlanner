@@ -32,7 +32,7 @@ public class JwtTokenProvider {
         this.accessTokenExpiration = accessTokenExpiration;
         this.refreshTokenExpiration = refreshTokenExpiration;
     }
-
+    // 엑세스 토큰 생성 
     public String generateAccessToken(String userid){
         log.info("엑세스 토큰 발급");
         return Jwts.builder()

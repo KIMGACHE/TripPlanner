@@ -1,8 +1,9 @@
-package com.tripPlanner.project.domain.login.auth;
+package com.tripPlanner.project.domain.login.service;
 
-import com.tripPlanner.project.domain.login.LoginRequest;
-import com.tripPlanner.project.domain.user.UserEntity;
-import com.tripPlanner.project.domain.login.UserRepository;
+import com.tripPlanner.project.domain.login.auth.PrincipalDetail;
+import com.tripPlanner.project.domain.login.dto.LoginRequest;
+import com.tripPlanner.project.domain.login.entity.UserEntity;
+import com.tripPlanner.project.domain.login.entity.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,8 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

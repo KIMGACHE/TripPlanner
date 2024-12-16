@@ -1,7 +1,6 @@
 package com.tripPlanner.project.domain.login.auth;
 
-import com.tripPlanner.project.domain.login.LoginRequest;
-import com.tripPlanner.project.domain.user.UserEntity;
+import com.tripPlanner.project.domain.login.dto.LoginRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -47,7 +46,7 @@ public class PrincipalDetail implements UserDetails, OAuth2User {
 
     @Override
     public String getName() {
-        return loginRequest.getUsername();
+        return loginRequest.getUserid();
     }
 
     @Override

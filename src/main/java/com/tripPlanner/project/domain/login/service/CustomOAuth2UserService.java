@@ -1,8 +1,9 @@
-package com.tripPlanner.project.domain.login.auth;
+package com.tripPlanner.project.domain.login.service;
 
-import com.tripPlanner.project.domain.login.LoginRequest;
-import com.tripPlanner.project.domain.login.UserRepository;
-import com.tripPlanner.project.domain.user.UserEntity;
+import com.tripPlanner.project.domain.login.auth.PrincipalDetail;
+import com.tripPlanner.project.domain.login.dto.LoginRequest;
+import com.tripPlanner.project.domain.login.entity.UserRepository;
+import com.tripPlanner.project.domain.login.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -39,7 +40,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         LoginRequest loginRequest = null;
         if(optionalUser.isEmpty()){ //로그인 할 때 사용자 정보가 없다면 그대로 회원가입이 되도록 진행
-            userEntity = createUserEntity(userid,oAuth2User,provider, providerId);
+            userEntity = createUserEntity(userid,oAuth2User,"ROLE_USER",provider, providerId);
             userRepository.save(userEntity);
 
             loginRequest = LoginRequest.builder()
@@ -82,7 +83,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     //UserEntity 만드는 함수
-    private UserEntity createUserEntity(String userid, OAuth2User oAuth2User, String provider, String providerId){
+    private UserEntity createUserEntity(String userid, OAuth2User oAuth2User, String role,String provider, String providerId){
         String username;
         String email;
 
@@ -102,7 +103,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 email = (String) kakaoAccount.get("email");
                 break;
             case "instagram" :
-                username = ""; //아직 미정
+                username = ""; //아직 미구현
                 email = "";
                 break;
             default :
@@ -112,6 +113,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .userid(userid)
                 .username(username)
                 .email(email)
+                .role("ROLE_USER")
                 .provider(provider)
                 .providerId(providerId)
                 .build();

@@ -1,4 +1,4 @@
-package com.tripPlanner.project.domain.login;
+package com.tripPlanner.project.domain.login.dto;
 
 import lombok.*;
 
@@ -10,7 +10,7 @@ import lombok.*;
 public class LoginRequest {
     private String userid;
     private String password;
-    private String username;
+    private String role;
 
     private String provider;
     private String providerId;

@@ -1,4 +1,4 @@
-package com.tripPlanner.project.domain;
+package com.tripPlanner.project.domain.login;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

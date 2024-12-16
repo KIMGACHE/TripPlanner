@@ -1,4 +1,4 @@
-package com.tripPlanner.project.domain.user;
+package com.tripPlanner.project.domain.login.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,18 +17,18 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class UserEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) //Auto Increment ID값
-    private Long id;
-
-    @Column(unique = true) //중복은 안되게
+    @Id
+    @Column() //중복은 안되게
     private String userid;
     private String username;
     private String email;
     private String password;
     private String profileImg;
     private String addr;
+    private String role;
+    private char gender;
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birth;
 
     private String provider;

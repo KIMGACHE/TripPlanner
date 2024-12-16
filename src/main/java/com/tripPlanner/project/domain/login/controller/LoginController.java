@@ -1,14 +1,14 @@
-package com.tripPlanner.project.domain.login;
+package com.tripPlanner.project.domain.login.controller;
 
 
-import com.tripPlanner.project.domain.user.UserEntity;
+import com.tripPlanner.project.domain.login.dto.LoginRequest;
+import com.tripPlanner.project.domain.login.dto.LoginResponse;
+import com.tripPlanner.project.domain.login.service.LoginService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @Slf4j
 @Controller

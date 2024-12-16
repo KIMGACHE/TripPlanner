@@ -1,4 +1,4 @@
-package com.tripPlanner.project.commons;
+package com.tripPlanner.project.domain.login.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

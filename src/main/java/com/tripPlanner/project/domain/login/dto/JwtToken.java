@@ -1,4 +1,4 @@
-package com.tripPlanner.project.domain.login.jwt;
+package com.tripPlanner.project.domain.login.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

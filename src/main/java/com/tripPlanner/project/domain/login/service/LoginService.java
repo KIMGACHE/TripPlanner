@@ -1,7 +1,10 @@
-package com.tripPlanner.project.domain.login;
+package com.tripPlanner.project.domain.login.service;
 
 
-import com.tripPlanner.project.domain.user.UserEntity;
+import com.tripPlanner.project.domain.login.dto.LoginRequest;
+import com.tripPlanner.project.domain.login.dto.LoginResponse;
+import com.tripPlanner.project.domain.login.entity.UserRepository;
+import com.tripPlanner.project.domain.login.entity.UserEntity;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,14 +23,6 @@ public class LoginService {
 
     private final UserRepository userRepository;
 //  private final BCryptPasswordEncoder passwordEncoder;  //비밀번호 암호화
-
-    public boolean checkLoginIdDuplicate(String userid){ //아이디 중복 체크
-        return userRepository.existsByUserid(userid);
-    }
-
-    public boolean checkUsernameDuplicate(String username){ //닉네임 중복 체크
-        return userRepository.existsByUsername(username);
-    }
 
     public LoginResponse login(LoginRequest loginRequest){ //로그인 기능
         log.info("로그인 서비스 함수 실행");

@@ -1,6 +1,5 @@
-package com.tripPlanner.project.domain.login;
+package com.tripPlanner.project.domain.login.entity;
 
-import com.tripPlanner.project.domain.user.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,10 +8,8 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity,Long> {
 
-    //userid 있는지 확인
-    boolean existsByUserid(String userid);
-    //username 있는지 확인
-    boolean existsByUsername(String username);
+    
+    //userid 유무 확인
     Optional<UserEntity> findByUserid(String userid);
 
 }
