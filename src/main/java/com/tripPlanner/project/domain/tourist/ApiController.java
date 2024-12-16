@@ -23,11 +23,7 @@ public class ApiController {
 
     private final ApiService apiService;
 
-    //    // 검색어로 데이터 요청
-//    @GetMapping("/api/getSearchKeyword")
-//    public Mono<String> getSearchKeyword(@RequestParam(value = "keyword") String keyword, @RequestParam(value = "pageNo") String pageNo) {
-//        return apiService.getSearchKeyword(keyword, pageNo);
-//    }
+
 // 검색어로 데이터 요청
     @PostMapping("/api/getSearchKeyword")
     public Mono<String> getSearchKeyword(@RequestBody SearchRequest searchRequest) {
@@ -35,10 +31,10 @@ public class ApiController {
         String regionCode = searchRequest.getRegionCode();
         String hashtag = searchRequest.getHashtag();
         String pageNo = searchRequest.getPageNo();
-        System.out.println("keyword : " + keyword);
-        System.out.println("regionCode : " + regionCode);
-        System.out.println("hashtag : " + hashtag);
-        System.out.println("pageNo : " + pageNo);
+//        System.out.println("keyword : " + keyword);
+//        System.out.println("regionCode : " + regionCode);
+//        System.out.println("hashtag : " + hashtag);
+//        System.out.println("pageNo : " + pageNo);
 
         // 모든 값이 비었을 경우
         if (keyword.isEmpty() && regionCode.isEmpty() && hashtag.isEmpty()) {
@@ -78,8 +74,7 @@ public class ApiController {
 
     @GetMapping("/travelcourse-info")
     public Mono<String> getTravelCourseInfo(@RequestParam(value = "id") String contentId) {
-        System.out.println("contentId : " + contentId);
-//        System.out.println("pageNo : " + pageNo);
+
         String pageNo = "";
         if (!contentId.isEmpty()) {
             return apiService.getDetailInfo(contentId, pageNo);
@@ -89,16 +84,27 @@ public class ApiController {
 
     @GetMapping("/travelcourse-info-detailCommon")
     public Mono<String> getTravelCourseCommons(@RequestParam(value = "id") String contentId) {
-        System.out.println("contentId : " + contentId);
-//        System.out.println("pageNo : " + pageNo);
+
         String pageNo = "";
         if (!contentId.isEmpty()) {
             return apiService.getDetailCommon(contentId, pageNo);
         }
         return null;
     }
+    @GetMapping("/travelcourse-info-searchKeyword")
+    public Mono<String> getTravelCourseInfoSearchKeyword(@RequestParam(value = "keyword") String keyword) {
 
+        String pageNo = "";
+        if (!keyword.isEmpty()) {
+            return apiService.getSearchKeywordByTourist(keyword, pageNo);
+        }
+        return null;
+    }
 
+    @GetMapping("/google-search-places")
+    public Mono<Map<String, Object>> searchPlaces(@RequestParam(value = "keyword") String keyword) {
+        return apiService.searchPlacesByKeyword(keyword);
+    }
 
 
 }
