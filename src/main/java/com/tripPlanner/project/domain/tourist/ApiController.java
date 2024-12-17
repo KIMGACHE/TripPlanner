@@ -31,6 +31,7 @@ public class ApiController {
         String regionCode = searchRequest.getRegionCode();
         String hashtag = searchRequest.getHashtag();
         String pageNo = searchRequest.getPageNo();
+        String arrange = searchRequest.getArrange();
 //        System.out.println("keyword : " + keyword);
 //        System.out.println("regionCode : " + regionCode);
 //        System.out.println("hashtag : " + hashtag);
@@ -39,25 +40,25 @@ public class ApiController {
         // 모든 값이 비었을 경우
         if (keyword.isEmpty() && regionCode.isEmpty() && hashtag.isEmpty()) {
             System.out.println("모든 값 입력 안 됐을 경우 실행");
-            return apiService.getAreaBasedList(regionCode, hashtag, pageNo);
+            return apiService.getAreaBasedList(regionCode, hashtag, pageNo, arrange);
         }
 
         // keyword만 있을 경우
         if (!keyword.isEmpty() && regionCode.isEmpty() && hashtag.isEmpty()) {
             System.out.println("keyword만 있을 때 호출");
-            return apiService.getSearchKeyword(keyword.trim(), pageNo);
+            return apiService.getSearchKeyword(keyword.trim(), pageNo, arrange);
         }
 
         // regionCode나 hashtag만 있을 경우
         if (keyword.isEmpty() && (!regionCode.isEmpty() || !hashtag.isEmpty())) {
             System.out.println("regionCode나 hashtag만 있을 때 호출");
-            return apiService.getAreaBasedList(regionCode, hashtag, pageNo);
+            return apiService.getAreaBasedList(regionCode, hashtag, pageNo, arrange);
         }
 
         System.out.println("모두 있음");
         pageNo = null;
-        Mono<String> areaBasedListResult = apiService.getAreaBasedList(regionCode, hashtag, pageNo);
-        Mono<String> searchKeywordResult = apiService.getSearchKeyword(keyword.trim(), pageNo);
+        Mono<String> areaBasedListResult = apiService.getAreaBasedList(regionCode, hashtag, pageNo, arrange);
+        Mono<String> searchKeywordResult = apiService.getSearchKeyword(keyword.trim(), pageNo, arrange);
 
 
         return Mono.zip(areaBasedListResult, searchKeywordResult)
@@ -95,8 +96,9 @@ public class ApiController {
     public Mono<String> getTravelCourseInfoSearchKeyword(@RequestParam(value = "keyword") String keyword) {
 
         String pageNo = "";
+        String arrange = "";
         if (!keyword.isEmpty()) {
-            return apiService.getSearchKeywordByTourist(keyword, pageNo);
+            return apiService.getSearchKeywordByTourist(keyword, pageNo, arrange);
         }
         return null;
     }
@@ -104,6 +106,13 @@ public class ApiController {
     @GetMapping("/google-search-places")
     public Mono<Map<String, Object>> searchPlaces(@RequestParam(value = "keyword") String keyword) {
         return apiService.searchPlacesByKeyword(keyword);
+    }
+
+    @GetMapping("/travelcourse-info-detailIntro")
+    public Mono<String> getTravelCourseInfoDetailIntro(@RequestParam(value="id") String contentId){
+        String pageNo = "";
+        return apiService.getDetailIntro(contentId, pageNo);
+
     }
 
 

@@ -10,4 +10,5 @@ public class SearchRequest {
     private String regionCode;
     private String hashtag;
     private String pageNo;
+    private String arrange;
 }
