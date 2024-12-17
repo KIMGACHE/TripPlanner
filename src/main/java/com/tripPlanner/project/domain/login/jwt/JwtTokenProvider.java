@@ -65,7 +65,7 @@ public class JwtTokenProvider {
         try{
             log.info("토큰 유효성 검사 실행");
             Jwts.parserBuilder()
-                    .setSigningKey(key)
+                    .setSigningKey(key) //secret Key를 기준으로 찾아서 파싱
                     .build()
                     .parseClaimsJws(token); //토큰 파싱
             return true;

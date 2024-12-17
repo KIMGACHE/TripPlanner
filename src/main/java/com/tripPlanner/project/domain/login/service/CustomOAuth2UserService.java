@@ -6,6 +6,8 @@ import com.tripPlanner.project.domain.login.entity.UserRepository;
 import com.tripPlanner.project.domain.login.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -63,9 +65,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         PrincipalDetail principalDetail = new PrincipalDetail();
         principalDetail.setLoginRequest(loginRequest);
         principalDetail.setAttributes(oAuth2User.getAttributes());
+
+        //spring security Authentication 객체 생성
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(principalDetail,null, principalDetail.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken); //시큐리티 컨텍스트에 저장
         return principalDetail;
     }
-    
+
     //provider 에 따라 providerId를 다르게 처리
     private String getProviderId(OAuth2User oAuth2User, String provider){
         switch(provider){

@@ -18,7 +18,6 @@ import java.time.LocalDate;
 public class UserEntity {
 
     @Id
-    @Column() //중복은 안되게
     private String userid;
     private String username;
     private String email;
