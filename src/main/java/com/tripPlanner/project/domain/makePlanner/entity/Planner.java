@@ -37,4 +37,5 @@ public class Planner {
 
     @Column(name = "people")
     private int people;
+    
 }
