@@ -1,21 +1,10 @@
 package com.tripPlanner.project.domain.tourist;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,42 +12,46 @@ public class ApiController {
 
     private final ApiService apiService;
 
+    @GetMapping("/tourist-info")
+    public Mono<String> getTouristInfo(@RequestParam(value = "id") String contentId) {
 
-// 검색어로 데이터 요청
-    @PostMapping("/api/getSearchKeyword")
-    public Mono<String> getSearchKeyword(@RequestBody SearchRequest searchRequest) {
-        String keyword = searchRequest.getKeyword();
-        String regionCode = searchRequest.getRegionCode();
-        String hashtag = searchRequest.getHashtag();
-        String pageNo = searchRequest.getPageNo();
-        String arrange = searchRequest.getArrange();
-//        System.out.println("keyword : " + keyword);
-//        System.out.println("regionCode : " + regionCode);
-//        System.out.println("hashtag : " + hashtag);
-//        System.out.println("pageNo : " + pageNo);
+        if (!contentId.isEmpty()) {
+            return apiService.getDetailCommon(contentId);
+        }
+        return null;
+    }
+
+    // 관광지 코스를 띄울 때 여러 필터링을 거쳐 데이터를 표시할 함수 (굳이 이렇게 하는 이유는 API가 제공되지 않기 때문)
+    @PostMapping("/api/getSearch")
+    public Mono<String> getSearch(@RequestBody ApiRequest apiRequest) {
+        String keyword = apiRequest.getKeyword();
+        String regionCode = apiRequest.getRegionCode();
+        String hashtag = apiRequest.getHashtag();
+        String pageNo = apiRequest.getPageNo();
+        String arrange = apiRequest.getArrange();
+        String contentTypeId = apiRequest.getContentTypeId();
 
         // 모든 값이 비었을 경우
         if (keyword.isEmpty() && regionCode.isEmpty() && hashtag.isEmpty()) {
-            System.out.println("모든 값 입력 안 됐을 경우 실행");
-            return apiService.getAreaBasedList(regionCode, hashtag, pageNo, arrange);
+            System.out.println("모든 값 비었을 때 반응");
+            return apiService.getAreaBasedList(regionCode, hashtag, pageNo, arrange, contentTypeId);
         }
 
         // keyword만 있을 경우
         if (!keyword.isEmpty() && regionCode.isEmpty() && hashtag.isEmpty()) {
-            System.out.println("keyword만 있을 때 호출");
-            return apiService.getSearchKeyword(keyword.trim(), pageNo, arrange);
+            System.out.println("keyword만 있을 때 반응");
+            return apiService.getSearchKeyword(keyword.trim(), pageNo, arrange, contentTypeId);
         }
 
         // regionCode나 hashtag만 있을 경우
         if (keyword.isEmpty() && (!regionCode.isEmpty() || !hashtag.isEmpty())) {
-            System.out.println("regionCode나 hashtag만 있을 때 호출");
-            return apiService.getAreaBasedList(regionCode, hashtag, pageNo, arrange);
+            System.out.println("지역 코드나 카테고리만 있을 때 반응");
+            return apiService.getAreaBasedList(regionCode, hashtag, pageNo, arrange, contentTypeId);
         }
 
-        System.out.println("모두 있음");
-        pageNo = null;
-        Mono<String> areaBasedListResult = apiService.getAreaBasedList(regionCode, hashtag, pageNo, arrange);
-        Mono<String> searchKeywordResult = apiService.getSearchKeyword(keyword.trim(), pageNo, arrange);
+        System.out.println("다 없음");
+        Mono<String> areaBasedListResult = apiService.getAreaBasedList(regionCode, hashtag, pageNo, arrange, contentTypeId);
+        Mono<String> searchKeywordResult = apiService.getSearchKeyword(keyword.trim(), pageNo, arrange, contentTypeId);
 
 
         return Mono.zip(areaBasedListResult, searchKeywordResult)
@@ -73,47 +66,43 @@ public class ApiController {
                 .doOnTerminate(() -> System.out.println("findCommonDataByCat2AndAreaCode 호출 종료"));
     }
 
+    // 관광지 코스 상세페이지로 진입할 때 contentid를 파라미터로 받아서 맵핑
     @GetMapping("/travelcourse-info")
     public Mono<String> getTravelCourseInfo(@RequestParam(value = "id") String contentId) {
 
-        String pageNo = "";
         if (!contentId.isEmpty()) {
-            return apiService.getDetailInfo(contentId, pageNo);
+            return apiService.getDetailInfo(contentId);
         }
         return null;
     }
 
-    @GetMapping("/travelcourse-info-detailCommon")
-    public Mono<String> getTravelCourseCommons(@RequestParam(value = "id") String contentId) {
-
-        String pageNo = "";
-        if (!contentId.isEmpty()) {
-            return apiService.getDetailCommon(contentId, pageNo);
+    // 관광지 코스 상세페이지
+    @PostMapping("/travelcourse-info-detailCommon")
+    public Mono<String> getTravelCourseCommons(@RequestBody ApiRequest apiRequest) {
+        String contentId = apiRequest.getContentId();
+        if (contentId != null && !contentId.isEmpty()) {
+            return apiService.getDetailCommon(contentId);
         }
-        return null;
+        return Mono.empty();  // null 대신 Mono.empty()를 반환하여 빈 값을 처리
     }
-    @GetMapping("/travelcourse-info-searchKeyword")
-    public Mono<String> getTravelCourseInfoSearchKeyword(@RequestParam(value = "keyword") String keyword) {
+    // 관광지 코스 각각의 장소들에 대한 정보를 구글api로 요청했을 때 데이터가 없으면 요청할 함수 (백업용)
+    @PostMapping("/travelcourse-info-searchKeyword")
+    public Mono<String> getTravelCourseInfoSearchKeyword(@RequestBody ApiRequest apiRequest) {
+        String keyword = apiRequest.getKeyword();
 
         String pageNo = "";
         String arrange = "";
-        if (!keyword.isEmpty()) {
+        if (keyword != null && !keyword.isEmpty()) {
             return apiService.getSearchKeywordByTourist(keyword, pageNo, arrange);
         }
-        return null;
+        return Mono.empty();  // null 대신 Mono.empty()를 반환하여 빈 값을 처리
     }
 
-    @GetMapping("/google-search-places")
-    public Mono<Map<String, Object>> searchPlaces(@RequestParam(value = "keyword") String keyword) {
+    // 관광지 코스 각각의 장소들의 이름으로 구글 API를 사용해 검색을 해서 이미지와 좌표를 받아올 함수
+    @PostMapping("/google-search-places")
+    public Mono<Map<String, Object>> searchPlaces(@RequestBody ApiRequest apiRequest) {
+        String keyword = apiRequest.getKeyword();
         return apiService.searchPlacesByKeyword(keyword);
     }
-
-    @GetMapping("/travelcourse-info-detailIntro")
-    public Mono<String> getTravelCourseInfoDetailIntro(@RequestParam(value="id") String contentId){
-        String pageNo = "";
-        return apiService.getDetailIntro(contentId, pageNo);
-
-    }
-
 
 }

@@ -83,9 +83,6 @@ public class ApiService {
                 }
             }
 
-//            for (JsonNode commonItem : commonItems) {
-//                System.out.println(commonItem.toPrettyString());
-//            }
 
             // 결과 JSON 생성
             ObjectNode resultBody = mapper.createObjectNode();
@@ -110,7 +107,7 @@ public class ApiService {
 
 
     // 검색어에 맞춰 데이터를 가져오는 함수 (관광지 코스)
-    public Mono<String> getSearchKeyword(String keyword, String pageNo, String arrange) {
+    public Mono<String> getSearchKeyword(String keyword, String pageNo, String arrange, String contentTypeId) {
 //        System.out.println("service의 getSearchKeyword함수 Keyword : " + keyword);
         // URL을 수동으로 구성
         String url = "https://apis.data.go.kr/B551011/KorService1/searchKeyword1"
@@ -119,7 +116,7 @@ public class ApiService {
                 + "&MobileApp=AppTest"
                 + "&MobileOS=ETC"
                 + "&arrange=" + arrange
-                + "&contentTypeId=25"
+                + "&contentTypeId=" + contentTypeId
                 + "&keyword=" + keyword
                 + "&_type=json";
 
@@ -257,22 +254,21 @@ public class ApiService {
     }
 
 
-
     // 지역 및 해시태그에 맞춰 데이터를 가져오는 함수
-    public Mono<String> getAreaBasedList(String regionCode, String hashtag, String pageNo, String arrange) {
+    public Mono<String> getAreaBasedList(String regionCode, String hashtag, String pageNo, String arrange, String contentTypeId) {
         // URL을 수동으로 구성
         String url = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1"
                 + "?serviceKey=" + serviceKey
-
-                + "&numOfRows=10"
+                + "&numOfRows=20"
                 + "&MobileApp=AppTest"
                 + "&MobileOS=ETC"
                 + "&arrange=" + arrange
                 + "&areaCode=" + (regionCode != null && !regionCode.isEmpty() ? regionCode : "")
-                + "&contentTypeId=25"
-                + "&cat1=C01"
-                + "&cat2=" + (hashtag != null && !hashtag.isEmpty() ? hashtag : "")
+                + "&contentTypeId=" + contentTypeId
+                + "&cat2=" + (hashtag != null && !hashtag.isEmpty() && hashtag.length() <= 5 ? hashtag : "")
+                + "&cat3=" + (hashtag != null && !hashtag.isEmpty() && hashtag.length() > 5 ? hashtag : "")
                 + "&_type=json";
+        System.out.println("URL : " + url);
         // pageNo가 null이면 아예 포함하지 않음
         if (pageNo != null) {
             url += "&pageNo=" + pageNo;
@@ -302,12 +298,12 @@ public class ApiService {
     }
 
     // 코스 ID를 바탕으로 상세 데이터를 가져오는 함수
-    public Mono<String> getDetailInfo(String courseId, String pageNo) {
+    public Mono<String> getDetailInfo(String courseId) {
         // URL을 수동으로 구성
         String url = "https://apis.data.go.kr/B551011/KorService1/detailInfo1"
                 + "?serviceKey=" + serviceKey
-                + "&pageNo=" + pageNo
-                + "&numOfRows=10"
+                + "&pageNo=1"
+                + "&numOfRows=20"
                 + "&MobileApp=AppTest"
                 + "&MobileOS=ETC"
                 + "&contentId=" + courseId
@@ -337,11 +333,11 @@ public class ApiService {
     }
 
     // 코스 ID를 바탕으로 상세 데이터를 가져오는 함수 (홈페이지, 상세 설명 등 포함된 정보)
-    public Mono<String> getDetailCommon(String courseId, String pageNo) {
+    public Mono<String> getDetailCommon(String courseId) {
         // URL을 수동으로 구성
         String url = "https://apis.data.go.kr/B551011/KorService1/detailCommon1"
                 + "?serviceKey=" + serviceKey
-                + "&pageNo=" + pageNo
+                + "&pageNo="
                 + "&numOfRows=10"
                 + "&MobileApp=AppTest"
                 + "&MobileOS=ETC"
@@ -375,131 +371,74 @@ public class ApiService {
                 });
     }
 
-//    // Google Places Api를 이용해 키워드로 검색을 하고 데이터를 받아옴 (위도, 경도와 이미지(하나만) 리턴)
-//    public Mono<Map<String, Object>> searchPlacesByKeyword(String keyword) {
-//        // URL과 파라미터 생성
-//        String url = "https://maps.googleapis.com/maps/api/place/textsearch/json" + "?query=" + keyword + "&key=" + googleKey;
-//
-//        // WebClient를 사용하여 Google Places API 호출
-//        return webClient.get()
-//                .uri(url)
-//                .retrieve()
-//                .bodyToMono(String.class)
-//                .flatMap(response -> {
-//                    try {
-//                        // JSON 응답을 파싱하여 JsonNode로 변환
-//                        JsonNode responseNode = new ObjectMapper().readTree(response);
-//
-//                        // "results" 노드를 가져오기
-//                        JsonNode results = responseNode.path("results");
-//
-//                        // 첫 번째 장소에서 사진 정보와 위치 정보 추출
-//                        if (results.isArray() && results.size() > 0) {
-//                            JsonNode firstResult = results.get(0);
-//
-//                            // 사진 정보가 있으면 첫 번째 photo_reference 추출하여 이미지 URL 생성
-//                            JsonNode photos = firstResult.path("photos");
-//                            String photoUrl = "";
-//                            if (photos.isArray() && photos.size() > 0) {
-//                                String photoReference = photos.get(0).path("photo_reference").asText();
-//                                if (!photoReference.isEmpty()) {
-//                                    // 첫 번째 이미지 URL 생성
-//                                    photoUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference="
-//                                            + photoReference + "&key=" + googleKey;
-//                                }
-//                            }
-//
-//                            // 위치 정보 (위도, 경도) 추출
-//                            JsonNode location = firstResult.path("geometry").path("location");
-//                            double latitude = location.path("lat").asDouble();
-//                            double longitude = location.path("lng").asDouble();
-//
-//                            // 결과를 Map으로 반환
-//                            Map<String, Object> resultMap = new HashMap<>();
-//                            resultMap.put("photoUrl", photoUrl);
-//                            resultMap.put("latitude", latitude);
-//                            resultMap.put("longitude", longitude);
-//
-//                            return Mono.just(resultMap); // 사진 URL, 위도, 경도를 포함한 Map 반환
-//                        }
-//
-//                        // 결과가 없으면 빈 Map 반환
-//                        return Mono.just(new HashMap<String, Object>());
-//
-//                    } catch (Exception e) {
-//                        return Mono.error(new RuntimeException("Error processing Google Places response", e));
-//                    }
-//                });
-//    }
-// 모든 이미지를 받아옴 (테스트)
-public Mono<Map<String, Object>> searchPlacesByKeyword(String keyword) {
-    // URL과 파라미터 생성
-    String url = "https://maps.googleapis.com/maps/api/place/textsearch/json" + "?query=" + keyword + "&key=" + googleKey;
-    System.out.println("keyword : " + keyword);
+    // 모든 이미지를 받아옴 (테스트)
+    public Mono<Map<String, Object>> searchPlacesByKeyword(String keyword) {
+        // URL과 파라미터 생성
+        String url = "https://maps.googleapis.com/maps/api/place/textsearch/json" + "?query=" + keyword + "&key=" + googleKey;
+        System.out.println("keyword : " + keyword);
 
-    // WebClient를 사용하여 Google Places API 호출
-    return webClient.get()
-            .uri(url)
-            .retrieve()
-            .bodyToMono(String.class)
-            .flatMap(response -> {
-                try {
-                    // JSON 응답을 파싱하여 JsonNode로 변환
-                    JsonNode responseNode = new ObjectMapper().readTree(response);
+        // WebClient를 사용하여 Google Places API 호출
+        return webClient.get()
+                .uri(url)
+                .retrieve()
+                .bodyToMono(String.class)
+                .flatMap(response -> {
+                    try {
+                        // JSON 응답을 파싱하여 JsonNode로 변환
+                        JsonNode responseNode = new ObjectMapper().readTree(response);
 
-                    // "results" 노드를 가져오기
-                    JsonNode results = responseNode.path("results");
-                    System.out.println("result : " + results);
+                        // "results" 노드를 가져오기
+                        JsonNode results = responseNode.path("results");
+                        System.out.println("result : " + results);
 
-                    // 모든 장소에서 사진 정보를 추출하여 photoUrls 리스트에 추가
-                    List<String> photoUrls = new ArrayList<>();
-                    if (results.isArray() && results.size() > 0) {
-                        for (JsonNode result : results) {
-                            JsonNode photos = result.path("photos");
-                            if (photos.isArray() && photos.size() > 0) {
-                                for (JsonNode photo : photos) {
-                                    String photoReference = photo.path("photo_reference").asText();
-                                    if (!photoReference.isEmpty()) {
-                                        // 이미지 URL 생성
-                                        String photoUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference="
-                                                + photoReference + "&key=" + googleKey;
-                                        photoUrls.add(photoUrl);
+                        // 모든 장소에서 사진 정보를 추출하여 photoUrls 리스트에 추가
+                        List<String> photoUrls = new ArrayList<>();
+                        if (results.isArray() && results.size() > 0) {
+                            for (JsonNode result : results) {
+                                JsonNode photos = result.path("photos");
+                                if (photos.isArray() && photos.size() > 0) {
+                                    for (JsonNode photo : photos) {
+                                        String photoReference = photo.path("photo_reference").asText();
+                                        if (!photoReference.isEmpty()) {
+                                            // 이미지 URL 생성
+                                            String photoUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference="
+                                                    + photoReference + "&key=" + googleKey;
+                                            photoUrls.add(photoUrl);
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        // 첫 번째 장소에서 위치 정보 (위도, 경도) 추출
-                        JsonNode firstResult = results.get(0); // 첫 번째 결과 가져오기
-                        if (firstResult != null && firstResult.has("geometry")) {
-                            JsonNode location = firstResult.path("geometry").path("location");
-                            double latitude = location.path("lat").asDouble();
-                            double longitude = location.path("lng").asDouble();
+                            // 첫 번째 장소에서 위치 정보 (위도, 경도) 추출
+                            JsonNode firstResult = results.get(0); // 첫 번째 결과 가져오기
+                            if (firstResult != null && firstResult.has("geometry")) {
+                                JsonNode location = firstResult.path("geometry").path("location");
+                                double latitude = location.path("lat").asDouble();
+                                double longitude = location.path("lng").asDouble();
 
-                            // 결과를 Map으로 반환
-                            Map<String, Object> resultMap = new HashMap<>();
-                            resultMap.put("photoUrls", photoUrls); // 모든 이미지 URL 리스트
-                            resultMap.put("latitude", latitude);
-                            resultMap.put("longitude", longitude);
+                                // 결과를 Map으로 반환
+                                Map<String, Object> resultMap = new HashMap<>();
+                                resultMap.put("photoUrls", photoUrls); // 모든 이미지 URL 리스트
+                                resultMap.put("latitude", latitude);
+                                resultMap.put("longitude", longitude);
 
-                            return Mono.just(resultMap); // 사진 URL 리스트, 위도, 경도를 포함한 Map 반환
+                                return Mono.just(resultMap); // 사진 URL 리스트, 위도, 경도를 포함한 Map 반환
+                            } else {
+                                return Mono.error(new RuntimeException("No valid location found in first result"));
+                            }
                         } else {
-                            return Mono.error(new RuntimeException("No valid location found in first result"));
+                            return Mono.error(new RuntimeException("No results found"));
                         }
-                    } else {
-                        return Mono.error(new RuntimeException("No results found"));
+
+                    } catch (Exception e) {
+                        return Mono.error(new RuntimeException("Error processing Google Places response", e));
                     }
-
-                } catch (Exception e) {
-                    return Mono.error(new RuntimeException("Error processing Google Places response", e));
-                }
-            });
-}
-
+                });
+    }
 
 
     // 코스 ID를 바탕으로 상세소개를 가져오는 기능
-    public Mono<String> getDetailIntro(String courseId, String pageNo) {
+    public Mono<String> getDetailIntro(String courseId, String pageNo, String contentTypeId) {
         // URL을 수동으로 구성
         String url = "https://apis.data.go.kr/B551011/KorService1/detailIntro1"
                 + "?serviceKey=" + serviceKey
