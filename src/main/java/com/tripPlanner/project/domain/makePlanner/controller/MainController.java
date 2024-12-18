@@ -51,46 +51,59 @@ public class MainController {
 //    }
 
     @ResponseBody
-    @PostMapping(value="/makePlanner", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, Object>> main_post(@RequestBody Map<String,Object> map) throws JsonProcessingException {
-        log.info("POST /planner/makePlanner...");
+    @PostMapping(value="/findDestination", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Object>> find_destination(@RequestBody Map<String,Object> map) throws JsonProcessingException {
+        log.info("POST /planner/findDestination...");
 
-        // 어떤 동작인지 판별하는 값
-        String action = (String)map.get("action");
+        // 값을 담을 map객체
+        Map<String,Object> datas = new HashMap<>();
 
-        if(action.equals("addDestination")) {
-            String businessName = (String)map.get("businessName");
-            String businessCategory = (String)map.get("businessCategory");
-            String streetFullAddress = (String)map.get("streetFullAddress");
+        String businessName = (String)map.get("businessName");
+        String businessCategory = (String)map.get("businessCategory");
+        String streetFullAddress = (String)map.get("streetFullAddress");
+        datas.put("businessName",businessName);
+        datas.put("businessCategory",businessCategory);
+        datas.put("streetFullAddress",streetFullAddress);
 
-            System.out.println("businessName : " + businessName + ", businessCategory : " + businessCategory + ", streetFullAddress : " + streetFullAddress);
-            return null;
-        } else if(action.equals("mapRender")) {
-            Map<String,Object> datas = new HashMap<>();
-            double latitude = (Double)map.get("latitude");
-            double longitude = (Double)map.get("longitude");
-            int zoom_level = (Integer)map.get("zoomlevel");
+        return new ResponseEntity<Map<String,Object>>(datas, HttpStatus.OK);
+    }
 
-            // 이동한 좌표 주변의 모든 데이터를 가져온다.
-            List<AccomDto> accomList = accomService.test1(longitude, latitude,zoom_level);
-            List<FoodDto> foodList = foodService.test1(longitude, latitude, zoom_level);
+    @ResponseBody
+    @PostMapping(value="/listDestination", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Object>> list_destination(@RequestBody Map<String,Object> map) throws JsonProcessingException {
+        log.info("POST /planner/listDestination...");
 
-            // ObjectMapper 객체 생성
-            ObjectMapper objectMapper = new ObjectMapper();
+        // 값을 담을 map객체
+        Map<String,Object> datas = new HashMap<>();
 
-            // 자바 객체를 JSON 문자열로 변환
-            String accom_json = objectMapper.writeValueAsString(accomList);
-            String food_json = objectMapper.writeValueAsString(foodList);
+        double latitude = (Double)map.get("latitude");
+        double longitude = (Double)map.get("longitude");
+        int zoom_level = (Integer)map.get("zoomlevel");
 
-            datas.put("accomList", accom_json);
-            datas.put("foodList", food_json);
+        // 이동한 좌표 주변의 모든 데이터를 가져온다.
+        List<AccomDto> accomList = accomService.listAccom(longitude, latitude,zoom_level);
+        List<FoodDto> foodList = foodService.test1(longitude, latitude, zoom_level);
 
-            return new ResponseEntity<Map<String,Object>>(datas, HttpStatus.OK);
-        } else {
-            System.out.println("error!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        // ObjectMapper 객체 생성
+        ObjectMapper objectMapper = new ObjectMapper();
 
-            return null;
-        }
+        // 자바 객체를 JSON 문자열로 변환
+        String accom_json = objectMapper.writeValueAsString(accomList);
+        String food_json = objectMapper.writeValueAsString(foodList);
 
+        datas.put("accomList", accom_json);
+        datas.put("foodList", food_json);
+
+        return new ResponseEntity(datas, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @PostMapping(value="/addPlanner", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String,Object>> add_planner() {
+        log.info("POST /planner/addPlanner...");
+
+        Map<String,Object> datas = new HashMap<>();
+
+        return new ResponseEntity(datas, HttpStatus.OK);
     }
 }

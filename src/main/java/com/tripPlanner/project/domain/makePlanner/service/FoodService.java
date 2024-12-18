@@ -16,16 +16,17 @@ import java.util.Optional;
 @Slf4j
 public class FoodService {
 
-    private double zoomLevel[] = {0,0,0,0,0,0,0,0,0,0,0,0,0.0015,0.00055};  // 8~13 zoomlevel의 x,y변동 값
+    private double zoomLevel_x[] = {0,0,0,0,0,0,0,0,0,0,0,0,0.004,0.0018};  // 8~13 zoomlevel의 x,y변동 값
+    private double zoomLevel_y[] = {0,0,0,0,0,0,0,0,0,0,0,0,0.0025,0.001};  // 8~13 zoomlevel의 x,y변동 값
 
     @Autowired 
     private FoodRepository foodRepository;
 
     public List<FoodDto> test1(double x, double y,int zoom_level) {
-        double xStart = x-zoomLevel[zoom_level];
-        double yStart = y-zoomLevel[zoom_level];
-        double xEnd = x+zoomLevel[zoom_level];
-        double yEnd = y+zoomLevel[zoom_level];
+        double xStart = x-zoomLevel_x[zoom_level];
+        double yStart = y-zoomLevel_y[zoom_level];
+        double xEnd = x+zoomLevel_x[zoom_level];
+        double yEnd = y+zoomLevel_y[zoom_level];
 
         List<Food> foods = foodRepository.selectFoodAll(xStart,yStart,xEnd,yEnd);
 

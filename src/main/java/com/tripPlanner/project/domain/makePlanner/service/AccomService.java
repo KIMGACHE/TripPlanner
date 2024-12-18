@@ -19,7 +19,7 @@ public class AccomService {
     @Autowired 
     private AccomRepository accomRepository;
 
-    public List<AccomDto> test1(double x, double y, int zoom_level) {
+    public List<AccomDto> listAccom(double x, double y, int zoom_level) {
         double xStart = x-zoomLevel[zoom_level];
         double yStart = y-zoomLevel[zoom_level];
         double xEnd = x+zoomLevel[zoom_level];

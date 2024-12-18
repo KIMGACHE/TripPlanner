@@ -90,13 +90,6 @@
       var baseLayers = L.tileLayer.koreaProvider('DaumMap.Street').addTo(map);
       var markers = L.layerGroup().addTo(map);
 
-    // 숙소 아이콘 설정
-    var AccomIcon = L.icon({
-        iconUrl: '/image/accom.png',
-        iconSize: [40, 40],
-        iconAnchor: [20, 0],
-        popupAnchor: [0, 0],
-    });
     // 식당 아이콘 설정
     var FoodIcon = L.icon({
         iconUrl: '/image/food.png',
