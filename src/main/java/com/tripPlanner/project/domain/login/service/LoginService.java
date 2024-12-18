@@ -12,6 +12,7 @@ import com.tripPlanner.project.domain.login.entity.UserEntity;
 import com.tripPlanner.project.domain.login.jwt.JwtTokenProvider;
 import io.jsonwebtoken.Jwt;
 import jakarta.transaction.Transactional;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,7 +25,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
+//@Transactional
 public class LoginService {
     //비밀번호 정규 표현식. 하나 이상의 영어 대문자 , 하나 이상의 특수기호 , 하나 이상의 숫자 , 8글자 13글자 사이
    //private static final String USERPW_RegExp = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&]{8,13}/";
@@ -35,15 +36,19 @@ public class LoginService {
     private final JwtTokenProvider jwtTokenProvider;
     private final TokenRepository tokenRepository;
 
+
+
     public LoginResponse login(LoginRequest loginRequest){ //로그인 기능
         log.info("로그인 서비스 함수 실행");
         Optional<UserEntity> optionalUser = userRepository.findByUserid(loginRequest.getUserid());
+        log.info(optionalUser.toString());
         emptyCheckUserIdAndPassword(loginRequest.getUserid(),loginRequest.getPassword());
         if(optionalUser.isEmpty()){ //loginId와 일치하는 user없으면 에러 리턴
             return LoginResponse.builder()
                     .success(false)
                     .message("유저를 찾을 수 없습니다 !")
                     .build();
+
         }
 
         UserEntity userEntity = optionalUser.get(); 
@@ -73,7 +78,7 @@ public class LoginService {
 
         TokenEntity tokenEntity = new TokenEntity(userEntity.getUserid(),refreshToken);
         tokenRepository.save(tokenEntity);
-        log.info("토큰엔티티"+tokenEntity);
+        log.info("토큰엔티티 "+tokenEntity);
 
         return LoginResponse.builder()
                 .userid(userEntity.getUserid())
