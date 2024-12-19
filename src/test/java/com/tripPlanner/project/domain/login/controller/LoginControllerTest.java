@@ -43,13 +43,11 @@ public class LoginControllerTest {
     @Mock
     private LoginService loginService;
 
-
     @Mock
     private UserRepository userRepository;
 
     @Mock
     private TokenRepository tokenRepository;
-
 
 
 //    AutoCloseable openMocks;
@@ -59,7 +57,7 @@ public class LoginControllerTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-//        loginController = new LoginController(loginService);
+        loginController = new LoginController(loginService);
         mockMvc = MockMvcBuilders.standaloneSetup(loginController).build();
 
     }
@@ -85,7 +83,7 @@ public class LoginControllerTest {
                 .message("로그인 성공")
                 .build();
 
-        Mockito.when(loginService.login(loginRequest)).thenReturn(loginResponse);
+        Mockito.when(loginService.login(Mockito.any(LoginRequest.class))).thenReturn(loginResponse);
 
 
 
