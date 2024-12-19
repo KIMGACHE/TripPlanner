@@ -1,13 +1,10 @@
 package com.tripPlanner.project.domain.login.service;
 
-import com.tripPlanner.project.domain.login.entity.TokenEntity;
 import com.tripPlanner.project.domain.login.entity.TokenRepository;
-import com.tripPlanner.project.domain.login.jwt.JwtTokenProvider;
+import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @Slf4j

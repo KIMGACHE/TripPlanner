@@ -1,4 +1,4 @@
-package com.tripPlanner.project.domain.login.jwt;
+package com.tripPlanner.project.domain.login.auth.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -35,20 +35,22 @@ public class JwtTokenProvider {
     // 엑세스 토큰 생성 
     public String generateAccessToken(String userid){
         log.info("엑세스 토큰 발급");
+        Long now = System.currentTimeMillis();
         return Jwts.builder()
                 .setSubject(userid)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpiration)) //만료시간 = 현재시간 + 토큰유효기간
+                .setExpiration(new Date(now + accessTokenExpiration)) //만료시간 = 현재시간 + 토큰유효기간
                 .signWith(key , SignatureAlgorithm.HS256) //HMAC SHA256 알고리즘 사용
                 .compact(); //토큰 생성 후 압축
     }
     // 리프레시 토큰 생성
     public String generateRefreshToken(String userId) {
         log.info("리프레시 토큰 발급");
+        Long now = System.currentTimeMillis();
         return Jwts.builder()
                 .setSubject(userId) // 사용자 ID를 `subject`로 설정
                 .setIssuedAt(new Date()) // 생성 시간
-                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpiration)) // 만료 시간
+                .setExpiration(new Date(now + refreshTokenExpiration)) // 만료 시간
                 .signWith(key, SignatureAlgorithm.HS256) // HMAC SHA256 알고리즘 사용
                 .compact(); // 토큰 생성 후 압축
     }
@@ -67,7 +69,7 @@ public class JwtTokenProvider {
             Jwts.parserBuilder()
                     .setSigningKey(key) //secret Key를 기준으로 찾아서 파싱
                     .build()
-                    .parseClaimsJws(token); //토큰 파싱
+                    .parseClaimsJws(token); //토큰 복호화
             return true;
         }catch (ExpiredJwtException e) { // 토큰 만료
             log.error("Expired JWT token: {}", e.getMessage());
@@ -82,5 +84,7 @@ public class JwtTokenProvider {
         }
         return false; // 유효하지 않은 경우 false 반환
     }
+
+
 
 }

@@ -2,22 +2,21 @@ package com.tripPlanner.project.domain.login.service;
 
 
 import com.tripPlanner.project.domain.login.auth.PrincipalDetail;
-import com.tripPlanner.project.domain.login.dto.JwtToken;
 import com.tripPlanner.project.domain.login.dto.LoginRequest;
 import com.tripPlanner.project.domain.login.dto.LoginResponse;
 import com.tripPlanner.project.domain.login.entity.TokenEntity;
 import com.tripPlanner.project.domain.login.entity.TokenRepository;
 import com.tripPlanner.project.domain.login.entity.UserRepository;
 import com.tripPlanner.project.domain.login.entity.UserEntity;
-import com.tripPlanner.project.domain.login.jwt.JwtTokenProvider;
-import io.jsonwebtoken.Jwt;
+import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
 import jakarta.transaction.Transactional;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -25,11 +24,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-//@Transactional
+@Transactional
 public class LoginService {
     //비밀번호 정규 표현식. 하나 이상의 영어 대문자 , 하나 이상의 특수기호 , 하나 이상의 숫자 , 8글자 13글자 사이
    //private static final String USERPW_RegExp = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&]{8,13}/";
-
 
     private final UserRepository userRepository;
 //  private final BCryptPasswordEncoder passwordEncoder;  //비밀번호 암호화
@@ -37,9 +35,9 @@ public class LoginService {
     private final TokenRepository tokenRepository;
 
 
-
     public LoginResponse login(LoginRequest loginRequest){ //로그인 기능
         log.info("로그인 서비스 함수 실행");
+        log.info("LoginRequest userid: {}", loginRequest.getUserid());
         Optional<UserEntity> optionalUser = userRepository.findByUserid(loginRequest.getUserid());
         log.info(optionalUser.toString());
         emptyCheckUserIdAndPassword(loginRequest.getUserid(),loginRequest.getPassword());
@@ -48,7 +46,6 @@ public class LoginService {
                     .success(false)
                     .message("유저를 찾을 수 없습니다 !")
                     .build();
-
         }
 
         UserEntity userEntity = optionalUser.get(); 
@@ -68,10 +65,10 @@ public class LoginService {
         );
 
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(principalDetail,null,principalDetail.getAuthorities());
-    
+                new UsernamePasswordAuthenticationToken(principalDetail,principalDetail.getPassword(),principalDetail.getAuthorities());
+        System.out.println("어덴트 토큰 : " + authenticationToken);
         log.info("시큐리티 인증정보 저장완료" + SecurityContextHolder.getContext().getAuthentication()); //ROLE USER 가 들어가지 않는다 !
-        
+
         //JWT 토큰 생성
         String accessToken = jwtTokenProvider.generateAccessToken(userEntity.getUserid());
         String refreshToken = jwtTokenProvider.generateRefreshToken(userEntity.getUserid());
@@ -89,13 +86,13 @@ public class LoginService {
     }
 
     //빈칸 검사 함수
-    private void emptyCheckUserIdAndPassword(String userid,String userpw){
+    private void emptyCheckUserIdAndPassword(String userid,String password){
         log.info("빈칸 검사 실행");
         if(userid == null || userid.trim().isEmpty()){
             throw new IllegalArgumentException("아이디를 입력해주세요");
         }
 
-        if(userpw==null || userpw.trim().isEmpty()){
+        if(password ==null || password.trim().isEmpty()){
             throw new IllegalArgumentException("비밀번호를 입력해주세요");
         }
 
@@ -103,7 +100,6 @@ public class LoginService {
             log.info("값이 입력되어있습니다.");
         }
     }
-
 
 
 }

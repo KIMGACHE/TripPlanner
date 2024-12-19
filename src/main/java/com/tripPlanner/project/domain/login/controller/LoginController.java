@@ -17,11 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class LoginController {
 
-
     private final LoginService loginService;
-
-//    @Autowired
-//    LoginRepository loginRepository;
 
     @GetMapping("/login")
     public String login(){
@@ -36,7 +32,6 @@ public class LoginController {
     ){
         log.info("login post mapping" + loginRequest);
       LoginResponse response = loginService.login(loginRequest); //loginDto 로 유저정보를 조회함
-        log.info("반갑습니다");
         System.out.println(response);
         if(!response.isSuccess()){
             return ResponseEntity.badRequest().body(response);

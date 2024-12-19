@@ -85,22 +85,6 @@ public class LoginControllerTest {
 
         Mockito.when(loginService.login(Mockito.any(LoginRequest.class))).thenReturn(loginResponse);
 
-
-
-//        // 테스트 로그 추가
-        System.out.println("Mock 설정 완료: " + loginService);
-
-        //when & then
-        System.out.println("Request JSON: " + objectMapper.writeValueAsString(loginRequest));
-
-        System.out.println("LoginService instance in test: " + loginService);
-        System.out.println("LoginController instance in test: " + loginController);
-        System.out.println("Is LoginService a mock? " + Mockito.mockingDetails(loginService).isMock());
-//        System.out.println("LoginService in controller: " + loginController.getLoginService());
-
-
-
-
         mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginRequest)))
