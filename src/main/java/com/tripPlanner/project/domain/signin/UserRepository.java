@@ -11,4 +11,6 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
     // 아이디 중복 검사
     Optional<UserEntity> findByUserid(String userid);
 
+    Optional<UserEntity> findByEmail(String email);
+
 }

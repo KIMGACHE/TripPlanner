@@ -1,61 +1,93 @@
 package com.tripPlanner.project.domain.signin;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-@Controller
-@Slf4j
-@RequestMapping("/user")
+@RestController
 @RequiredArgsConstructor
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
-    @GetMapping("/join")
-    public void join() {
-        log.info("Get /join...");// join.html을 반환
+    @PostMapping("/check-id")
+    public ResponseEntity<Map<String, Object>> checkUserId(@RequestBody Map<String, String> data) {
+        String userid = data.get("userid");
+        Optional<UserEntity> result = userRepository.findByUserid(userid);
+        Map<String, Object> response = new HashMap<>();
+        response.put("available", !result.isPresent());
+        response.put("message", result.isPresent() ? "이미 사용 중인 ID입니다." : "사용 가능한 ID입니다.");
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/check-email")
+    public ResponseEntity<Map<String, Object>> checkEmail(@RequestBody Map<String, String> data) {
+        String email = data.get("email");
+        Optional<UserEntity> result = userRepository.findByEmail(email);
+        Map<String, Object> response = new HashMap<>();
+
+        // Optional 객체를 isPresent로 확인
+        if (result.isPresent()) {
+            response.put("available", false);
+            response.put("message", "이미 사용 중인 이메일입니다.");
+        } else {
+            response.put("available", true);
+            response.put("message", "사용 가능한 이메일입니다.");
+        }
+
+        System.out.println("이메일 중복 검사 요청: {}" + email);
+        System.out.println("이메일 검색 결과: {}" + result);
+
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/send-auth-code")
+    public ResponseEntity<String> sendAuthCode(@RequestBody Map<String, String> data) {
+        String email = data.get("email");
+        String result = userService.sendAuthCode(email);
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/verify-auth-code")
+    public ResponseEntity<Map<String, String>> verifyAuthCode(@RequestBody Map<String, String> data) {
+        String email = data.get("email");
+        String code = data.get("code");
+        String result = userService.verifyAuthCode(email, code);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", result);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/join")
-    public String join_post(@RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
-                            @RequestParam Map<String, String> formData, UserDto userDto) throws IOException {
-        log.info("Post /join " + userDto);
+    public ResponseEntity<String> joinPost(@ModelAttribute UserDto userDto,
+                                           @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) {
 
-        userDto.setRepassword(formData.get("repassword"));
-        String error = userService.joinUser(userDto, profileImage);
+        System.out.println("UserID : "+userDto.getUserid());
+        System.out.println("UserPassword : "+userDto.getPassword());
 
-        if (error != null) {
-            log.error("Error occurred during user registration: {}", error);
-            return "redirect:/user/join?error=" + error;
+        try {
+            if (profileImage != null && !profileImage.isEmpty()) {
+                String imagePath = userService.uploadProfileImage(userDto.getUserid(), profileImage);
+                userDto.setImg(imagePath);
+            }
+
+            String result = userService.joinUser(userDto);
+            if (result != null) {
+                return ResponseEntity.badRequest().body(result);
+            }
+            return ResponseEntity.ok("회원가입 성공");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원가입 처리 중 오류가 발생했습니다.");
         }
-
-        return "redirect:/"; // 회원가입 성공 후 홈 화면으로 리다이렉트
-    }
-
-    // 아이디 유효성 검사
-    @PostMapping("/check-id")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> checkUserId(@RequestBody Map<String, String> data) {
-        String userid = data.get("userid");
-        String result = userService.validateUserId(userid);
-
-        Map<String, Object> response = new HashMap<>();
-        if (result == null) {
-            response.put("available", true);
-            response.put("message", "사용 가능한 아이디입니다.");
-        } else {
-            response.put("available", false);
-            response.put("message", result);
-        }
-
-        return ResponseEntity.ok(response);
     }
 }

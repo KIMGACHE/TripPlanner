@@ -15,18 +15,32 @@ import lombok.NoArgsConstructor;
 public class UserEntity {
 
     @Id
-    @Column(name = "userid" , length = 20)
+    @Column(name = "userid", length = 20)
     private String userid;
+
     @Column(name = "img")
     private String img;
-    @Column(name = "username")
+
+    @Column(name = "username", nullable = false)
     private String username;
-    @Column(name = "password")
+
+    @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "email")
+
+    @Column(name = "email", nullable = false)
     private String email;
-    @Column(name = "addr")
-    private String addr;
-    @Column(name = "birth")
-    private String birth;
+
+    @Column(name = "birth", nullable = false ,length = 8)
+    private int birth;
+
+    @Column(name = "gender", nullable = false)
+    private String gender;
+
+    @Column(name = "role", nullable = false)
+    private String role;
+
+    @PrePersist // 엔티티 저장 직전에 호출
+    public void prePersist() {
+        this.role = this.role == null ? "ROLE_USER" : this.role;
+    }
 }
