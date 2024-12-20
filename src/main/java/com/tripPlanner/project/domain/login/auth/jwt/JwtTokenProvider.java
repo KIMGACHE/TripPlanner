@@ -1,11 +1,16 @@
 package com.tripPlanner.project.domain.login.auth.jwt;
 
-import io.jsonwebtoken.*;
+import com.tripPlanner.project.domain.login.entity.TokenRepository;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.util.Date;
@@ -13,14 +18,11 @@ import java.util.Date;
 @Component
 @Slf4j
 public class JwtTokenProvider {
-    private Key key;
-    @Value("${jwt.secret}")
-    private String secretKey;
 
-    @Value("${jwt.access-token-expiration}")
-    private long accessTokenExpiration;
-    @Value("${jwt.refresh-token-expiration}")
-    private long refreshTokenExpiration;
+    private final Key key;
+    private final long accessTokenExpiration;
+    private final long refreshTokenExpiration;
+
 
     public JwtTokenProvider(
             @Value("${jwt.secret}") String secretKey,
@@ -63,27 +65,6 @@ public class JwtTokenProvider {
                 .getSubject(); //subject 에서 사용자 id 추출함
     }
     
-    public boolean validateToken(String token){
-        try{
-            log.info("토큰 유효성 검사 실행");
-            Jwts.parserBuilder()
-                    .setSigningKey(key) //secret Key를 기준으로 찾아서 파싱
-                    .build()
-                    .parseClaimsJws(token); //토큰 복호화
-            return true;
-        }catch (ExpiredJwtException e) { // 토큰 만료
-            log.error("Expired JWT token: {}", e.getMessage());
-        } catch (UnsupportedJwtException e) { // 지원하지 않는 JWT
-            log.error("Unsupported JWT token: {}", e.getMessage());
-        } catch (MalformedJwtException e) { // 잘못된 형식의 JWT
-            log.error("Malformed JWT token: {}", e.getMessage()); //추후에 GlobalExceptionHandler에서 관리하도록 함
-        } catch (SignatureException e) { // 서명 검증 실패
-            log.error("Invalid JWT signature: {}", e.getMessage());
-        } catch (IllegalArgumentException e) { // 기타 오류
-            log.error("JWT claims string is empty: {}", e.getMessage());
-        }
-        return false; // 유효하지 않은 경우 false 반환
-    }
 
 
 

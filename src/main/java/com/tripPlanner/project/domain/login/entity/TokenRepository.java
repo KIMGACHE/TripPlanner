@@ -7,5 +7,5 @@ import java.util.Optional;
 
 @Repository
 public interface TokenRepository extends CrudRepository<TokenEntity,String> {
-    Optional<TokenEntity> findByAccessToken(String accessToken); //Access Token 찾기
+    Optional<TokenEntity> findByRefreshToken(String refreshToken); //Access Token 찾기
 }
