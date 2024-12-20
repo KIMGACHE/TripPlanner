@@ -1,12 +1,15 @@
 package com.tripPlanner.project.domain.makePlanner.controller;
 
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tripPlanner.project.domain.makePlanner.dto.FoodDto;
+import com.tripPlanner.project.domain.makePlanner.dto.MapDataDto;
 import com.tripPlanner.project.domain.makePlanner.service.AccomService;
 import com.tripPlanner.project.domain.makePlanner.dto.AccomDto;
 import com.tripPlanner.project.domain.makePlanner.dto.MapDto;
+import com.tripPlanner.project.domain.makePlanner.service.DestinationService;
 import com.tripPlanner.project.domain.makePlanner.service.FoodService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,9 @@ public class MainController {
 
     @Autowired
     private FoodService foodService;
+
+    @Autowired
+    private DestinationService destinationService;
 
 //    @GetMapping("/makePlanner")
 //    public void main(Model model) throws JsonProcessingException {
@@ -61,9 +67,13 @@ public class MainController {
         String businessName = (String)map.get("businessName");
         String businessCategory = (String)map.get("businessCategory");
         String streetFullAddress = (String)map.get("streetFullAddress");
+        Double xCoordinate = (Double)map.get("coordinate_x");
+        Double yCoordinate = (Double)map.get("coordinate_y");
         datas.put("businessName",businessName);
         datas.put("businessCategory",businessCategory);
         datas.put("streetFullAddress",streetFullAddress);
+        datas.put("xCoordinate",xCoordinate);
+        datas.put("yCoordinate",yCoordinate);
 
         return new ResponseEntity<Map<String,Object>>(datas, HttpStatus.OK);
     }
@@ -99,10 +109,11 @@ public class MainController {
 
     @ResponseBody
     @PostMapping(value="/addPlanner", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String,Object>> add_planner() {
-        log.info("POST /planner/addPlanner...");
+    public ResponseEntity<Map<String,Object>> add_planner(@RequestBody Map<String,Object> map) {
+        List<MapDataDto> list = (List<MapDataDto>)map.get("destinations");
+        log.info("POST /planner/addPlanner..."+list);
 
-        Map<String,Object> datas = new HashMap<>();
+        Map<String,Object> datas = destinationService.addPlanner(list);
 
         return new ResponseEntity(datas, HttpStatus.OK);
     }
