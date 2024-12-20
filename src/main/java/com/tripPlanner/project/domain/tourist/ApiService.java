@@ -43,6 +43,38 @@ public class ApiService {
                 .build();
     }
 
+    // 구글 kgsearch api를 사용해서 장소 이름으로 검색을 해 장소에 대한 간단한 설명을 받아옵니다
+    public Mono<String> getPlaceDescription(String placeName) {
+        // API 요청 URL에 필요한 파라미터 추가
+        String url = "https://kgsearch.googleapis.com/v1/entities:search"
+                + "?limit=1"
+                + "&query=" + placeName
+                + "&key=" + googleKey;
+
+
+        System.out.println("url : " + url);
+
+        // WebClient를 사용해 GET 요청을 보냄
+        return webClient.get()
+                .uri(url)
+                .retrieve()
+                .bodyToMono(String.class).flatMap(response -> {
+            try {
+                // JSON 응답을 파싱하여 JsonNode로 변환
+                JsonNode responseNode = new ObjectMapper().readTree(response);
+
+                // body 데이터만 추출하여 반환
+                JsonNode items = responseNode.path("response").path("body");
+
+                // JsonNode 그대로 반환
+                return Mono.just(responseNode.toString());  // JsonNode를 그대로 JSON 형식의 문자열로 반환
+
+            } catch (JsonProcessingException e) {
+                return Mono.error(new RuntimeException("Error processing JSON", e));  // JSON 처리 중 오류가 발생하면 에러 반환
+            }
+        });
+    }
+
 
     // 검색어, 지역, 태그를 모두 입력했을 때 실행할 메서드
     public Mono<String> findCommonDataByCat2AndAreaCode(String areaBasedListResult, String searchKeywordResult) {
@@ -298,7 +330,7 @@ public class ApiService {
     }
 
     // 코스 ID를 바탕으로 상세 데이터를 가져오는 함수
-    public Mono<String> getDetailInfo(String courseId) {
+    public Mono<String> getDetailInfo(String courseId, String contentTypeId) {
         // URL을 수동으로 구성
         String url = "https://apis.data.go.kr/B551011/KorService1/detailInfo1"
                 + "?serviceKey=" + serviceKey
@@ -307,9 +339,9 @@ public class ApiService {
                 + "&MobileApp=AppTest"
                 + "&MobileOS=ETC"
                 + "&contentId=" + courseId
-                + "&contentTypeId=25"
+                + "&contentTypeId=" + contentTypeId
                 + "&_type=json";
-//        System.out.println("url : " + url);
+
         // WebClient를 사용하여 API 호출
         return webClient.get()
                 .uri(url)  // 인코딩 없이 URL을 그대로 전달
@@ -438,7 +470,7 @@ public class ApiService {
 
 
     // 코스 ID를 바탕으로 상세소개를 가져오는 기능
-    public Mono<String> getDetailIntro(String courseId, String pageNo, String contentTypeId) {
+    public Mono<String> getDetailIntro(String courseId, String contentTypeId) {
         // URL을 수동으로 구성
         String url = "https://apis.data.go.kr/B551011/KorService1/detailIntro1"
                 + "?serviceKey=" + serviceKey
@@ -447,7 +479,7 @@ public class ApiService {
                 + "&MobileApp=AppTest"
                 + "&MobileOS=ETC"
                 + "&contentId=" + courseId
-                + "&contentTypeId=25"
+                + "&contentTypeId=" + contentTypeId
                 + "&_type=json";
         System.out.println("url : " + url);
         // WebClient를 사용하여 API 호출

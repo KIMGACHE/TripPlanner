@@ -1,5 +1,7 @@
 package com.tripPlanner.project.domain.tourist;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -12,6 +14,26 @@ public class ApiController {
 
     private final ApiService apiService;
 
+//    @PostMapping("getPlaceDescription")
+//    public Mono<String> getPlaceDescription(@RequestBody String title) {
+//        // title이 object형태로 받아와지기 때문에 문자열로 변환
+//        try {
+//            // ObjectMapper로 JSON 파싱
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            JsonNode jsonNode = objectMapper.readTree(title);
+//            title = jsonNode.get("query").asText();  // "query" 값을 추출
+//
+//            System.out.println("title : " + title);
+//
+//            return apiService.getPlaceDescription(title);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return Mono.error(new RuntimeException("Error parsing request body", e));
+//        }
+//    }
+
+
+
     @GetMapping("/tourist-info")
     public Mono<String> getTouristInfo(@RequestParam(value = "id") String contentId) {
 
@@ -20,6 +42,48 @@ public class ApiController {
         }
         return null;
     }
+
+    @PostMapping("tourist-detailInfo")
+    public Mono<String> getTouristDetailInfo(@RequestBody String contentId) {
+        String contentTypeId = "12";
+        // title이 object형태로 받아와지기 때문에 문자열로 변환
+        try {
+            // ObjectMapper로 JSON 파싱
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(contentId);
+            contentId = jsonNode.get("contentId").asText();
+
+            System.out.println("title : " + contentId);
+
+            return apiService.getDetailInfo(contentId, contentTypeId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Mono.error(new RuntimeException("Error parsing request body", e));
+        }
+
+    }
+
+    // 영업시간, 전화번호 등이 포함돼 있는 정보
+    @PostMapping("tourist-detailIntro")
+    public Mono<String> getTouristDetailIntro(@RequestBody String contentId) {
+        String contentTypeId = "12";
+        // title이 object형태로 받아와지기 때문에 문자열로 변환
+        try {
+            // ObjectMapper로 JSON 파싱
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(contentId);
+            contentId = jsonNode.get("contentId").asText();
+
+            System.out.println("title : " + contentId);
+
+            return apiService.getDetailIntro(contentId, contentTypeId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Mono.error(new RuntimeException("Error parsing request body", e));
+        }
+
+    }
+
 
     // 관광지 코스를 띄울 때 여러 필터링을 거쳐 데이터를 표시할 함수 (굳이 이렇게 하는 이유는 API가 제공되지 않기 때문)
     @PostMapping("/api/getSearch")
@@ -69,9 +133,9 @@ public class ApiController {
     // 관광지 코스 상세페이지로 진입할 때 contentid를 파라미터로 받아서 맵핑
     @GetMapping("/travelcourse-info")
     public Mono<String> getTravelCourseInfo(@RequestParam(value = "id") String contentId) {
-
+        String contentTypeId = "25";
         if (!contentId.isEmpty()) {
-            return apiService.getDetailInfo(contentId);
+            return apiService.getDetailInfo(contentId, contentTypeId);
         }
         return null;
     }
@@ -85,6 +149,7 @@ public class ApiController {
         }
         return Mono.empty();  // null 대신 Mono.empty()를 반환하여 빈 값을 처리
     }
+
     // 관광지 코스 각각의 장소들에 대한 정보를 구글api로 요청했을 때 데이터가 없으면 요청할 함수 (백업용)
     @PostMapping("/travelcourse-info-searchKeyword")
     public Mono<String> getTravelCourseInfoSearchKeyword(@RequestBody ApiRequest apiRequest) {
