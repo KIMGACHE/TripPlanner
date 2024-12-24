@@ -1,14 +1,16 @@
 package com.tripPlanner.project.commons.entity;
 
+import com.tripPlanner.project.domain.board.BoardDto;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "Planner")
 @Entity
+@AllArgsConstructor
 @Builder
 public class Planner {
     @Id
@@ -19,6 +21,9 @@ public class Planner {
     @JoinColumn(name = "userid", nullable = false)
     private UserEntity user; // 사용자
 
+    @Column(name = "plannerTitle", nullable = false)
+    private String plannerTitle;
+
     @Column(name = "createAt", nullable = false, updatable = false)
     private LocalDateTime createAt = LocalDateTime.now(); // 등록일자
 
@@ -28,6 +33,17 @@ public class Planner {
     @Column(name = "day", nullable = false)
     private byte day; // 여행 기간
 
+    @Column(name = "isPublic", nullable = false)
+    private boolean isPublic; // 공개 여부 (생성 시 선택)
 
-
+    public BoardDto toDto(String thumbnailImage) {
+        return new BoardDto(
+                this.plannerID,
+                this.plannerTitle,
+                this.createAt,
+                this.day,
+                this.user.getUsername(), // UserEntity에서 username 가져오기
+                thumbnailImage // 썸네일 이미지
+        );
+    }
 }

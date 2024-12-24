@@ -1,19 +1,18 @@
 package com.tripPlanner.project.commons.entity;
 
+import com.tripPlanner.project.domain.destination.DestinationDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @Table(name = "Destination")
-@Builder
+@NoArgsConstructor
 public class Destination {
 
     @EmbeddedId
-    private DestinationId destinationId;
+    private DestinationID destinationID;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plannerID", referencedColumnName = "plannerID", insertable = false, updatable = false)
@@ -33,4 +32,22 @@ public class Destination {
 
     @Column(name = "category")
     private String category; // 카테고리
+
+    @Column(name = "image")
+    private String image; // 장소의 이미지 URL (구글 API사용)
+
+    public DestinationDto toDto() {
+        return new DestinationDto(
+                this.name,
+                this.x,
+                this.y,
+                this.address,
+                this.category,
+                this.image,
+                this.planner.getUser().getUsername(),  // Username만 포함
+                this.destinationID.getPlannerID(),
+                this.destinationID.getDay(),
+                this.destinationID.getDayOrder()
+        );
+    }
 }

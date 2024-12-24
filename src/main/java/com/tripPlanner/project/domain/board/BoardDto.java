@@ -1,13 +1,23 @@
 package com.tripPlanner.project.domain.board;
 
+import com.tripPlanner.project.commons.entity.Planner;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+import java.time.LocalDateTime;
+
+@Getter
 @NoArgsConstructor
-//@AllArgsConstructor
+@AllArgsConstructor
 @Builder
 public class BoardDto {
+    private int plannerID;
+    private String plannerTitle;
+    private LocalDateTime createAt;
+    private byte day;
+    private String username;
+    private String thumbnailImage;
+
 }

@@ -1,12 +1,14 @@
 package com.tripPlanner.project.commons.entity;
 
 import jakarta.persistence.Embeddable;
+import lombok.Getter;
 
 import java.io.Serializable;
 
 // 여행 일정에서 특정 날짜에 특정 장소를 식별하는 데 사용하는 클래스
 @Embeddable  // 이 클래스는 JPA에서 복합 기본 키를 만들 때 사용
-public class DestinationId implements Serializable {
+@Getter
+public class DestinationID implements Serializable {
 
     private int plannerID;  // 여행 계획의 고유 ID
     private int day;         // 여행 일정의 특정 날짜 (예: 첫째 날, 둘째 날 등)
@@ -21,7 +23,7 @@ public class DestinationId implements Serializable {
         if (this == o) return true;  // 자신과 비교하는 경우 동일함
         if (o == null || getClass() != o.getClass()) return false;  // 비교 대상이 없거나 클래스가 다르면 false 반환
 
-        DestinationId that = (DestinationId) o;
+        DestinationID that = (DestinationID) o;
 
         // plannerID, day, dayOrder가 모두 동일해야 동일한 객체로 간주
         if (plannerID != that.plannerID) return false;
