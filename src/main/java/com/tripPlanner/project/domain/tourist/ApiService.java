@@ -43,39 +43,6 @@ public class ApiService {
                 .build();
     }
 
-    // 구글 kgsearch api를 사용해서 장소 이름으로 검색을 해 장소에 대한 간단한 설명을 받아옵니다
-    public Mono<String> getPlaceDescription(String placeName) {
-        // API 요청 URL에 필요한 파라미터 추가
-        String url = "https://kgsearch.googleapis.com/v1/entities:search"
-                + "?limit=1"
-                + "&query=" + placeName
-                + "&key=" + googleKey;
-
-
-        System.out.println("url : " + url);
-
-        // WebClient를 사용해 GET 요청을 보냄
-        return webClient.get()
-                .uri(url)
-                .retrieve()
-                .bodyToMono(String.class).flatMap(response -> {
-            try {
-                // JSON 응답을 파싱하여 JsonNode로 변환
-                JsonNode responseNode = new ObjectMapper().readTree(response);
-
-                // body 데이터만 추출하여 반환
-                JsonNode items = responseNode.path("response").path("body");
-
-                // JsonNode 그대로 반환
-                return Mono.just(responseNode.toString());  // JsonNode를 그대로 JSON 형식의 문자열로 반환
-
-            } catch (JsonProcessingException e) {
-                return Mono.error(new RuntimeException("Error processing JSON", e));  // JSON 처리 중 오류가 발생하면 에러 반환
-            }
-        });
-    }
-
-
     // 검색어, 지역, 태그를 모두 입력했을 때 실행할 메서드
     public Mono<String> findCommonDataByCat2AndAreaCode(String areaBasedListResult, String searchKeywordResult) {
         try {
@@ -403,7 +370,7 @@ public class ApiService {
                 });
     }
 
-    // 모든 이미지를 받아옴 (테스트)
+    // 키워드로 구글 API를 요청해 모든 이미지를 받아오는 함수
     public Mono<Map<String, Object>> searchPlacesByKeyword(String keyword) {
         // URL과 파라미터 생성
         String url = "https://maps.googleapis.com/maps/api/place/textsearch/json" + "?query=" + keyword + "&key=" + googleKey;
@@ -433,7 +400,7 @@ public class ApiService {
                                         String photoReference = photo.path("photo_reference").asText();
                                         if (!photoReference.isEmpty()) {
                                             // 이미지 URL 생성
-                                            String photoUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference="
+                                            String photoUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=1000&photoreference="
                                                     + photoReference + "&key=" + googleKey;
                                             photoUrls.add(photoUrl);
                                         }

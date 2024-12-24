@@ -16,7 +16,7 @@ public class BoardDto {
     private int plannerID;
     private String plannerTitle;
     private LocalDateTime createAt;
-    private byte day;
+    private int day;
     private String username;
     private String thumbnailImage;
 
