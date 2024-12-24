@@ -1,19 +1,21 @@
 package com.tripPlanner.project.domain.makePlanner.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class DestinationDto {
-    private Long plannerid;
-    private int plan_day;
-    private int plan_order;
     private String name;
-    private double coordinate_x;
-    private double coordinate_y;
+    private double x;
+    private double y;
+    private String address;
+    private String category;
+    private String image;
+    private String username;  // Planner의 username
+    private int plannerID;
+    private int day;
+    private int dayOrder;
 }

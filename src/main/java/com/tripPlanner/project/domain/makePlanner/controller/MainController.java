@@ -6,11 +6,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tripPlanner.project.domain.makePlanner.dto.FoodDto;
 import com.tripPlanner.project.domain.makePlanner.dto.MapDataDto;
+import com.tripPlanner.project.domain.makePlanner.entity.Planner;
 import com.tripPlanner.project.domain.makePlanner.service.AccomService;
 import com.tripPlanner.project.domain.makePlanner.dto.AccomDto;
 import com.tripPlanner.project.domain.makePlanner.dto.MapDto;
 import com.tripPlanner.project.domain.makePlanner.service.DestinationService;
 import com.tripPlanner.project.domain.makePlanner.service.FoodService;
+import com.tripPlanner.project.domain.makePlanner.service.PlannerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,24 +40,8 @@ public class MainController {
     @Autowired
     private DestinationService destinationService;
 
-//    @GetMapping("/makePlanner")
-//    public void main(Model model) throws JsonProcessingException {
-//        log.info("GET /planner/makePlanner...");
-//
-//        // 최초 좌표 주변의 모든 데이터를 가져온다.
-//        List<AccomDto> accomList = accomService.test1(128.601445, 35.8714354,11);
-//        List<FoodDto> foodList = foodService.test1(128.601445, 35.8714354,11);
-//
-//        // ObjectMapper 객체 생성
-//        ObjectMapper objectMapper = new ObjectMapper();
-//
-//        // 자바 객체를 JSON 문자열로 변환
-//        String accom_json = objectMapper.writeValueAsString(accomList);
-//        String food_json = objectMapper.writeValueAsString(foodList);
-//
-//        model.addAttribute("accomList", accom_json);
-//        model.addAttribute("foodList", food_json);
-//    }
+    @Autowired
+    private PlannerService plannerService;
 
     @ResponseBody
     @PostMapping(value="/findDestination", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
@@ -110,11 +97,17 @@ public class MainController {
     @ResponseBody
     @PostMapping(value="/addPlanner", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String,Object>> add_planner(@RequestBody Map<String,Object> map) {
-        List<MapDataDto> list = (List<MapDataDto>)map.get("destinations");
-        log.info("POST /planner/addPlanner..."+list);
+        String title = (String)map.get("title");
+        String description = (String)map.get("description");
+        boolean isPublic = (Boolean)map.get("isPublic");
+        int day = (Integer)map.get("day");
+        ArrayList<Map<String,Object>> destination = (ArrayList<Map<String,Object>>)map.get("destination");
 
-        Map<String,Object> datas = destinationService.addPlanner(list);
+        log.info("POST /planner/addPlanner..."+destination);
 
-        return new ResponseEntity(datas, HttpStatus.OK);
+        Planner planner = plannerService.addPlanner(title,description,day,isPublic);
+        Map<String,Object> datas = destinationService.addDestination(planner, day, destination);
+
+        return new ResponseEntity(null, HttpStatus.OK);
     }
 }

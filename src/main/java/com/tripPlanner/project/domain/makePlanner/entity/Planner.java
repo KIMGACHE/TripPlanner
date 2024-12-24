@@ -1,41 +1,55 @@
 package com.tripPlanner.project.domain.makePlanner.entity;
 
+import com.tripPlanner.project.domain.makePlanner.dto.PlannerDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-@Entity
-@Table(name="tbl_planner")
-@Data
-@Builder
-@AllArgsConstructor
+@Getter
 @NoArgsConstructor
+@Table(name = "Planner")
+@Entity
+@AllArgsConstructor
+@Builder
 public class Planner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "plannerid")
-    private Long plannerid;
+    private int plannerID; // 여행 일정 ID
 
-    @Column(name="userid")
-//    @ManyToOne(fetch= FetchType.LAZY)
-//    @JoinColumn(name ="userid", foreignKey = @ForeignKey(name="FK_PLANNER_USER",
-//            foreignKeyDefinition = "FOREIGN KEY(userid) REFERENCES User(userid) ON DELETE CASCADE ON UPDATE CASCADE"))
-    private String userid;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "userid", nullable = false)
+    @Column(name = "userid", nullable = false)
+    private String userid; // 사용자
 
-    @Column(name = "createAt")
-    private LocalDate createAt;
+    @Column(name = "plannerTitle", nullable = false)
+    private String plannerTitle;
 
-    @Column(name = "updateAt")
-    private LocalDate updateAt;
+    @Column(name = "createAt", nullable = false, updatable = false)
+    private LocalDateTime createAt = LocalDateTime.now(); // 등록일자
 
-    @Column(name = "duration")
-    private int duration;
+    @Column(name = "updateAt", nullable = false)
+    private LocalDateTime updateAt = LocalDateTime.now(); // 수정일자
 
-    @Column(name = "people")
-    private int people;
-    
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "day", nullable = false)
+    private int day; // 여행 기간
+
+    @Column(name = "isPublic", nullable = false)
+    private boolean isPublic; // 공개 여부 (생성 시 선택)
+
+    public PlannerDto toDto(Planner planner,String thumbnailImage) {
+        return PlannerDto.builder()
+                .plannerID(planner.getPlannerID())
+                .userid(planner.getUserid())
+                .plannerTitle(planner.getPlannerTitle())
+                .createAt(planner.getCreateAt())
+                .updateAt(planner.getUpdateAt())
+                .day(planner.getDay())
+                .isPublic(planner.isPublic())
+                .description(planner.getDescription())
+                .build();
+    }
 }

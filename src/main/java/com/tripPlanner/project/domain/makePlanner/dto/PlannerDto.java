@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -19,38 +20,33 @@ import java.time.LocalDate;
 public class PlannerDto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long plannerid;
+    private int plannerID;
     @Column
     private String userid;
     @Column
-    private LocalDate createAt;
+    private String plannerTitle;
     @Column
-    private LocalDate updateAt;
+    private LocalDateTime createAt;
     @Column
-    private int duration;
+    private LocalDateTime updateAt;
     @Column
-    private int people;
-
+    private int day;
+    @Column
+    private boolean isPublic;
+    @Column
+    private String description;
 
     public static Planner dtoToEntity(PlannerDto plannerDto) {
         return Planner.builder()
-                .plannerid(plannerDto.getPlannerid())
+                .plannerID(plannerDto.getPlannerID())
                 .userid(plannerDto.getUserid())
+                .plannerTitle(plannerDto.getPlannerTitle())
                 .createAt(plannerDto.getCreateAt())
                 .updateAt(plannerDto.getUpdateAt())
-                .duration(plannerDto.getDuration())
-                .people(plannerDto.getPeople())
+                .day(plannerDto.getDay())
+                .isPublic(plannerDto.isPublic())
+                .description(plannerDto.getDescription())
                 .build();
     }
 
-    public static PlannerDto entityToDto(Planner planner) {
-        return PlannerDto.builder()
-                .plannerid(planner.getPlannerid())
-                .userid(planner.getUserid())
-                .createAt(planner.getCreateAt())
-                .updateAt(planner.getUpdateAt())
-                .duration(planner.getDuration())
-                .people(planner.getPeople())
-                .build();
-    }
 }
