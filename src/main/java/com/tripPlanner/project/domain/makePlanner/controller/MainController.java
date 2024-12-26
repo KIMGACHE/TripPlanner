@@ -110,4 +110,30 @@ public class MainController {
 
         return new ResponseEntity(null, HttpStatus.OK);
     }
+
+    @ResponseBody
+    @PostMapping(value="/searchDestination", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String,Object>> search_destination(@RequestBody Map<String,Object> map) {
+        String type = (String)map.get("type");
+        String word = (String)map.get("word");
+        String areaname = (String)map.get("areaname");
+
+        Map<String,Object> datas = new HashMap<>();
+        log.info("POST /planner/searchDestination..."+type+word);
+
+        if(type.equals("food")) {
+            List<FoodDto> searchList = foodService.searchFood(word,areaname);
+            datas.put("data",searchList);
+            System.out.println("찾은것!!!!!!!!!!!!"+searchList);
+        } else if(type.equals("accom")) {
+//            accomService
+        } else if(type.equals("place")) {
+
+        } else {
+            System.out.println("error");
+        }
+
+
+        return new ResponseEntity(datas, HttpStatus.OK);
+    }
 }

@@ -17,4 +17,15 @@ public interface FoodRepository extends JpaRepository<Food,String>  {
             @Param("xEnd") double xEnd,
             @Param("yEnd") double yEnd
     );
+
+    @Query("SELECT fd FROM Food AS fd WHERE (fd.locationFullAddress LIKE %:areaname% or fd.streetFullAddress LIKE %:areaname%) and fd.businessName LIKE %:word%")
+    List<Food> searchFood(
+            @Param("word") String word,
+            @Param("areaname") String areaname
+    );
+
+    @Query("SELECT fd FROM Food AS fd WHERE fd.locationFullAddress LIKE %:areaname% or fd.streetFullAddress LIKE %:areaname% ")
+    List<Food> searchAreaFood(
+            @Param("areaname") String areaname
+    );
 }

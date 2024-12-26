@@ -3,6 +3,7 @@ package com.tripPlanner.project.domain.makePlanner.service;
 import com.tripPlanner.project.domain.makePlanner.dto.FoodDto;
 import com.tripPlanner.project.domain.makePlanner.entity.Food;
 import com.tripPlanner.project.domain.makePlanner.repository.FoodRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,5 +38,31 @@ public class FoodService {
             list.add(foodDto.entityToDto(el));
         });
         return list;
+    }
+
+    @Transactional
+    public List<FoodDto> searchFood(String word, String areaname) {
+        try {
+            List<Food> foods = new ArrayList<>();
+
+            if(areaname.equals("강원도"))
+                areaname = "강원";
+            if(word.equals("")) {
+                foods = foodRepository.searchAreaFood(areaname);
+            } else {
+                foods = foodRepository.searchFood(word,areaname);
+            }
+
+
+            List<FoodDto> list = new ArrayList<FoodDto>();
+
+            FoodDto foodDto = new FoodDto();
+            foods.forEach(el->{
+                list.add(foodDto.entityToDto(el));
+            });
+            return list;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
