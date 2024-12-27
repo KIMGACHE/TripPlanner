@@ -8,6 +8,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -19,6 +22,9 @@ public class SecurityConfig {
         // csrf 비활성화
         http.csrf(AbstractHttpConfigurer::disable);
 
+        // cors 설정
+        http.cors(httpSecurityCorsConfigurer -> corsConfigurationSource());
+
         // httpBasic 비활성화
         http.httpBasic(AbstractHttpConfigurer::disable);
 
@@ -27,8 +33,8 @@ public class SecurityConfig {
 
         // 정적 경로
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("*", "/*/*","/static/**", "/js/**").permitAll() // 인증 없이 허용할 경로
-//                .requestMatchers("").denyAll() // 인증 없으면 허용하지 않을 경로
+                .requestMatchers("**", "/*", "/**/**", "/api/getAreaBasedList").permitAll() // 인증 없이 허용할 경로
+//              .requestMatchers("").denyAll() // 인증 없으면 허용하지 않을 경로
                 .anyRequest().authenticated());
 
         // 로그아웃
@@ -40,6 +46,7 @@ public class SecurityConfig {
 //            oauth2.loginPage("/login").userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService))
 //                    .successHandler(oAuth2SuccessHandler).failureHandler(oAuth2ErrorHandler);
 //        });
+
 
 
         // 세션 비활성화
@@ -61,5 +68,18 @@ public class SecurityConfig {
 //            return (web) -> web.ignoring().requestMatchers("/favicon.ico");
 //    }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:3000"); // 필요한 도메인 추가
+        configuration.addAllowedOrigin("http://localhost:9000");
+        configuration.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
+        configuration.addAllowedHeader("*"); // 모든 헤더 허용
+        configuration.setAllowCredentials(true); // 쿠키 허용
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
 }
