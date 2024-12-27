@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script defer src="/js/tourist/tourist.js"></script>
+    <style>
+        .hidden {
+        display: none;
+    }
+
+    a {
+        text-decoration: none;
+        margin:0;
+        padding: 0;
+    }
+    li {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    h4 {
+        margin:0;
+        padding: 0;
+    }
+
+
+    .course_contentListItemLinkImg {
+        height: 300px;
+        width: 300px;
+    }
+
+    .course_contentListItemTextList {
+        padding:0;
+    }
+
+    .tourlist-info-btn {
+        margin-bottom: 20px;
+    }
+    </style>
+<!-- axios cdn -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js" integrity="sha512-v8+bPcpk4Sj7CKB11+gK/FnsbgQ15jTwZamnBf/xDmiQDcgOIYufBo6Acu1y30vrk8gg5su4x0CG3zfPaq5Fcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+
+<h1>여행 코스 검색!</h1>
+
+<select id="regionFilter" class="course_regionFilterSelect">
+    <option value="">전체</option>
+    <option value="1">서울</option>
+    <option value="6">부산</option>
+    <option value="4">대구</option>
+    <option value="2">인천</option>
+    <option value="5">광주</option>
+    <option value="3">대전</option>
+    <option value="7">울산</option>
+    <option value="8">세종</option>
+    <option value="31">경기</option>
+    <option value="32">강원</option>
+    <option value="33">충북</option>
+    <option value="34">충남</option>
+    <option value="35">경북</option>
+    <option value="36">경남</option>
+    <option value="37">전북</option>
+    <option value="38">전남</option>
+    <option value="39">제주</option>
+</select>
+
+<select id="hashtagFilter" class="course_hashtagFilterSelect">
+    <option value="">전체</option>
+    <option value="C0112">#가족코스</option>
+    <option value="C0113">#나홀로코스</option>
+    <option value="C0114">#힐링코스</option>
+    <option value="C0115">#도보코스</option>
+    <option value="C0116">#캠핑코스</option>
+    <option value="C0117">#맛코스</option>
+</select>
+
+<div class="course_searchFilter_box">
+    <label class="course_searchFilterLabel">키워드</label>
+    <input id="searchFilter" class="course_searchFilterInput" type="text" placeholder="검색어를 입력하세요">
+    <button class="course_formButton">검색</button>
+
+</div>
+
+<div class="total-count"></div>
+
+<div class="course_content_wrap"></div>
+<div class="buttonBox"></div>
+
+<div class="course_details_container hidden"></div>
+
+
+
+
+</body>
+</html>
