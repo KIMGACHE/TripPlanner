@@ -1,8 +1,8 @@
 package com.tripPlanner.project.domain.board;
 
-import com.tripPlanner.project.commons.entity.Destination;
-import com.tripPlanner.project.commons.entity.Planner;
-import com.tripPlanner.project.domain.destination.DestinationRepository;
+import com.tripPlanner.project.domain.makePlanner.entity.Destination;
+import com.tripPlanner.project.domain.makePlanner.entity.Planner;
+import com.tripPlanner.project.domain.makePlanner.repository.DestinationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

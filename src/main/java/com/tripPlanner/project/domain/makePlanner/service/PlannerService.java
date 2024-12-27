@@ -28,7 +28,8 @@ public class PlannerService {
             
             PlannerDto plannerDto = PlannerDto.builder()
                     .plannerID(0)
-                    .userid("userid")
+                    // 병합 시 변경
+                    .user(null)
                     .plannerTitle(title)
                     .createAt(LocalDateTime.now())
                     .updateAt(LocalDateTime.now())

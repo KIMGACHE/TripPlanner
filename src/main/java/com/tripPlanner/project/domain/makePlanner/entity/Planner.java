@@ -1,5 +1,7 @@
 package com.tripPlanner.project.domain.makePlanner.entity;
 
+import com.tripPlanner.project.commons.entity.UserEntity;
+import com.tripPlanner.project.domain.board.BoardDto;
 import com.tripPlanner.project.domain.makePlanner.dto.PlannerDto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,10 +19,10 @@ public class Planner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int plannerID; // 여행 일정 ID
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "userid", nullable = false)
-    @Column(name = "userid", nullable = false)
-    private String userid; // 사용자
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userid", nullable = false)
+//    @Column(name = "userid", nullable = false)
+    private UserEntity user; // 사용자
 
     @Column(name = "plannerTitle", nullable = false)
     private String plannerTitle;
@@ -40,10 +42,13 @@ public class Planner {
     @Column(name = "isPublic", nullable = false)
     private boolean isPublic; // 공개 여부 (생성 시 선택)
 
+    @Column(name = "area", nullable = false)
+    private String area;
+
     public PlannerDto toDto(Planner planner,String thumbnailImage) {
         return PlannerDto.builder()
                 .plannerID(planner.getPlannerID())
-                .userid(planner.getUserid())
+                .user(planner.getUser())
                 .plannerTitle(planner.getPlannerTitle())
                 .createAt(planner.getCreateAt())
                 .updateAt(planner.getUpdateAt())
@@ -51,5 +56,19 @@ public class Planner {
                 .isPublic(planner.isPublic())
                 .description(planner.getDescription())
                 .build();
+    }
+
+    public BoardDto toBoardDto(String thumbnailImage) {
+        return new BoardDto(
+                this.plannerID,
+                this.plannerTitle,
+                this.createAt,
+                this.day,
+                this.area,
+                this.description,
+                this.user.getUsername(), // UserEntity에서 username 가져오기
+                this.user.getUserid(),
+                thumbnailImage // 썸네일 이미지
+        );
     }
 }

@@ -1,8 +1,6 @@
 package com.tripPlanner.project.domain.makePlanner.service;
 
-import com.tripPlanner.project.domain.makePlanner.dto.AccomDto;
-import com.tripPlanner.project.domain.makePlanner.entity.Accom;
-import com.tripPlanner.project.domain.makePlanner.repository.AccomRepository;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

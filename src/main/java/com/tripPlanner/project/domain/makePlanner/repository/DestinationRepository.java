@@ -21,4 +21,5 @@ public interface DestinationRepository extends JpaRepository<Destination, Destin
 
     // 플래너 ID로 해당 플래너의 destination들 조회
     List<Destination> findByPlanner_PlannerID(int plannerID);
+
 }
