@@ -1,8 +1,8 @@
 package com.tripPlanner.project.domain.makePlanner.entity;
 
-import com.tripPlanner.project.commons.entity.UserEntity;
 import com.tripPlanner.project.domain.board.BoardDto;
 import com.tripPlanner.project.domain.makePlanner.dto.PlannerDto;
+import com.tripPlanner.project.domain.signin.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
