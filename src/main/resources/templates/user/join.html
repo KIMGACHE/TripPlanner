@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- BS5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <!-- GOOGLE ICON -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+
+    <!-- axios.cdn -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js" integrity="sha512-DdX/YwF5e41Ok+AI81HI8f5/5UsoxCVT9GKYZRIzpLxb8Twz4ZwPPX+jQMwMhNQ9b5+zDEefc+dcvQoPWGNZ3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>회원가입</title>
+</head>
+<body>
+<h1>회원가입 페이지</h1>
+<form id="joinForm">
+    <!-- 프로필 사진 업로드 -->
+    <div class="m-3" style="position:relative;">
+        <div class="profileBox" style="margin:15px auto;width:150px;height:150px;border:1px solid lightgray;border-radius:50%;">
+            <img src="/assets/anonymous.jpg" id="profileImg" style="width:100%;height:100%;border:1px solid;border-radius:50%;" />
+        </div>
+        <input type="file" id="profileImageInput" style="display:none;" />
+        <div class="profileUploadBtn" style="padding:5px;position:absolute;left:67%;top:80%;cursor:pointer">
+            <span class="material-symbols-outlined">image</span>
+        </div>
+    </div>
+
+    <!-- ID 입력 -->
+    <div class="mb-3 mt-3">
+        <label for="userid">ID</label>
+        <input type="text" name="userid" id="userid" class="form-control">
+        <div id="iddMessage" class="text-danger"></div>
+    </div>
+
+    <!-- 이름 입력 -->
+    <div class="mb-3">
+        <label for="username">이름</label>
+        <input type="text" name="username" id="username" class="form-control">
+        <div id="usernameMessage" class="text-danger"></div>
+    </div>
+
+    <!-- 비밀번호 입력 -->
+    <div class="mb-3">
+        <label for="password">비밀번호</label>
+        <input type="password" name="password" id="password" class="form-control">
+        <div id="passwordMessage" class="text-danger"></div>
+    </div>
+
+    <!-- 비밀번호 확인 -->
+    <div class="mb-3">
+        <label for="repassword">비밀번호 확인</label>
+        <input type="password" name="repassword" id="repassword" class="form-control">
+        <div id="repasswordMessage" class="text-danger"></div>
+    </div>
+
+    <div>
+        <input type="radio" name="gender" value="man">남
+        <input type="radio" name="gender" value="woman">여
+        <br>
+        <br>
+    </div>
+
+
+
+
+    <!-- 이메일 입력 -->
+    <div class="mb-3">
+        <label for="useremail">이메일</label>
+        <input type="email" id="useremail" name="email" class="form-control" placeholder="이메일을 입력하세요.">
+        <input type="button" name="emailbutton" id="emailbutton" class="btn btn-secondary" value="이메일 인증">
+        <p id="emailMessage" style="color:red;"></p>
+    </div>
+
+    <!-- 인증번호 입력란 -->
+    <div id="authCodeInput" style="display:none;">
+        <label>인증번호를 입력하시오</label>
+        <input type="text" id="authCode" name="authCode">
+        <input type="button" id="authCodeVerifyButton1" class="btn btn-primary" value="인증 확인">
+        <p id="authCodeMessage" style="color:red;"></p>
+    </div>
+
+
+    <div class="mb-3">
+        <label for="birth">생년월일을 입력하시오</label><br>
+        <select class="box" id="birth-year">
+            <option disabled selected>출생 연도</option>
+        </select>
+        <select class="box" id="birth-month">
+            <option disabled selected>월</option>
+        </select>
+        <select class="box" id="birth-day">
+            <option disabled selected>일</option>
+        </select>
+        <label style="font-size: 0.8rem">ex) 생년월일(숫자만 입력)</label><br>
+        <input type="text" id="birth" name="birth" maxlength="8" placeholder="YYYYMMDD" class="form-control mb-2"/>
+        <div id="birthMessage" class="text-danger"></div> <!-- 메시지를 출력할 요소 -->
+    </div>
+
+
+    <!-- 회원가입 버튼 -->
+    <button type="submit" class="btn btn-primary">회원가입</button>
+</form>
+</body>
+
+<script >
+    document.addEventListener("DOMContentLoaded", () => {
+        // 프로필 사진 업로드
+        const profileBoxEl = document.querySelector(".profileBox");
+        const profileUploadBtn = document.querySelector(".profileUploadBtn");
+        const profileImageInput = document.querySelector("#profileImageInput");
+        const defaultImageURL = "/assets/anonymous.jpg";
+        let uploadedFile = null;
+
+        function handleImagePreview(file) {
+            const imgTg = document.createElement("img");
+            imgTg.src = URL.createObjectURL(file);
+            imgTg.style = "width:100%;height:100%;border-radius:50%;";
+            profileBoxEl.innerHTML = "";
+            profileBoxEl.appendChild(imgTg);
+            uploadedFile = file;
+        }
+
+        profileUploadBtn.addEventListener("click", () => {
+            profileImageInput.click();
+        });
+
+        profileImageInput.addEventListener("change", (event) => {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith("image/")) {
+                handleImagePreview(file);
+            } else {
+                alert("이미지 파일만 업로드 가능합니다.");
+            }
+        });
+
+        profileBoxEl.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            profileBoxEl.style.borderColor = "blue";
+        });
+
+        profileBoxEl.addEventListener("dragleave", () => {
+            profileBoxEl.style.borderColor = "lightgray";
+        });
+
+        profileBoxEl.addEventListener("drop", (e) => {
+            e.preventDefault();
+            profileBoxEl.style.borderColor = "lightgray";
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith("image/")) {
+                handleImagePreview(file);
+            } else {
+                alert("이미지 파일만 업로드 가능합니다.");
+            }
+        });
+
+        const imgTg = document.createElement("img");
+        imgTg.src = defaultImageURL;
+        imgTg.style = "width:100%;height:100%;border-radius:50%;";
+        profileBoxEl.innerHTML = "";
+        profileBoxEl.appendChild(imgTg);
+
+        const joinForm = document.querySelector("#joinForm");
+        const fields = [
+            { id: "userid", messageId: "iddMessage", message: "ID를 입력해주세요.", validate: validateUserId },
+            { id: "username", messageId: "usernameMessage", message: "이름을 입력해주세요.", validate: validateUsername },
+            { id: "password", messageId: "passwordMessage", message: "비밀번호는 8~15자이어야 합니다.", validate: validatePassword },
+            { id: "repassword", messageId: "repasswordMessage", message: "비밀번호가 일치하지 않습니다.", validate: validateRePassword },
+            { id: "useremail", messageId: "emailMessage", message: "올바른 이메일을 입력해주세요.", validate: validateEmail },
+            { id: "birth", messageId: "birthMessage", message: "생년월일을 YYYY-MM-DD 형식으로 입력해주세요.", validate: validateBirth },
+        ];
+
+        let isEmailVerified = false;
+        let isFirstClick = true;
+
+        // Populate birth-year and birth-month options
+        const birthYearSelect = document.querySelector("#birth-year");
+        const birthMonthSelect = document.querySelector("#birth-month");
+        const birthDaySelect = document.querySelector("#birth-day");
+        const birthInput = document.querySelector("#birth");
+
+        const currentYear = new Date().getFullYear();
+        for (let year = currentYear; year >= 1900; year--) {
+            const option = document.createElement("option");
+            option.value = year;
+            option.textContent = year;
+            birthYearSelect.appendChild(option);
+        }
+
+        for (let month = 1; month <= 12; month++) {
+            const option = document.createElement("option");
+            option.value = month;
+            option.textContent = month;
+            birthMonthSelect.appendChild(option);
+        }
+
+        // Update days based on year and month
+        function updateDays() {
+            const selectedYear = parseInt(birthYearSelect.value, 10);
+            const selectedMonth = parseInt(birthMonthSelect.value, 10);
+
+            birthDaySelect.innerHTML = '<option disabled selected>일</option>'; // Reset days
+
+            if (!selectedYear || !selectedMonth) return;
+
+            const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const option = document.createElement("option");
+                option.value = day;
+                option.textContent = day;
+                birthDaySelect.appendChild(option);
+            }
+
+            updateBirthInput();
+        }
+
+
+        function updateBirthInput() {
+            const year = birthYearSelect.value;
+            const month = birthMonthSelect.value.padStart(2, "0");
+            let day = birthDaySelect.value;
+
+            // 일 값이 선택되지 않았거나 숫자가 아니면 빈 문자열로 처리
+            if (!day || isNaN(day)) {
+                day = "";
+            } else {
+                day = day.padStart(2, "0"); // 선택된 경우만 패딩 추가
+            }
+
+            // 입력 필드에 YYYYMMDD 형식 유지
+            if (year && month && day) {
+                birthInput.value = `${year}${month}${day}`;
+            } else if (year && month) {
+                birthInput.value = `${year}${month}`;
+            } else {
+                birthInput.value = "";
+            }
+
+            validateBirthInput();
+        }
+
+        function validateBirthInput() {
+            const birthMessage = document.querySelector("#birthMessage");
+            const rawValue = birthInput.value;
+            if (!/^[0-9]{8}$/.test(rawValue)) {
+                birthMessage.textContent = "생년월일은 YYYYMMDD 형식의 8자리 숫자여야 합니다.";
+                birthMessage.style.color = "red";
+            } else {
+                const year = parseInt(rawValue.slice(0, 4), 10);
+                const month = parseInt(rawValue.slice(4, 6), 10);
+                const day = parseInt(rawValue.slice(6, 8), 10);
+                const date = new Date(year, month - 1, day);
+                const now = new Date();
+                if (
+                    date.getFullYear() !== year ||
+                    date.getMonth() + 1 !== month ||
+                    date.getDate() !== day ||
+                    date > now
+                ) {
+                    birthMessage.textContent = "유효한 생년월일이 아닙니다.";
+                    birthMessage.style.color = "red";
+                } else {
+                    birthMessage.textContent = "유효한 생년월일입니다.";
+                    birthMessage.style.color = "green";
+                }
+            }
+        }
+
+        birthYearSelect.addEventListener("change", updateDays);
+        birthMonthSelect.addEventListener("change", updateDays);
+        birthDaySelect.addEventListener("change", updateBirthInput);
+        birthInput.addEventListener("input", validateBirthInput);
+
+        fields.forEach(({ id, messageId, validate }) => {
+            const input = document.querySelector(`#${id}`);
+            const messageElement = document.querySelector(`#${messageId}`);
+            input.addEventListener("input", async () => {
+                const isValid = await validate(input.value);
+                updateValidationMessage(messageElement, isValid.valid, isValid.message);
+            });
+        });
+
+        const passwordInput = document.querySelector("#password");
+        const repasswordInput = document.querySelector("#repassword");
+        const repasswordMessage = document.querySelector("#repasswordMessage");
+
+        passwordInput.addEventListener("input", validatePasswords);
+        repasswordInput.addEventListener("input", validatePasswords);
+
+        joinForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            let isValid = true;
+
+            // 성별 확인
+            const genderInputs = document.querySelectorAll('input[name="gender"]');
+            const genderSelected = Array.from(genderInputs).some(input => input.checked);
+            if (!genderSelected) {
+                alert("성별을 선택해주세요.");
+                return;
+            }
+
+            for (const { id, messageId, validate } of fields) {
+                const input = document.querySelector(`#${id}`);
+                const messageElement = document.querySelector(`#${messageId}`);
+                const validationResult = await validate(input.value);
+                if (!validationResult.valid) {
+                    updateValidationMessage(messageElement, false, validationResult.message);
+                    isValid = false;
+                } else {
+                    updateValidationMessage(messageElement, true, "");
+                }
+            }
+
+            if (!isEmailVerified) {
+                alert("이메일 인증을 완료해주세요.");
+                return;
+            }
+
+            if (!isValid) {
+                alert("올바르지 않은 정보가 있습니다. 다시 확인해주세요.");
+                return;
+            }
+
+            const formData = new FormData(joinForm);
+            if (uploadedFile) {
+                formData.append("profileImage", uploadedFile);
+            }
+
+            try {
+                const response = await axios.post("/user/join", formData);
+                if (response.status === 200) {
+                    alert("회원가입이 완료되었습니다.");
+                    window.location.href = "/";
+                }
+            } catch (error) {
+                alert("회원가입 처리 중 오류가 발생했습니다.");
+            }
+        });
+
+        function updateValidationMessage(element, isValid, message) {
+            element.textContent = message;
+            element.style.color = isValid ? "green" : "red";
+        }
+
+        function validateUserId(userid) {
+            if (!/^[a-zA-Z0-9]{4,12}$/.test(userid)) {
+                return { valid: false, message: "ID는 4~12자, 영문 및 숫자만 가능합니다." };
+            }
+            return axios.post("/user/check-id", { userid }).then((response) => ({
+                valid: response.data.available,
+                message: response.data.available ? "사용 가능한 ID입니다." : response.data.message,
+            }));
+        }
+
+        function validateUsername(username) {
+            if (!username.trim()) {
+                return { valid: false, message: "이름을 입력해주세요." };
+            }
+            if (!/^[가-힣a-zA-Z]+$/.test(username)) {
+                return { valid: false, message: "이름은 한글 또는 영문만 입력 가능합니다." };
+            }
+            return { valid: true, message: "" };
+        }
+
+
+
+        function validatePassword(password) {
+            if (!/^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{8,15}$/.test(password)) {
+                return { valid: false, message: "비밀번호는 8~15자, 영문+숫자 조합이어야 합니다." };
+            }
+            validatePasswords(); // 실시간 비교
+            return { valid: true, message: "사용 가능한 비밀번호입니다." };
+        }
+
+        function validateRePassword(repassword) {
+            validatePasswords(); // 실시간 비교
+            return { valid: true, message: "" };
+        }
+
+        function validatePasswords() {
+            const password = passwordInput.value.trim();
+            const repassword = repasswordInput.value.trim();
+
+            if (password && repassword) {
+                if (password === repassword) {
+                    repasswordMessage.textContent = "비밀번호가 일치합니다.";
+                    repasswordMessage.style.color = "green";
+                } else {
+                    repasswordMessage.textContent = "비밀번호가 일치하지 않습니다.";
+                    repasswordMessage.style.color = "red";
+                }
+            } else {
+                repasswordMessage.textContent = "";
+            }
+        }
+
+        function validateEmail(email) {
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                return { valid: false, message: "유효한 이메일 형식이 아닙니다." };
+            }
+            return axios.post("/user/check-email", { email }).then((response) => ({
+                valid: response.data.available,
+                message: response.data.available ? "사용 가능한 이메일입니다." : response.data.message,
+            }));
+        }
+
+
+
+        function validateBirth(birth) {
+            const rawValue = birth.replace(/[^0-9]/g, "");
+            if (!/^\d{8}$/.test(rawValue)) {
+                return { valid: false, message: "생년월일은 YYYYMMDD 형식의 8자리 숫자여야 합니다." };
+            }
+            const year = parseInt(rawValue.slice(0, 4), 10);
+            const month = parseInt(rawValue.slice(4, 6), 10);
+            const day = parseInt(rawValue.slice(6, 8), 10);
+            const date = new Date(year, month - 1, day);
+            const now = new Date();
+            if (
+                date.getFullYear() !== year ||
+                date.getMonth() + 1 !== month ||
+                date.getDate() !== day ||
+                date > now
+            ) {
+                return { valid: false, message: "올바른 날짜를 입력해주세요." };
+            }
+            return { valid: true, message: "유효한 생년월일입니다." };
+        }
+
+
+        // 이메일 인증 클릭시 타이머 표시 및 재전송
+        const emailInput = document.querySelector("#useremail");
+        const emailMessage = document.querySelector("#emailMessage");
+        const emailButton = document.querySelector("#emailbutton");
+        const authCodeInput = document.querySelector("#authCode");
+        const authCodeVerifyButton = document.querySelector("#authCodeVerifyButton1");
+        const authCodeMessage = document.querySelector("#authCodeMessage");
+        let timer;
+        let timeLeft = 180;
+        let timerDisplay = null;
+
+        emailButton.addEventListener("click", async () => {
+            const email = emailInput.value;
+            if (!email) {
+                updateValidationMessage(emailMessage, false, "이메일을 입력해주세요.");
+                return;
+            }
+            const checkResponse = await axios.post("/user/check-email", { email });
+            if (!checkResponse.data.available) {
+                updateValidationMessage(emailMessage, false, checkResponse.data.message);
+                return;
+            }
+            const sendResponse = await axios.post("/user/send-auth-code", { email });
+            if (sendResponse.data === "success") {
+                const message = isFirstClick ? "인증번호를 보냈습니다." : "인증번호를 재전송했습니다.";
+                updateValidationMessage(emailMessage, true, message);
+                document.getElementById("authCodeInput").style.display = "block";
+                startTimer();
+                isFirstClick = false;
+            } else {
+                updateValidationMessage(emailMessage, false, "이메일 전송 중 문제가 발생했습니다.");
+            }
+        });
+
+        authCodeVerifyButton.addEventListener("click", async () => {
+            const email = emailInput.value;
+            const code = authCodeInput.value;
+            if (!code) {
+                updateValidationMessage(authCodeMessage, false, "인증번호를 입력해주세요.");
+                return;
+            }
+            const response = await axios.post("/user/verify-auth-code", { email, code });
+            updateValidationMessage(authCodeMessage, response.data.message.includes("완료"), response.data.message);
+            if (response.data.message.includes("완료")) {
+                isEmailVerified = true;
+                clearInterval(timer);
+            }
+        });
+
+        function startTimer() {
+            clearInterval(timer);
+            timeLeft = 180;
+            if (timerDisplay) {
+                timerDisplay.remove();
+            }
+            timerDisplay = document.createElement("div");
+            timerDisplay.id = "timerDisplay";
+            emailButton.parentElement.appendChild(timerDisplay);
+            timer = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    timerDisplay.textContent = "인증 시간이 만료되었습니다.";
+                } else {
+                    const minutes = Math.floor(timeLeft / 60);
+                    const seconds = timeLeft % 60;
+                    timerDisplay.textContent = `남은 시간: ${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+                    timeLeft--;
+                }
+            }, 1000);
+        }
+    });
+
+
+
+
+
+</script>
+</html>
