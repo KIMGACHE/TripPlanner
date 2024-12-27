@@ -1,4 +1,4 @@
-package com.tripPlanner.project.commons.config;
+package com.tripPlanner.project.commons;
 
 import com.tripPlanner.project.domain.login.auth.handler.CustomLogoutHandler;
 import com.tripPlanner.project.domain.login.auth.handler.Oauth2LoginSuccessHandler;
