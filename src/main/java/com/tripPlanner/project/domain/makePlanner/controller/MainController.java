@@ -119,15 +119,14 @@ public class MainController {
         String areaname = (String)map.get("areaname");
 
         Map<String,Object> datas = new HashMap<>();
-        log.info("POST /planner/searchDestination..."+type+word);
+        log.info("POST /planner/searchDestination..."+word);
 
-        if(type.equals("food")) {
+        if(type.equals("식당")) {
             List<FoodDto> searchList = foodService.searchFood(word,areaname);
             datas.put("data",searchList);
-            System.out.println("찾은것!!!!!!!!!!!!"+searchList);
-        } else if(type.equals("accom")) {
+        } else if(type.equals("숙소")) {
 //            accomService
-        } else if(type.equals("place")) {
+        } else if(type.equals("관광지")) {
 
         } else {
             System.out.println("error");
