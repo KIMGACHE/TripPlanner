@@ -20,4 +20,5 @@ public class BoardController {
     public ResponseEntity<List<BoardDto>> getPlannerList() {
         return ResponseEntity.ok(boardService.getPlannersForBoard());
     }
+    
 }

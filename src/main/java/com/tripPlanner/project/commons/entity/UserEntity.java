@@ -36,6 +36,22 @@ public class UserEntity {
     @Column(name = "gender", nullable = false)
     private String gender;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @Column(name = "role", nullable = false)
     private String role;
 

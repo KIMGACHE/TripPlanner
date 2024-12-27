@@ -32,6 +32,9 @@ public class BoardService {
                             .day(planner.getDay())
                             .username(planner.getUser().getUsername())
                             .thumbnailImage(thumbnailImage) // 썸네일 이미지 설정
+                            .area((planner.getArea()))
+                            .description(planner.getDescription())
+                            .userId(planner.getUser().getUserid())
                             .build();
                 })
                 .collect(Collectors.toList());

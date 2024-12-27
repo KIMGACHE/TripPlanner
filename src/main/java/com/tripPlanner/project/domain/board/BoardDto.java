@@ -19,5 +19,8 @@ public class BoardDto {
     private int day;
     private String username;
     private String thumbnailImage;
+    private String area;
+    private String description;
+    private String userId;
 
 }

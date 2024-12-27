@@ -36,13 +36,22 @@ public class Planner {
     @Column(name = "isPublic", nullable = false)
     private boolean isPublic; // 공개 여부 (생성 시 선택)
 
+    @Column(name = "area", nullable = false)
+    private String area;
+
+    @Column(name = "description", nullable = false)
+    private String description;
+
     public BoardDto toDto(String thumbnailImage) {
         return new BoardDto(
                 this.plannerID,
                 this.plannerTitle,
                 this.createAt,
                 this.day,
+                this.area,
+                this.description,
                 this.user.getUsername(), // UserEntity에서 username 가져오기
+                this.user.getUserid(),
                 thumbnailImage // 썸네일 이미지
         );
     }
