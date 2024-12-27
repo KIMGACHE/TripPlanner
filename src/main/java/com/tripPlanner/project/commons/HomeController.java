@@ -1,4 +1,4 @@
-package com.tripPlanner.project.domain.login.controller;
+package com.tripPlanner.project.commons;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
