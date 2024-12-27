@@ -1,5 +1,6 @@
 package com.tripPlanner.project.domain.login.entity;
 
+import com.tripPlanner.project.commons.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,7 @@
 package com.tripPlanner.project.domain.login.service;
 
 
+import com.tripPlanner.project.commons.entity.UserEntity;
 import com.tripPlanner.project.domain.login.auth.PrincipalDetail;
 import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
 import com.tripPlanner.project.domain.login.dto.JwtToken;
@@ -8,7 +9,7 @@ import com.tripPlanner.project.domain.login.dto.LoginRequest;
 import com.tripPlanner.project.domain.login.dto.LoginResponse;
 import com.tripPlanner.project.domain.login.entity.TokenEntity;
 import com.tripPlanner.project.domain.login.entity.TokenRepository;
-import com.tripPlanner.project.domain.login.entity.UserEntity;
+
 import com.tripPlanner.project.domain.login.entity.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
