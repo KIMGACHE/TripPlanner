@@ -88,6 +88,7 @@ public class ApiController {
     // 관광지 코스를 띄울 때 여러 필터링을 거쳐 데이터를 표시할 함수 (굳이 이렇게 하는 이유는 API가 제공되지 않기 때문)
     @PostMapping("/api/getSearch")
     public Mono<String> getSearch(@RequestBody ApiRequest apiRequest) {
+        System.out.println("호출");
         String keyword = apiRequest.getKeyword();
         String regionCode = apiRequest.getRegionCode();
         String hashtag = apiRequest.getHashtag();

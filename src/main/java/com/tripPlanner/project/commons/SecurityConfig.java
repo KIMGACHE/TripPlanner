@@ -36,7 +36,7 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final PrincipalDetailService principalDetailService;
     private final Oauth2LoginSuccessHandler oauth2LoginSuccessHandler;
-    private final RedisTemplate<String,String> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -44,17 +44,20 @@ public class SecurityConfig {
         http.httpBasic(AbstractHttpConfigurer::disable);
         // 폼로그인 비활성화 (jwt사용하기 위해)
         http.formLogin(AbstractHttpConfigurer::disable);
+        http.csrf(AbstractHttpConfigurer::disable);
         //CORS 설정 활성화
-        http.cors((config)->{corsConfigurationSource();});
+        http.cors((config) -> {
+            corsConfigurationSource();
+        });
 
         // 정적 경로
         http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login","/join","/","planner/board").permitAll() // 인증 없이 허용할 경로
-                        .requestMatchers("/css/**","/js/**","image/**","/favicon.ico").permitAll() //정적 자원 허용
+                        .requestMatchers("/login", "/join", "/", "planner/board", "**", "/**", "/api/search").permitAll() // 인증 없이 허용할 경로
+                        .requestMatchers("/css/**", "/js/**", "image/**", "/favicon.ico").permitAll() //정적 자원 허용
                         .requestMatchers("/api/user/**").hasRole("USER") //user 권한만 접근할 수 있는 경로
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") //user 권한만 접근할 수 있는 경로
-                        .requestMatchers("/logout","/planner/makeplanner","/user/mypage","/admin",
-                                "/travelcourse","/travelcourse-info","/tourist","/tourist-info").authenticated()  // 인증 없으면 허용하지 않을 경로
+                        .requestMatchers("/logout", "/planner/makeplanner", "/user/mypage", "/admin",
+                                "/travelcourse", "/travelcourse-info", "/tourist", "/tourist-info").authenticated()  // 인증 없으면 허용하지 않을 경로
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(sessionRemoveFilter(), BasicAuthenticationFilter.class)
@@ -65,7 +68,7 @@ public class SecurityConfig {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true) //세션 무효화
-                .deleteCookies("accessToken","SESSION") //쿠키 삭제
+                .deleteCookies("accessToken", "SESSION") //쿠키 삭제
                 .addLogoutHandler(new CustomLogoutHandler(redisTemplate))
         );
 
@@ -74,10 +77,9 @@ public class SecurityConfig {
             rm.rememberMeParameter("remember-me");
             rm.alwaysRemember(false);
             rm.tokenValiditySeconds(30 * 30);
-//            rm.tokenRepository(tokenRepository());
         });
 
-//      //소셜 로그인 (입맛에 맞춰 쓰면 됩니다)
+        //소셜 로그인 (입맛에 맞춰 쓰면 됩니다)
         http.oauth2Login(oauth2 -> oauth2
                 .loginPage("/login")
                 .successHandler(oauth2LoginSuccessHandler)
@@ -86,9 +88,10 @@ public class SecurityConfig {
 
         return http.build();
     }
+
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(){
-        return new JwtAuthenticationFilter(jwtTokenProvider,principalDetailService);
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(jwtTokenProvider, principalDetailService);
     }
 
     // 비밀번호 암호화
@@ -102,41 +105,40 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-    
+
     //CORS 설정
     @Bean
-    public CorsConfigurationSource corsConfigurationSource(){
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.addAllowedOrigin("http://localhost:3000"); //리액트 url 허용
+        configuration.addAllowedOrigin("http://localhost:9000"); //리액트 url 허용
         configuration.addAllowedMethod("*"); //모든 HTTP 메서드 허용 / 추후 수정
         configuration.addAllowedHeader("*"); //모든 헤더 허용 /추후 수정
         configuration.setAllowCredentials(true); //자격 증명 허용
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**",configuration);
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
 
-
     @Bean
-    Filter sessionRemoveFilter() throws Exception{
+    Filter sessionRemoveFilter() throws Exception {
 
-        return new Filter(){
+        return new Filter() {
 
             @Override
             public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException, IOException {
 
-                if(response instanceof HttpServletResponse){
+                if (response instanceof HttpServletResponse) {
                     HttpServletResponse resp = (HttpServletResponse) response;
-                    resp.setHeader("Set-Cookie","SESSION=; Path=/; Max-Age=0; HttpOnly");
+                    resp.setHeader("Set-Cookie", "SESSION=; Path=/; Max-Age=0; HttpOnly");
                 }
-                chain.doFilter(request,response);
+                chain.doFilter(request, response);
             }
         };
     }
-
 
 
 }
