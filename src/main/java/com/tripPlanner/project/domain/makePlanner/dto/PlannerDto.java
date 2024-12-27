@@ -1,5 +1,6 @@
 package com.tripPlanner.project.domain.makePlanner.dto;
 
+import com.tripPlanner.project.commons.entity.UserEntity;
 import com.tripPlanner.project.domain.makePlanner.entity.Planner;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
@@ -22,7 +23,7 @@ public class PlannerDto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int plannerID;
     @Column
-    private String userid;
+    private UserEntity user;
     @Column
     private String plannerTitle;
     @Column
@@ -39,7 +40,7 @@ public class PlannerDto {
     public static Planner dtoToEntity(PlannerDto plannerDto) {
         return Planner.builder()
                 .plannerID(plannerDto.getPlannerID())
-                .userid(plannerDto.getUserid())
+                .user(plannerDto.getUser())
                 .plannerTitle(plannerDto.getPlannerTitle())
                 .createAt(plannerDto.getCreateAt())
                 .updateAt(plannerDto.getUpdateAt())

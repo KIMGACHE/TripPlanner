@@ -45,7 +45,8 @@ public class Destination {
                 this.address,
                 this.category,
                 this.image,
-                "user1",  // Username만 포함
+//                "user1",  // Username만 포함
+                this.planner.getUser().getUsername(),
                 this.destinationID.getPlannerID(),
                 this.destinationID.getDay(),
                 this.destinationID.getDayOrder()

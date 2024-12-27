@@ -1,9 +1,11 @@
 package com.tripPlanner.project.domain.destination;
 
-import com.tripPlanner.project.commons.entity.Destination;
+import com.tripPlanner.project.domain.makePlanner.dto.DestinationDto;
+import com.tripPlanner.project.domain.makePlanner.entity.Destination;
+import com.tripPlanner.project.domain.makePlanner.repository.DestinationRepository;
+import com.tripPlanner.project.domain.makePlanner.service.DestinationService;
 import com.tripPlanner.project.domain.tourist.ApiRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -27,6 +29,7 @@ public class DestinationController {
                 .map(Destination::toDto) // Destination을 DestinationDto로 변환
                 .collect(Collectors.toList());
     }
+
 
     // 좋아요 기능
 //    @PostMapping("/like")

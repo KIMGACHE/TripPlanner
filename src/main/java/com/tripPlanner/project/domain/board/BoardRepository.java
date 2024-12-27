@@ -1,6 +1,6 @@
 package com.tripPlanner.project.domain.board;
 
-import com.tripPlanner.project.commons.entity.Planner;
+import com.tripPlanner.project.domain.makePlanner.entity.Planner;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
