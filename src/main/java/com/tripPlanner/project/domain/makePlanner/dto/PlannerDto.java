@@ -1,7 +1,7 @@
 package com.tripPlanner.project.domain.makePlanner.dto;
 
 import com.tripPlanner.project.domain.makePlanner.entity.Planner;
-import com.tripPlanner.project.domain.signin.UserEntity;
+import com.tripPlanner.project.domain.signin.entity.UserEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,7 +11,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data

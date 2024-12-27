@@ -1,10 +1,12 @@
-package com.tripPlanner.project.domain.signin;
+package com.tripPlanner.project.domain.signin.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
+import com.tripPlanner.project.domain.signin.repository.UserRepository;
+import com.tripPlanner.project.domain.signin.service.UserService;
+import com.tripPlanner.project.domain.signin.dto.UserDto;
+import com.tripPlanner.project.domain.signin.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

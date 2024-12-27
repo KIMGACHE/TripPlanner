@@ -1,4 +1,4 @@
-package com.tripPlanner.project.domain.signin;
+package com.tripPlanner.project.domain.signin.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;

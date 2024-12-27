@@ -7,10 +7,9 @@ import com.tripPlanner.project.domain.login.dto.JwtToken;
 import com.tripPlanner.project.domain.login.dto.LoginRequest;
 import com.tripPlanner.project.domain.login.dto.LoginResponse;
 import com.tripPlanner.project.domain.login.entity.TokenEntity;
-import com.tripPlanner.project.domain.login.entity.TokenRepository;
 
-import com.tripPlanner.project.domain.signin.UserEntity;
-import com.tripPlanner.project.domain.signin.UserRepository;
+import com.tripPlanner.project.domain.signin.entity.UserEntity;
+import com.tripPlanner.project.domain.signin.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

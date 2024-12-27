@@ -1,4 +1,4 @@
-package com.tripPlanner.project.domain.signin;
+package com.tripPlanner.project.domain.signin.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
