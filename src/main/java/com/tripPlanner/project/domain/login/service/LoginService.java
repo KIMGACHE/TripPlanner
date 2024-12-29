@@ -7,9 +7,8 @@ import com.tripPlanner.project.domain.login.dto.JwtToken;
 import com.tripPlanner.project.domain.login.dto.LoginRequest;
 import com.tripPlanner.project.domain.login.dto.LoginResponse;
 import com.tripPlanner.project.domain.login.entity.TokenEntity;
-import com.tripPlanner.project.domain.login.entity.TokenRepository;
-import com.tripPlanner.project.domain.login.entity.UserEntity;
-import com.tripPlanner.project.domain.login.entity.UserRepository;
+import com.tripPlanner.project.domain.signin.UserEntity;
+import com.tripPlanner.project.domain.signin.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +35,7 @@ public class LoginService {
 
     public LoginResponse login(LoginRequest loginRequest){ //로그인 기능
         log.info("로그인 서비스 함수 실행");
-        log.info("LoginRequest userid: {}", loginRequest.getUserid());
+        log.info("LoginRequest : {}", loginRequest.toString());
         Optional<UserEntity> optionalUser = userRepository.findByUserid(loginRequest.getUserid());
         log.info(optionalUser.toString());
         emptyCheckUserIdAndPassword(loginRequest.getUserid(),loginRequest.getPassword()); //아이디 비밀번호 빈칸검사

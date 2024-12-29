@@ -2,21 +2,23 @@ package com.tripPlanner.project.domain.login.service;
 
 import com.tripPlanner.project.domain.login.auth.PrincipalDetail;
 import com.tripPlanner.project.domain.login.dto.LoginRequest;
-import com.tripPlanner.project.domain.login.entity.UserEntity;
-import com.tripPlanner.project.domain.login.entity.UserRepository;
+
+import com.tripPlanner.project.domain.signin.UserEntity;
+import com.tripPlanner.project.domain.signin.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class PrincipalDetailService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

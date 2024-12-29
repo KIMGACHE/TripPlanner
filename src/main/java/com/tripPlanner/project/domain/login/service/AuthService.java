@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -39,16 +40,22 @@ public class AuthService {
     }
 
     //쿠키 저장 메서드
-    public void setTokenCookies(HttpServletResponse response,String accessToken){
-        Cookie accessTokenCookie = new Cookie("accessToken",accessToken);
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setSecure(true);
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(30 * 60); //30분  ,,1분
+    public void setTokenCookies(HttpServletResponse response, String accessToken) {
+        ResponseCookie cookie = ResponseCookie.from("accessToken", accessToken)
+                .httpOnly(true)
+                .secure(true) // HTTPS 사용 시 true로 변경
+                .sameSite("None") // CORS 요청에서도 쿠키 허용
+                .path("/")
+                .maxAge(30 * 60) // 30분 유효
+                .build();
 
-        response.addCookie(accessTokenCookie); //쿠키 반환
-
+        response.addHeader("Set-Cookie", cookie.toString());
     }
+
+
+
+
+
 //
 //    //사용자 정보 조회
 //    private PrincipalDetail getPrincipalDetails(String userid){

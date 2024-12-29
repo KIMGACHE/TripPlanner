@@ -85,8 +85,6 @@ public class JwtTokenProvider {
     }
     //토큰 생성후 dto 로 사용하기 위해 만든 메서드
     public JwtToken generateToken(Authentication authentication,boolean rememberMe){
-//        PrincipalDetail principalDetail = (PrincipalDetail) authentication.getPrincipal();
-//        String userid = principalDetail.getLoginRequest().getUserid();
 
         String accessToken = generateAccessToken(authentication);
         String refreshToken = generateRefreshToken(authentication,rememberMe);
@@ -212,8 +210,7 @@ public class JwtTokenProvider {
         long expiration = rememberMe ? refreshTokenExpiration * 7 / 2 : refreshTokenExpiration; //rememberMe 여부에 따라 7일 or 2일
 
         //Redis에 저장 및 TTL 설정
-        redisTemplate.opsForValue().set(key,tokenEntity.getRefreshToken());
-        redisTemplate.expire(key,expiration, TimeUnit.MILLISECONDS); //TTL 설정
+        redisTemplate.opsForValue().set(key,tokenEntity.getRefreshToken(),expiration,TimeUnit.MILLISECONDS);
 
     }
     

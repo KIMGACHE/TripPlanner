@@ -21,7 +21,6 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final PrincipalDetailService principalDetailService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -37,8 +36,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info("추출된 토큰 정보 : {}", token);
 
         if(jwtTokenProvider.validateToken(token)){
-            String userid = jwtTokenProvider.getUserIdFromToken(token);
-            log.info("인증된 토큰 정보 : {}", userid);
 
             Authentication authentication = jwtTokenProvider.getTokenInfo(token);
 
