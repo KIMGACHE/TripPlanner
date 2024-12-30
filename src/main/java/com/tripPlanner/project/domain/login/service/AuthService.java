@@ -49,6 +49,7 @@ public class AuthService {
                 .maxAge(30 * 60) // 30분 유효
                 .build();
 
+        log.info("쿠키쿠키 : {}",cookie);
         response.addHeader("Set-Cookie", cookie.toString());
     }
 

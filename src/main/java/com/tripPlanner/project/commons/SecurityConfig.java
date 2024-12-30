@@ -81,7 +81,7 @@ public class SecurityConfig {
 
         //소셜 로그인 (입맛에 맞춰 쓰면 됩니다)
         http.oauth2Login(oauth2 -> oauth2
-                .loginPage("/login")
+                .loginPage("/user/login")
                 .successHandler(oauth2LoginSuccessHandler)
 //                .defaultSuccessUrl("/")
                 .failureUrl("/login?error=true")
