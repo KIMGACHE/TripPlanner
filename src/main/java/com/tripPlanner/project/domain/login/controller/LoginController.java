@@ -1,20 +1,25 @@
 package com.tripPlanner.project.domain.login.controller;
 
 
+import com.tripPlanner.project.domain.login.auth.handler.CustomLogoutHandler;
 import com.tripPlanner.project.domain.login.dto.LoginRequest;
 import com.tripPlanner.project.domain.login.dto.LoginResponse;
 import com.tripPlanner.project.domain.login.service.AuthService;
 import com.tripPlanner.project.domain.login.service.LoginService;
-import jakarta.servlet.http.Cookie;
+import com.tripPlanner.project.domain.signin.UserEntity;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -49,13 +54,33 @@ public class LoginController {
     return ResponseEntity.ok(response); //Json 데이터로 전달
     }
     
-//    //로그아웃 메서드
-//    @PostMapping(value="/logout")
-//    public ResponseEntity<Void> logout(){
-//
-//        return ResponseEntity.ok().build();
-//
-//    }
+    //아이디 찾기
+    @PostMapping(value="/findId")
+    @ResponseBody
+    public ResponseEntity<?> findUserid(@RequestBody Map<String,String> request){
+        String email = request.get("email");
+        String userid = loginService.findUserByEmail(email);
+
+        if(userid != null) {
+            return ResponseEntity.ok(Collections.singletonMap("userid",userid));
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("message","유저를 찾을 수 없습니다"));
+        }
+    }
+
+    @PostMapping("/password-reset")
+    @ResponseBody
+    public ResponseEntity<?> findUserPassword(@RequestBody Map<String,String> request){
+        String email = request.get("email");
+        Optional<UserEntity> optionalUser = loginService.findUserByEmail(email);
+
+        if(optionalUser.isPresent()){
+            String token =
+        }
+
+
+    }
 
 
 //    @PostMapping("/refresh")

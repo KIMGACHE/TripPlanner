@@ -90,8 +90,9 @@ public class LoginService {
                 .build();
     }
 
-    public void logout(String userid){
-//        userEntity = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    //아이디 찾기 서비스 로직
+    public String findUserByEmail(String email){
+        return userRepository.findByEmail(email).map(UserEntity::getUserid).orElse(null);
     }
 
     //빈칸 검사 함수
@@ -111,7 +112,9 @@ public class LoginService {
     }
 
 
-
+    public String findUserPassword(String email) {
+        return null;
+    }
 }
 
 

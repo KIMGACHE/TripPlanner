@@ -3,6 +3,7 @@ package com.tripPlanner.project.domain.login.service;
 import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
 import com.tripPlanner.project.domain.login.dto.LoginResponse;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,31 +53,11 @@ public class AuthService {
         log.info("쿠키쿠키 : {}",cookie);
         response.addHeader("Set-Cookie", cookie.toString());
     }
+    
+    //이메일 인증 메서드
+    public void sendAuthMail(){
 
-
-
-
-
-//
-//    //사용자 정보 조회
-//    private PrincipalDetail getPrincipalDetails(String userid){
-//        try{
-//            return (PrincipalDetail) userDetailsService.loadUserByUsername(userid);
-//        }catch(Exception e){
-//            log.warn("유저를 찾을 수 없습니다",userid ,e.getMessage());
-//            throw new IllegalArgumentException("찾을 수 없는 userid");
-//        }
-//    }
-//
-//    private Authentication getAuthentication(String token){
-//        Claims claims = get
-//    }
-//
-//    private Claims getClaims(String token){
-//        return Jwts.parserBuilder()
-//                .setSigningKey(jwtTokenProvider.)
-//    }
-//
+    }
 
 
 
