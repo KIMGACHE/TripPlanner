@@ -21,5 +21,5 @@ public class BoardDto {
     private String area;
     private String description;
     private String userId;
-
+    private boolean isPublic;
 }

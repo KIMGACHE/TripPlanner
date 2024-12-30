@@ -21,7 +21,6 @@ public class Planner {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid", nullable = false)
-//    @Column(name = "userid", nullable = false)
     private UserEntity user; // 사용자
 
     @Column(name = "plannerTitle", nullable = false)
@@ -68,7 +67,8 @@ public class Planner {
                 this.description,
                 this.user.getUsername(), // UserEntity에서 username 가져오기
                 this.user.getUserid(),
-                thumbnailImage // 썸네일 이미지
+                thumbnailImage, // 썸네일 이미지
+                this.isPublic
         );
     }
 }

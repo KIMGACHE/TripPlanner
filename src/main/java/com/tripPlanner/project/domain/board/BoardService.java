@@ -35,6 +35,7 @@ public class BoardService {
                             .area((planner.getArea()))
                             .description(planner.getDescription())
                             .userId(planner.getUser().getUserid())
+                            .isPublic(planner.isPublic())
                             .build();
                 })
                 .collect(Collectors.toList());
