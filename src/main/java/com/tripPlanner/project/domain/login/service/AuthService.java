@@ -2,14 +2,13 @@ package com.tripPlanner.project.domain.login.service;
 
 import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
 import com.tripPlanner.project.domain.login.dto.LoginResponse;
-import com.tripPlanner.project.domain.signin.UserEntity;
-import com.tripPlanner.project.domain.signin.UserRepository;
+import com.tripPlanner.project.domain.signin.entity.UserEntity;
+import com.tripPlanner.project.domain.signin.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseCookie;
 import org.springframework.mail.SimpleMailMessage;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -117,9 +115,9 @@ public class AuthService {
         userRepository.save(userEntity);
     }
 
-    public List<UserEntity> findUserIdByEmail(String email){
-        return userRepository.findAllByEmail(email);
-    }
+//    public List<UserEntity> findUserIdByEmail(String email){
+//        return userRepository.findAllByEmail(email);
+//    }
 
 
 
