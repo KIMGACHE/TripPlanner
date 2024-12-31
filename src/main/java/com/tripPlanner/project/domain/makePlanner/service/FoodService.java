@@ -23,7 +23,7 @@ public class FoodService {
     @Autowired 
     private FoodRepository foodRepository;
 
-    public List<FoodDto> test1(double x, double y,int zoom_level) {
+    public List<FoodDto> listFood(double x, double y,int zoom_level) {
         double xStart = x-zoomLevel_x[zoom_level];
         double yStart = y-zoomLevel_y[zoom_level];
         double xEnd = x+zoomLevel_x[zoom_level];

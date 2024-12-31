@@ -1,6 +1,7 @@
 package com.tripPlanner.project.domain.makePlanner.repository;
 
 import com.tripPlanner.project.domain.makePlanner.entity.Accom;
+import com.tripPlanner.project.domain.makePlanner.entity.Food;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,4 +20,14 @@ public interface AccomRepository extends JpaRepository<Accom,String> {
             @Param("yEnd") double yEnd
     );
 
+    @Query("SELECT ac FROM Accom AS ac WHERE (ac.locationFullAddress LIKE %:areaname% or ac.streetFullAddress LIKE %:areaname%) and ac.businessName LIKE %:word%")
+    List<Accom> searchAccom(
+            @Param("word") String word,
+            @Param("areaname") String areaname
+    );
+
+    @Query("SELECT ac FROM Accom AS ac WHERE ac.locationFullAddress LIKE %:areaname% or ac.streetFullAddress LIKE %:areaname% ")
+    List<Accom> searchAreaAccom(
+            @Param("areaname") String areaname
+    );
 }
