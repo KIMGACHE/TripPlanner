@@ -7,6 +7,7 @@ import com.tripPlanner.project.domain.login.entity.TokenEntity;
 import com.tripPlanner.project.domain.login.entity.TokenRepository;
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,8 +28,8 @@ import java.util.concurrent.TimeUnit;
 public class JwtTokenProvider {
 
     @Value("${jwt.secret}")
-    private String secretKey;
-//    private Key key;
+    @Getter
+    public String secretKey;
     @Value("${jwt.access-token-expiration}")
     private long accessTokenExpiration;
     @Value("${jwt.refresh-token-expiration}")
@@ -39,7 +40,6 @@ public class JwtTokenProvider {
     @PostConstruct
     public void init(){
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-
     }
 
     // 액세스 토큰 생성

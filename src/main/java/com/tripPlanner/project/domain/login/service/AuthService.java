@@ -2,15 +2,26 @@ package com.tripPlanner.project.domain.login.service;
 
 import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
 import com.tripPlanner.project.domain.login.dto.LoginResponse;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
+import com.tripPlanner.project.domain.signin.UserEntity;
+import com.tripPlanner.project.domain.signin.UserRepository;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseCookie;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
 
 @Service
 @Slf4j
@@ -19,6 +30,14 @@ public class AuthService {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate<String,Object> redisTemplate;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JavaMailSender javaMailSender;
+
+    private String getKey(){
+        String secretKey = jwtTokenProvider.getSecretKey();
+        return  secretKey;
+    }
 
     public LoginResponse refreshAccessToken(Authentication authentication, String refreshToken){
         try{
@@ -55,12 +74,52 @@ public class AuthService {
     }
     
     //이메일 인증 메서드
-    public void sendAuthMail(){
+    public void sendAuthMail(String to,String subject,String body){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
+        message.setFrom("wlscksals@gmail.com");
+
+        javaMailSender.send(message);
 
     }
 
+    //비밀번호 변경 토큰 발급 메서드
+    public String generatePasswordResetToken(String email){
+        long expiration = 1000 * 60 * 5; //5분
+        return Jwts.builder()
+                .setSubject(email)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis()+expiration))
+                .signWith(SignatureAlgorithm.HS256,getKey())
+                .compact();
+    }
 
+    //비밀번호 찾기 토큰 유효성검사
+    public String validateToken(String token){
+        try{
+            return Jwts.parserBuilder()
+                    .setSigningKey(getKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getSubject();  //이메일 반환
+        }catch(Exception e){
+            return null; //유효하지 않은 토큰
+        }
+    }
 
+    //비밀번호 변경 저장 메서드
+    public void updatePassword(String email,String newPassword){
+        UserEntity userEntity = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다"));
+        userEntity.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(userEntity);
+    }
+
+    public List<UserEntity> findUserIdByEmail(String email){
+        return userRepository.findAllByEmail(email);
+    }
 
 
 

@@ -19,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -90,11 +91,6 @@ public class LoginService {
                 .build();
     }
 
-    //아이디 찾기 서비스 로직
-    public String findUserByEmail(String email){
-        return userRepository.findByEmail(email).map(UserEntity::getUserid).orElse(null);
-    }
-
     //빈칸 검사 함수
     private void emptyCheckUserIdAndPassword(String userid,String password){
         log.info("빈칸 검사 실행");
@@ -112,9 +108,6 @@ public class LoginService {
     }
 
 
-    public String findUserPassword(String email) {
-        return null;
-    }
 }
 
 

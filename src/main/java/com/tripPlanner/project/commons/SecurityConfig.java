@@ -34,7 +34,6 @@ import java.io.IOException;
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final PrincipalDetailService principalDetailService;
     private final Oauth2LoginSuccessHandler oauth2LoginSuccessHandler;
     private final RedisTemplate<String, String> redisTemplate;
 
@@ -94,13 +93,6 @@ public class SecurityConfig {
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter(jwtTokenProvider);
     }
-
-    // 비밀번호 암호화
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
