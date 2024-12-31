@@ -56,6 +56,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/user/**","/makePlanner","/user/mypage","/listDestination" ).hasRole("USER") //user 권한만 접근할 수 있는 경로
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") //user 권한만 접근할 수 있는 경로
                         .requestMatchers("/logout", "/admin",
+
                                 "/travelcourse", "/travelcourse-info", "/tourist", "/tourist-info").authenticated()  // 인증 없으면 허용하지 않을 경로
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -88,11 +89,13 @@ public class SecurityConfig {
 
         return http.build();
     }
-
+  
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter(jwtTokenProvider);
     }
+
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {

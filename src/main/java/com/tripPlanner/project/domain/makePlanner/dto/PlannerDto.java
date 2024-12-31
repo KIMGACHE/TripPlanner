@@ -11,7 +11,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -36,6 +35,8 @@ public class PlannerDto {
     private boolean isPublic;
     @Column
     private String description;
+    @Column
+    private String area;
 
     public static Planner dtoToEntity(PlannerDto plannerDto) {
         return Planner.builder()
@@ -47,6 +48,7 @@ public class PlannerDto {
                 .day(plannerDto.getDay())
                 .isPublic(plannerDto.isPublic())
                 .description(plannerDto.getDescription())
+                .area(plannerDto.getArea())
                 .build();
     }
 

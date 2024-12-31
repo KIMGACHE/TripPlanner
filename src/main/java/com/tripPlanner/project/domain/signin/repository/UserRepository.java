@@ -1,0 +1,18 @@
+package com.tripPlanner.project.domain.signin.repository;
+
+import com.tripPlanner.project.domain.signin.entity.UserEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+//import com.tripPlanner.project.domain.signin.entity.UserEntity;
+
+import java.util.Optional;
+
+@Repository
+public interface UserRepository extends JpaRepository<UserEntity, String> {
+
+    // 아이디 중복 검사
+    Optional<UserEntity> findByUserid(String userid);
+
+    Optional<UserEntity> findByEmail(String email);
+
+}
