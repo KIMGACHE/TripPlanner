@@ -35,6 +35,8 @@ public class PlannerDto {
     private boolean isPublic;
     @Column
     private String description;
+    @Column
+    private String area;
 
     public static Planner dtoToEntity(PlannerDto plannerDto) {
         return Planner.builder()
@@ -46,6 +48,7 @@ public class PlannerDto {
                 .day(plannerDto.getDay())
                 .isPublic(plannerDto.isPublic())
                 .description(plannerDto.getDescription())
+                .area(plannerDto.getArea())
                 .build();
     }
 

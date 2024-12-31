@@ -40,6 +40,7 @@ public class DestinationService {
                 list.forEach((el) -> {
                     final int index = count.getAndIncrement();
                     Map<String,Object> data = (Map<String,Object>)el.get("data");
+                    String image = (String)el.get("image");
                     Destination elements = Destination.builder()
                             .destinationID(new DestinationID(planner.getPlannerID(), (Integer) el.get("day"), index))
                             .name((String)data.get("businessName"))
@@ -47,7 +48,7 @@ public class DestinationService {
                             .y((Double)data.get("yCoordinate"))
                             .address((String)data.get("streetFullAddress"))
                             .category((String)data.get("businessCategory"))
-                            .image(null)
+                            .image(image)
                             .build();
                     destinationRepository.save(elements);
                 });

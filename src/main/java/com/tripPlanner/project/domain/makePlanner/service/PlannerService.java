@@ -19,7 +19,7 @@ public class PlannerService {
     private PlannerRepository plannerRepository;
 
     @Transactional
-    public Planner addPlanner(String title,String description,int day,boolean isPublic) {
+    public Planner addPlanner(String title,String areaName,String description,int day,boolean isPublic) {
         try {
             
             if(title.isEmpty() || description.isEmpty() || day<=0) {
@@ -28,7 +28,6 @@ public class PlannerService {
             
             PlannerDto plannerDto = PlannerDto.builder()
                     .plannerID(0)
-                    // 병합 시 변경
                     .user(null)
                     .plannerTitle(title)
                     .createAt(LocalDateTime.now())
@@ -36,6 +35,7 @@ public class PlannerService {
                     .day(day)
                     .isPublic(isPublic)
                     .description(description)
+                    .area(areaName)
                     .build();
             Planner planner = PlannerDto.dtoToEntity(plannerDto);
 

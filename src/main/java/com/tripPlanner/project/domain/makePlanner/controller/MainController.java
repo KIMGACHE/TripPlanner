@@ -1,25 +1,19 @@
 package com.tripPlanner.project.domain.makePlanner.controller;
 
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tripPlanner.project.domain.makePlanner.dto.FoodDto;
-import com.tripPlanner.project.domain.makePlanner.dto.MapDataDto;
 import com.tripPlanner.project.domain.makePlanner.entity.Planner;
-import com.tripPlanner.project.domain.makePlanner.service.AccomService;
+import com.tripPlanner.project.domain.makePlanner.service.*;
 import com.tripPlanner.project.domain.makePlanner.dto.AccomDto;
-import com.tripPlanner.project.domain.makePlanner.dto.MapDto;
-import com.tripPlanner.project.domain.makePlanner.service.DestinationService;
-import com.tripPlanner.project.domain.makePlanner.service.FoodService;
-import com.tripPlanner.project.domain.makePlanner.service.PlannerService;
+import com.tripPlanner.project.domain.tourist.ApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -42,6 +36,26 @@ public class MainController {
 
     @Autowired
     private PlannerService plannerService;
+
+    @Autowired
+    private PlannerApiService plannerApiService;
+
+    @ResponseBody
+    @PostMapping(value="/getImages", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Object>> getImages(@RequestBody Map<String,Object> map) throws JsonProcessingException {
+        log.info("POST /planner/getImages...");
+
+        // 값을 담을 map객체
+        Map<String,Object> datas = new HashMap<>();
+
+        String businessName = (String)map.get("businessName");
+
+//        System.out.println("businessName : "+businessName);
+
+        datas.put("image",plannerApiService.getPlaceImage(businessName).block());
+
+        return new ResponseEntity<Map<String,Object>>(datas, HttpStatus.OK);
+    }
 
     @ResponseBody
     @PostMapping(value="/findDestination", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
@@ -79,7 +93,7 @@ public class MainController {
 
         // 이동한 좌표 주변의 모든 데이터를 가져온다.
         List<AccomDto> accomList = accomService.listAccom(longitude, latitude,zoom_level);
-        List<FoodDto> foodList = foodService.test1(longitude, latitude, zoom_level);
+        List<FoodDto> foodList = foodService.listFood(longitude, latitude, zoom_level);
 
         // ObjectMapper 객체 생성
         ObjectMapper objectMapper = new ObjectMapper();
@@ -98,6 +112,7 @@ public class MainController {
     @PostMapping(value="/addPlanner", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String,Object>> add_planner(@RequestBody Map<String,Object> map) {
         String title = (String)map.get("title");
+        String areaName = (String)map.get("areaName");
         String description = (String)map.get("description");
         boolean isPublic = (Boolean)map.get("isPublic");
         int day = (Integer)map.get("day");
@@ -105,10 +120,10 @@ public class MainController {
 
         log.info("POST /planner/addPlanner..."+destination);
 
-        Planner planner = plannerService.addPlanner(title,description,day,isPublic);
+        Planner planner = plannerService.addPlanner(title,areaName,description,day,isPublic);
         Map<String,Object> datas = destinationService.addDestination(planner, day, destination);
 
-        return new ResponseEntity(null, HttpStatus.OK);
+        return new ResponseEntity(datas, HttpStatus.OK);
     }
 
     @ResponseBody
@@ -125,7 +140,8 @@ public class MainController {
             List<FoodDto> searchList = foodService.searchFood(word,areaname);
             datas.put("data",searchList);
         } else if(type.equals("숙소")) {
-//            accomService
+            List<AccomDto> searchList = accomService.searchAccom(word,areaname);
+            datas.put("data",searchList);
         } else if(type.equals("관광지")) {
 
         } else {

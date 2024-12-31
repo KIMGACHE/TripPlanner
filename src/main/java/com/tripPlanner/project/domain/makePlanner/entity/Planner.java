@@ -53,6 +53,7 @@ public class Planner {
                 .createAt(planner.getCreateAt())
                 .updateAt(planner.getUpdateAt())
                 .day(planner.getDay())
+                .area(planner.getArea())
                 .isPublic(planner.isPublic())
                 .description(planner.getDescription())
                 .build();
