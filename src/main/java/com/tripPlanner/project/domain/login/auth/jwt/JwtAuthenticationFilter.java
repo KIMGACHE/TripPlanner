@@ -1,7 +1,5 @@
 package com.tripPlanner.project.domain.login.auth.jwt;
 
-import com.tripPlanner.project.domain.login.auth.PrincipalDetail;
-import com.tripPlanner.project.domain.login.service.PrincipalDetailService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -9,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -21,7 +18,6 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final PrincipalDetailService principalDetailService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -37,8 +33,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info("추출된 토큰 정보 : {}", token);
 
         if(jwtTokenProvider.validateToken(token)){
-            String userid = jwtTokenProvider.getUserIdFromToken(token);
-            log.info("인증된 토큰 정보 : {}", userid);
 
             Authentication authentication = jwtTokenProvider.getTokenInfo(token);
 
@@ -84,7 +78,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.warn("토큰이 헤더와 쿠키 둘 다에 존재하지 않음.");
         return null;
     }
-
 
 
 }

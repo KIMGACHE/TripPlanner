@@ -34,7 +34,6 @@ import java.io.IOException;
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final PrincipalDetailService principalDetailService;
     private final Oauth2LoginSuccessHandler oauth2LoginSuccessHandler;
     private final RedisTemplate<String, String> redisTemplate;
 
@@ -52,11 +51,12 @@ public class SecurityConfig {
 
         // 정적 경로
         http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/join", "/", "planner/board", "**", "/**", "/api/search").permitAll() // 인증 없이 허용할 경로
+                        .requestMatchers("/login", "/oauth2/**","/join", "/", "/board","**", "/**", "/api/search").permitAll() // 인증 없이 허용할 경로
                         .requestMatchers("/css/**", "/js/**", "image/**", "/favicon.ico").permitAll() //정적 자원 허용
-                        .requestMatchers("/api/user/**").hasRole("USER") //user 권한만 접근할 수 있는 경로
+                        .requestMatchers("/api/user/**","/makePlanner","/user/mypage","/listDestination" ).hasRole("USER") //user 권한만 접근할 수 있는 경로
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") //user 권한만 접근할 수 있는 경로
-                        .requestMatchers("/logout", "/planner/makeplanner", "/user/mypage", "/admin",
+                        .requestMatchers("/logout", "/admin",
+
                                 "/travelcourse", "/travelcourse-info", "/tourist", "/tourist-info").authenticated()  // 인증 없으면 허용하지 않을 경로
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -81,24 +81,20 @@ public class SecurityConfig {
 
         //소셜 로그인 (입맛에 맞춰 쓰면 됩니다)
         http.oauth2Login(oauth2 -> oauth2
-                .loginPage("/login")
+                .loginPage("/user/login")
                 .successHandler(oauth2LoginSuccessHandler)
+//                .defaultSuccessUrl("/")
                 .failureUrl("/login?error=true")
         );
 
         return http.build();
     }
-
+  
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtTokenProvider, principalDetailService);
+        return new JwtAuthenticationFilter(jwtTokenProvider);
     }
 
-    // 비밀번호 암호화
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
 
     @Bean

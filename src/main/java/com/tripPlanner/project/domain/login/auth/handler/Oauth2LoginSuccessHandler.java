@@ -62,6 +62,7 @@ public class Oauth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             response.getHeader("Accept");
             response.getWriter().write(new ObjectMapper().writeValueAsString(jwtToken));
         }else{
+            log.info("메인페이지로 갑니다.");
             response.sendRedirect("/"); //메인페이지 리다이렉트
         }
 //

@@ -12,7 +12,7 @@ public class HomeController {
     @GetMapping("/")
     public String home() {
         log.info("Home !");
-        return "index";
+        return "redirect:/index.html";
     }
     
 }

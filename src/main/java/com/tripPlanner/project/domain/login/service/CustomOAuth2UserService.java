@@ -4,8 +4,8 @@ import com.tripPlanner.project.domain.login.auth.PrincipalDetail;
 import com.tripPlanner.project.domain.login.dto.LoginRequest;
 
 
-import com.tripPlanner.project.domain.signin.entity.UserEntity;
-import com.tripPlanner.project.domain.signin.repository.UserRepository;
+import com.tripPlanner.project.domain.signin.UserEntity;
+import com.tripPlanner.project.domain.signin.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -85,6 +85,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService{
     private UserEntity createUserEntity(String userid, OAuth2User oAuth2User, String role,String provider, String providerId){
         String username;
         String email;
+        String gender = "unknown";
 
         switch(provider){
             case "google" :
@@ -112,6 +113,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService{
                 .userid(userid)
                 .username(username)
                 .email(email)
+                .gender(gender)
                 .role("ROLE_USER")
                 .provider(provider)
                 .providerId(providerId)
