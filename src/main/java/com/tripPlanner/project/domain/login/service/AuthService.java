@@ -9,7 +9,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseCookie;
 import org.springframework.mail.SimpleMailMessage;
@@ -121,6 +120,13 @@ public class AuthService {
         return userRepository.findAllByEmail(email);
     }
 
+    public Optional<UserEntity> findUserByUseridAndEmail(String email,String userid){
+        return userRepository.findByUseridAndEmail(email,userid);
+    }
+
+    public boolean existsByUserid(String userid){
+        return userRepository.existsByUserid(userid);
+    }
 
 
 }

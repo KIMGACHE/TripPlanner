@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -58,15 +59,33 @@ public class LoginController {
     public ResponseEntity<?> findUserid(@RequestBody Map<String,String> request){
         String email = request.get("email");
         List<UserEntity> users = authService.findUserIdByEmail(email);
-        
-        if(optionalUser.isPresent()){
+
+        if(!users.isEmpty()){
         //유저 ID 추출
-            String userid = optionalUser.get().getUserid();
-            return ResponseEntity.ok(Collections.singletonMap("userid",userid));
+            List<String> userids = users.stream()
+                    .map(UserEntity::getUserid)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(Collections.singletonMap("userid",userids));
 
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Collections.singletonMap("message","유저를 찾을 수 없습니다")); 
+        }
+    }
+
+    //이메일로 사용자 찾기
+    @PostMapping("/check-userid")
+    @ResponseBody
+    public ResponseEntity<?> checkUserid(@RequestBody Map<String,String> request){
+        String userid = request.get("userid");
+
+        boolean isExistsUserid = authService.existsByUserid(userid);
+
+        if(isExistsUserid){
+            return ResponseEntity.ok(Collections.singletonMap("message","사용자 ID가 확인되었습니다"));
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("message","해당 사용자 ID 가 없습니다"));
         }
     }
 
@@ -75,7 +94,9 @@ public class LoginController {
     @ResponseBody
     public ResponseEntity<?> findUserPassword(@RequestBody Map<String,String> request){
         String email = request.get("email");
-        Optional<UserEntity> optionalUser = authService.findUserIdByEmail(email); //변경
+        String userid = request.get("userid");
+
+        Optional<UserEntity> optionalUser = authService.findUserByUseridAndEmail(email,userid);
 
         if(optionalUser.isPresent()){
             String token = authService.generatePasswordResetToken(email);
