@@ -67,6 +67,7 @@ public class Planner {
                 this.description,
                 this.user.getUsername(), // UserEntity에서 username 가져오기
                 this.user.getUserid(),
+                this.user.getImg(),
                 thumbnailImage, // 썸네일 이미지
                 this.isPublic
         );
