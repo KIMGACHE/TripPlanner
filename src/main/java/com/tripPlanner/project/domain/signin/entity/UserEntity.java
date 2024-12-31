@@ -39,8 +39,8 @@ public class UserEntity {
     @Column(name = "role", nullable = false)
     private String role;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate birth;
+    @DateTimeFormat(pattern = "yyyyMMdd")
+    private int birth;
 
     private String provider;
     private String providerId;
