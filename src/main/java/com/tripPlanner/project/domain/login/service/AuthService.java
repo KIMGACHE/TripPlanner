@@ -2,10 +2,9 @@ package com.tripPlanner.project.domain.login.service;
 
 import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
 import com.tripPlanner.project.domain.login.dto.LoginResponse;
-import com.tripPlanner.project.domain.signin.UserEntity;
-import com.tripPlanner.project.domain.signin.UserRepository;
+import com.tripPlanner.project.domain.signin.entity.UserEntity;
+import com.tripPlanner.project.domain.signin.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +16,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 @Service
@@ -33,9 +32,10 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
 
+    private final ConcurrentHashMap<String,String> verificationCodes = new ConcurrentHashMap<>();
+
     private String getKey(){
-        String secretKey = jwtTokenProvider.getSecretKey();
-        return  secretKey;
+        return jwtTokenProvider.getSecretKey();
     }
 
     public LoginResponse refreshAccessToken(Authentication authentication, String refreshToken){
@@ -72,7 +72,7 @@ public class AuthService {
         response.addHeader("Set-Cookie", cookie.toString());
     }
     
-    //이메일 인증 메서드
+    //인증 메일 발송 메서드
     public void sendAuthMail(String to,String subject,String body){
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
@@ -84,34 +84,24 @@ public class AuthService {
 
     }
 
-    //비밀번호 변경 토큰 발급 메서드
-    public String generatePasswordResetToken(String email){
-        long expiration = 1000 * 60 * 5; //5분
-        return Jwts.builder()
-                .setSubject(email)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis()+expiration))
-                .signWith(SignatureAlgorithm.HS256,getKey())
-                .compact();
+    //인증 코드 생성
+    public String generateAuthCode(String email){
+        String code = String.valueOf((int)((Math.random() * 900000) + 100000));
+        verificationCodes.put(email,code);
+        return code;
     }
 
-    //비밀번호 찾기 토큰 유효성검사
-    public String validateToken(String token){
-        try{
-            return Jwts.parserBuilder()
-                    .setSigningKey(getKey())
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody()
-                    .getSubject();  //이메일 반환
-        }catch(Exception e){
-            return null; //유효하지 않은 토큰
-        }
+    public boolean verifyCode(String email,String code){
+        return verificationCodes.containsKey(email) && verificationCodes.get(email).equals(code);
+    }
+
+    public void removeCode(String email){
+        verificationCodes.remove(email);
     }
 
     //비밀번호 변경 저장 메서드
     public void updatePassword(String email,String newPassword){
-        UserEntity userEntity = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다"));
+        UserEntity userEntity = userRepository.findByEmail(email).orElseThrow(()->new IllegalArgumentException("유저를 찾을 수 없습니다"));
         userEntity.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(userEntity);
     }
@@ -120,13 +110,11 @@ public class AuthService {
         return userRepository.findAllByEmail(email);
     }
 
-    public Optional<UserEntity> findUserByUseridAndEmail(String email,String userid){
-        return userRepository.findByUseridAndEmail(email,userid);
-    }
-
     public boolean existsByUserid(String userid){
         return userRepository.existsByUserid(userid);
     }
 
-
+    public Optional<UserEntity> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 }

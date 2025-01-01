@@ -18,7 +18,7 @@ import java.time.LocalDate;
 public class UserEntity {
 
     @Id
-    @Column(name = "userid", length = 20)
+    @Column(name = "userid")
     private String userid;
 
     @Column(name = "img")
@@ -27,7 +27,7 @@ public class UserEntity {
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
     @Column(name = "email", nullable = false)
