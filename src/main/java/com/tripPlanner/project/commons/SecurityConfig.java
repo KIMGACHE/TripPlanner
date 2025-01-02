@@ -5,6 +5,7 @@ import com.tripPlanner.project.domain.login.auth.handler.CustomLogoutHandler;
 import com.tripPlanner.project.domain.login.auth.handler.Oauth2LoginSuccessHandler;
 import com.tripPlanner.project.domain.login.auth.jwt.JwtAuthenticationFilter;
 import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
+import com.tripPlanner.project.domain.login.service.AuthService;
 import com.tripPlanner.project.domain.login.service.PrincipalDetailService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,6 +37,7 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final Oauth2LoginSuccessHandler oauth2LoginSuccessHandler;
     private final RedisTemplate<String, String> redisTemplate;
+    private final AuthService authService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -92,7 +94,7 @@ public class SecurityConfig {
   
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtTokenProvider);
+        return new JwtAuthenticationFilter(jwtTokenProvider,redisTemplate,authService);
     }
 
 

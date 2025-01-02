@@ -1,6 +1,7 @@
 package com.tripPlanner.project.domain.login.auth;
 
 import com.tripPlanner.project.domain.login.dto.LoginRequest;
+import com.tripPlanner.project.domain.signin.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.Map;
 public class PrincipalDetail implements UserDetails, OAuth2User {
 
     private LoginRequest loginRequest;
+//    private UserEntity userEntity;
     private Map<String, Object> attributes;
 
     public PrincipalDetail(LoginRequest loginRequest){

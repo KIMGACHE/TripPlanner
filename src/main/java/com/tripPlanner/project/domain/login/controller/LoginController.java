@@ -1,6 +1,7 @@
 package com.tripPlanner.project.domain.login.controller;
 
 
+import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
 import com.tripPlanner.project.domain.login.dto.LoginRequest;
 import com.tripPlanner.project.domain.login.dto.LoginResponse;
 import com.tripPlanner.project.domain.login.service.AuthService;
@@ -14,10 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -29,6 +27,7 @@ public class LoginController {
 
     private final LoginService loginService;
     private final AuthService authService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("/login")
     public String login(){
@@ -93,9 +92,12 @@ public class LoginController {
     @PostMapping("/send-verify-code")
     @ResponseBody
     public ResponseEntity<?> sendAuthCode(@RequestBody Map<String,String> request){
+        String userid = request.get("userid");
         String email = request.get("email");
 
-        Optional<UserEntity> optionalUser = authService.findByEmail(email);
+        log.info("userid {} ,email {} ",userid,email);
+
+        Optional<UserEntity> optionalUser = authService.findByUseridAndEmail(userid, email);
 
         if(optionalUser.isPresent()){
             String code = authService.generateAuthCode(email);
@@ -120,7 +122,14 @@ public class LoginController {
         boolean isValid = authService.verifyCode(email,code);
         if(isValid){
             authService.removeCode(email); //코드 삭제
-            return ResponseEntity.ok(Collections.singletonMap("message","인증 성공"));
+            
+            String token = jwtTokenProvider.generateResetToken(email); //비밀번호 재설정을 위한 토큰 생성
+
+            Map<String,String> response = new HashMap<>();
+            response.put("message","인증 성공");
+            response.put("resetToken",token);
+
+            return ResponseEntity.ok(response);
         }else{
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Collections.singletonMap("message","인증 코드가 유효하지 않습니다."));
@@ -130,13 +139,12 @@ public class LoginController {
     //인증 토큰 받은 후 비밀번호 변경
     @PostMapping("/reset-password")
     @ResponseBody
-    public ResponseEntity<?> resetPassword(@RequestBody Map<String,String> request){
-        String email = request.get("email");
+    public ResponseEntity<?> resetPassword(@RequestHeader("Authorization") String token , @RequestBody Map<String,String> request){
         String newPassword = request.get("newPassword");
 
-        authService.updatePassword(email,newPassword);
+        String email = jwtTokenProvider.decodeResetToken(token);
 
-        authService.removeCode(email);
+        authService.updatePassword(email,newPassword);
 
         return ResponseEntity.ok(Collections.singletonMap("message","비밀번호가 성공적으로 변경되었습니다"));
     }

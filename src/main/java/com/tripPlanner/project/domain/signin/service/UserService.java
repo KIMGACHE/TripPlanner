@@ -258,7 +258,7 @@ public class UserService {
 //        UserEntity user = userRepository.findByUserid(userId)
 //                .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
 //
-//        if (userRepository.findByEmail(newEmail).isPresent()) {
+//        if (userRepository.findByUseridAndEmail(newEmail).isPresent()) {
 //            return "이미 사용 중인 이메일입니다.";
 //        }
 //
