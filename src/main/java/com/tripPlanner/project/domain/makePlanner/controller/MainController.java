@@ -46,20 +46,20 @@ public class MainController {
     @Autowired
     private PlaceApiService apiService;
 
-//    @ResponseBody
-//    @PostMapping(value="/getImages", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<Map<String, Object>> getImages(@RequestBody Map<String,Object> map) throws JsonProcessingException {
-//        log.info("POST /planner/getImages...");
-//
-//        // 값을 담을 map객체
-//        Map<String,Object> datas = new HashMap<>();
-//
-//        String businessName = (String)map.get("businessName");
-//
-//        datas.put("image",plannerApiService.getPlaceImage(businessName).block());
-//
-//        return new ResponseEntity<Map<String,Object>>(datas, HttpStatus.OK);
-//    }
+    @ResponseBody
+    @PostMapping(value="/getImages", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Object>> getImages(@RequestBody Map<String,Object> map) throws JsonProcessingException {
+        log.info("POST /planner/getImages...");
+
+        // 값을 담을 map객체
+        Map<String,Object> datas = new HashMap<>();
+
+        String businessName = (String)map.get("businessName");
+
+        datas.put("image",plannerApiService.getPlaceImage(businessName).block());
+
+        return new ResponseEntity<Map<String,Object>>(datas, HttpStatus.OK);
+    }
 
     @ResponseBody
     @PostMapping(value="/findDestination", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)

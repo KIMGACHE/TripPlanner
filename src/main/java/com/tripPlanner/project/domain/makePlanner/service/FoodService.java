@@ -57,16 +57,11 @@ public class FoodService {
                 foods = foodRepository.searchFood(word,areaname);
 
             }
-
-
             List<FoodDto> list = new ArrayList<FoodDto>();
 
             FoodDto foodDto = new FoodDto();
             foods.forEach(el->{
-                String image = plannerApiService.getPlaceImage(el.getBusinessName()).block();
-                FoodDto addImageDto = foodDto.entityToDto(el);
-                addImageDto.setImage(image);
-                list.add(addImageDto);
+                list.add(foodDto.entityToDto(el));
             });
             return list;
         } catch (Exception e) {

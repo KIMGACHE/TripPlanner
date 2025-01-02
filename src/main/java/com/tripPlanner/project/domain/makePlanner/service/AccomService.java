@@ -54,15 +54,10 @@ public class AccomService {
             } else {
                 accoms = accomRepository.searchAccom(word,areaname);
             }
-
-
             List<AccomDto> list = new ArrayList<AccomDto>();
 
             AccomDto accomDto = new AccomDto();
             accoms.forEach(el->{
-                String image = plannerApiService.getPlaceImage(el.getBusinessName()).block();
-                AccomDto addImageDto = accomDto.entityToDto(el);
-                addImageDto.setImage(image);
                 list.add(accomDto.entityToDto(el));
             });
             return list;
