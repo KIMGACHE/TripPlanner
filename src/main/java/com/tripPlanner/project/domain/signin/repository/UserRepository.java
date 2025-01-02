@@ -1,5 +1,6 @@
-package com.tripPlanner.project.domain.signin;
+package com.tripPlanner.project.domain.signin.repository;
 
+import com.tripPlanner.project.domain.signin.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

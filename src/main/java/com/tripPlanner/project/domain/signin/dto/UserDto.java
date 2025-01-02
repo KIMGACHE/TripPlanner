@@ -1,16 +1,13 @@
-package com.tripPlanner.project.domain.signin;
+package com.tripPlanner.project.domain.signin.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-<<<<<<< HEAD
-=======
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
->>>>>>> 이영훈
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -23,11 +20,7 @@ public class UserDto {
     private String password;
     private String repassword;
     private String email;
-<<<<<<< HEAD
     private int birth;
-=======
-    private LocalDate birth;
->>>>>>> 이영훈
     private String gender;
     private String role;
 }
