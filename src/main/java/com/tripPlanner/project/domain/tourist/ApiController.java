@@ -14,26 +14,6 @@ public class ApiController {
 
     private final ApiService apiService;
 
-//    @PostMapping("getPlaceDescription")
-//    public Mono<String> getPlaceDescription(@RequestBody String title) {
-//        // title이 object형태로 받아와지기 때문에 문자열로 변환
-//        try {
-//            // ObjectMapper로 JSON 파싱
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            JsonNode jsonNode = objectMapper.readTree(title);
-//            title = jsonNode.get("query").asText();  // "query" 값을 추출
-//
-//            System.out.println("title : " + title);
-//
-//            return apiService.getPlaceDescription(title);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return Mono.error(new RuntimeException("Error parsing request body", e));
-//        }
-//    }
-
-
-
     @GetMapping("/tourist-info")
     public Mono<String> getTouristInfo(@RequestParam(value = "id") String contentId) {
 
