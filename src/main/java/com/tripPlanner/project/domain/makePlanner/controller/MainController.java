@@ -7,9 +7,10 @@ import com.tripPlanner.project.domain.makePlanner.dto.FoodDto;
 import com.tripPlanner.project.domain.makePlanner.entity.Planner;
 import com.tripPlanner.project.domain.makePlanner.service.*;
 import com.tripPlanner.project.domain.makePlanner.dto.AccomDto;
-import com.tripPlanner.project.domain.tourist.ApiRequest;
-import com.tripPlanner.project.domain.tourist.ApiService;
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -42,22 +43,23 @@ public class MainController {
     @Autowired
     private PlannerApiService plannerApiService;
 
-    @ResponseBody
-    @PostMapping(value="/getImages", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, Object>> getImages(@RequestBody Map<String,Object> map) throws JsonProcessingException {
-        log.info("POST /planner/getImages...");
+    @Autowired
+    private PlaceApiService apiService;
 
-        // 값을 담을 map객체
-        Map<String,Object> datas = new HashMap<>();
-
-        String businessName = (String)map.get("businessName");
-
-//        System.out.println("businessName : "+businessName);
-
-        datas.put("image",plannerApiService.getPlaceImage(businessName).block());
-
-        return new ResponseEntity<Map<String,Object>>(datas, HttpStatus.OK);
-    }
+//    @ResponseBody
+//    @PostMapping(value="/getImages", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<Map<String, Object>> getImages(@RequestBody Map<String,Object> map) throws JsonProcessingException {
+//        log.info("POST /planner/getImages...");
+//
+//        // 값을 담을 map객체
+//        Map<String,Object> datas = new HashMap<>();
+//
+//        String businessName = (String)map.get("businessName");
+//
+//        datas.put("image",plannerApiService.getPlaceImage(businessName).block());
+//
+//        return new ResponseEntity<Map<String,Object>>(datas, HttpStatus.OK);
+//    }
 
     @ResponseBody
     @PostMapping(value="/findDestination", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
@@ -131,7 +133,7 @@ public class MainController {
 
     @ResponseBody
     @PostMapping(value="/searchDestination", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String,Object>> search_destination(@RequestBody Map<String,Object> map) {
+    public ResponseEntity<Map<String,Object>> search_destination(@RequestBody Map<String,Object> map) throws ParseException {
         String type = (String)map.get("type");
         String word = (String)map.get("word");
         String areaname = (String)map.get("areaname");
@@ -147,58 +149,44 @@ public class MainController {
             datas.put("data",searchList);
         } else if(type.equals("관광지")) {
             System.out.println("호출");
-            String keyword = apiRequest.getKeyword();
-            String regionCode = apiRequest.getRegionCode();
-            String hashtag = null;
-            String pageNo = apiRequest.getPageNo();
-            String arrange = apiRequest.getArrange();
-            String contentTypeId = apiRequest.getContentTypeId();
+            String keyword = word;
+            String regionCode = (String)map.get("areacode");
+            String hashtag = "";
+            int pageNoNum = (Integer)map.get("pageNo");
+            String pageNo = Integer.toString(pageNoNum);
+            String arrange = "A";
+            String contentTypeId = "12";
+            System.out.println("keyword : " + keyword + ", regionCode : " + regionCode + ", pageNo : " + pageNo);
 
-            // 모든 값이 비었을 경우
-            if (keyword.isEmpty() && regionCode.isEmpty() && hashtag.isEmpty()) {
-                System.out.println("모든 값 비었을 때 반응");
-                return apiService.getAreaBasedList(regionCode, hashtag, pageNo, arrange, contentTypeId);
-            }
-
-            // keyword만 있을 경우
-            if (!keyword.isEmpty() && regionCode.isEmpty() && hashtag.isEmpty()) {
-                System.out.println("keyword만 있을 때 반응");
-                return apiService.getSearchKeyword(keyword.trim(), pageNo, arrange, contentTypeId);
-            }
-
-            // regionCode나 hashtag만 있을 경우
-            if (keyword.isEmpty() && (!regionCode.isEmpty() || !hashtag.isEmpty())) {
-                System.out.println("지역 코드나 카테고리만 있을 때 반응");
-                return apiService.getAreaBasedList(regionCode, hashtag, pageNo, arrange, contentTypeId);
+            // regionCode만 있는 경우
+            if (keyword.isEmpty() && !regionCode.isEmpty()) {
+                System.out.println("지역 코드만 있을 때 반응");
+                datas.put("data",apiService.getAreaBasedList(regionCode, hashtag, pageNo, arrange, contentTypeId).block());
             }
 
             System.out.println("다 없음");
             Mono<String> areaBasedListResult = apiService.getAreaBasedList(regionCode, hashtag, pageNo, arrange, contentTypeId);
             Mono<String> searchKeywordResult = apiService.getSearchKeyword(keyword.trim(), pageNo, arrange, contentTypeId);
 
-
-            return Mono.zip(areaBasedListResult, searchKeywordResult)
+            Mono<String> result = Mono.zip(areaBasedListResult, searchKeywordResult)
                     .flatMap(tuple -> {
                         String areaBasedList = tuple.getT1();
                         String searchKeyword = tuple.getT2();
-
-                        // areaBasedList와 searchKeyword를 전달하여 findCommonDataByCat2AndAreaCode를 호출
                         return apiService.findCommonDataByCat2AndAreaCode(areaBasedList, searchKeyword);
                     })
-                    .switchIfEmpty(Mono.just("[]"))  // 데이터가 없을 경우 빈 배열을 반환
+                    .switchIfEmpty(Mono.just("[]"))
                     .doOnTerminate(() -> System.out.println("findCommonDataByCat2AndAreaCode 호출 종료"));
+
+            JSONParser jsonParser = new JSONParser();
+            Object obj = jsonParser.parse(result.block());
+            JSONObject jsonObj = (JSONObject) obj;
+
+            datas.put("data", jsonObj);
         } else {
             System.out.println("error");
         }
 
-
         return new ResponseEntity(datas, HttpStatus.OK);
     }
 
-    // 관광지 코스를 띄울 때 여러 필터링을 거쳐 데이터를 표시할 함수 (굳이 이렇게 하는 이유는 API가 제공되지 않기 때문)
-    @PostMapping("/getSearch")
-    public Mono<String> getSearch(@RequestBody ApiRequest apiRequest) {
-
-    }
 }
-// f57%2FvzD0xikhY%2BT%2FUp%2BhJY6yczlZKsLfk6F3HJXBuefh4KUKuEtmV0kc%2Bcf7shvdxz0s%2FHYIvbO6yHn1NVJ7EA%3D%3D

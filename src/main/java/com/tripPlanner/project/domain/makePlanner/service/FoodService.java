@@ -23,6 +23,9 @@ public class FoodService {
     @Autowired 
     private FoodRepository foodRepository;
 
+    @Autowired
+    private PlannerApiService plannerApiService;
+
     public List<FoodDto> listFood(double x, double y,int zoom_level) {
         double xStart = x-zoomLevel_x[zoom_level];
         double yStart = y-zoomLevel_y[zoom_level];
@@ -48,9 +51,11 @@ public class FoodService {
             if(areaname.equals("강원도"))
                 areaname = "강원";
             if(word.equals("")) {
+                log.info("키워드를 입력하지않음");
                 foods = foodRepository.searchAreaFood(areaname);
             } else {
                 foods = foodRepository.searchFood(word,areaname);
+
             }
 
 
@@ -58,7 +63,10 @@ public class FoodService {
 
             FoodDto foodDto = new FoodDto();
             foods.forEach(el->{
-                list.add(foodDto.entityToDto(el));
+                String image = plannerApiService.getPlaceImage(el.getBusinessName()).block();
+                FoodDto addImageDto = foodDto.entityToDto(el);
+                addImageDto.setImage(image);
+                list.add(addImageDto);
             });
             return list;
         } catch (Exception e) {

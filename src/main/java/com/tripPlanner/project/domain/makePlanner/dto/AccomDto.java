@@ -22,6 +22,7 @@ public class AccomDto {
     public String streetFullAddress;
     public String businessCategory;
     public String hygieneCategory;
+    public String image;
 
     // Dto -> Entity
     public static Accom dtoToEntity(AccomDto accomDto) {

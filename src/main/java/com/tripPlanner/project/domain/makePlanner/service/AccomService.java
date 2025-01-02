@@ -24,6 +24,9 @@ public class AccomService {
     @Autowired 
     private AccomRepository accomRepository;
 
+    @Autowired
+    private PlannerApiService plannerApiService;
+
     public List<AccomDto> listAccom(double x, double y, int zoom_level) {
         double xStart = x-zoomLevel_x[zoom_level];
         double yStart = y-zoomLevel_y[zoom_level];
@@ -46,6 +49,7 @@ public class AccomService {
             if(areaname.equals("강원도"))
                 areaname = "강원";
             if(word.equals("")) {
+                log.info("키워드를 입력하지않음");
                 accoms = accomRepository.searchAreaAccom(areaname);
             } else {
                 accoms = accomRepository.searchAccom(word,areaname);
@@ -56,6 +60,9 @@ public class AccomService {
 
             AccomDto accomDto = new AccomDto();
             accoms.forEach(el->{
+                String image = plannerApiService.getPlaceImage(el.getBusinessName()).block();
+                AccomDto addImageDto = accomDto.entityToDto(el);
+                addImageDto.setImage(image);
                 list.add(accomDto.entityToDto(el));
             });
             return list;
