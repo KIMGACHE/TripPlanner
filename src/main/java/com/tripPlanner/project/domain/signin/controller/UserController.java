@@ -1,10 +1,12 @@
 package com.tripPlanner.project.domain.signin.controller;
 
+import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
 import com.tripPlanner.project.domain.signin.repository.UserRepository;
 import com.tripPlanner.project.domain.signin.service.UserService;
 import com.tripPlanner.project.domain.signin.dto.UserDto;
 import com.tripPlanner.project.domain.signin.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
@@ -21,6 +24,7 @@ public class UserController {
 
     private final UserService userService;
     private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/check-id")
     public ResponseEntity<Map<String, Object>> checkUserId(@RequestBody Map<String, String> data) {
@@ -77,9 +81,9 @@ public class UserController {
     public ResponseEntity<String> joinPost(@ModelAttribute UserDto userDto,
                                            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) {
 
-        System.out.println("UserID : "+userDto.getUserid());
-        System.out.println("UserPassword : "+userDto.getPassword());
-
+        System.out.println("UserID : " + userDto.getUserid());
+        System.out.println("UserPassword : " + userDto.getPassword());
+        System.out.println("Controller username :" + userDto.getUsername());
         try {
             if (profileImage != null && !profileImage.isEmpty()) {
                 String imagePath = userService.uploadProfileImage(userDto.getUserid(), profileImage);
@@ -95,16 +99,4 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원가입 처리 중 오류가 발생했습니다.");
         }
     }
-
-//    private final UserService userService;
-//
-//    @DeleteMapping("/delete")
-//    public ResponseEntity<String> deleteUser(HttpServletRequest request) {
-//        String token = jwtTokenProvider.resolveToken(request); // 토큰 추출
-//        jwtTokenProvider.validateToken(token); // 토큰 유효성 검증
-//        String userId = jwtTokenProvider.getUserIdFromToken(token); // 사용자 ID 추출
-//
-//        userService.deleteUser(userId); // 사용자 삭제
-//        return ResponseEntity.ok("회원탈퇴가 완료되었습니다.");
-//    }
 }

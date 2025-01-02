@@ -18,10 +18,10 @@ import java.time.LocalDate;
 public class UserEntity {
 
     @Id
-    @Column(name = "userid", length = 20)
+    @Column(name = "userid", length = 1024)
     private String userid;
 
-    @Column(name = "img")
+    @Column(name = "img", length = 1024)
     private String img;
 
     @Column(name = "username", nullable = false)
@@ -39,8 +39,11 @@ public class UserEntity {
     @Column(name = "role", nullable = false)
     private String role;
 
-    @DateTimeFormat(pattern = "yyyyMMdd")
+    @Column(name = "birth" , length = 8)
     private int birth;
+
+//    @Column(name = "like")
+//    private
 
     private String provider;
     private String providerId;
@@ -49,4 +52,5 @@ public class UserEntity {
     public void prePersist() {
         this.role = this.role == null ? "ROLE_USER" : this.role;
     }
+
 }
