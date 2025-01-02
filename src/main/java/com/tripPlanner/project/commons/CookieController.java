@@ -76,6 +76,7 @@ public class CookieController {
 
         return ResponseEntity.ok(LoginResponse.builder()
                         .userid(optionalUser.get().getUserid())
+                        .username(optionalUser.get().getUsername())
                         .success(true)
                         .message("유저 인증 완료")
                         .accessToken(accessToken)

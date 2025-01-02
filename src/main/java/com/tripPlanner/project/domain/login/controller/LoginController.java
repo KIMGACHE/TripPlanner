@@ -1,17 +1,21 @@
 package com.tripPlanner.project.domain.login.controller;
 
 
+import com.tripPlanner.project.domain.login.auth.handler.CustomLogoutHandler;
 import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
 import com.tripPlanner.project.domain.login.dto.LoginRequest;
 import com.tripPlanner.project.domain.login.dto.LoginResponse;
 import com.tripPlanner.project.domain.login.service.AuthService;
 import com.tripPlanner.project.domain.login.service.LoginService;
 import com.tripPlanner.project.domain.signin.entity.UserEntity;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +32,7 @@ public class LoginController {
     private final LoginService loginService;
     private final AuthService authService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final CustomLogoutHandler customLogoutHandler;
 
     @GetMapping("/login")
     public String login(){
@@ -50,6 +55,18 @@ public class LoginController {
         authService.setTokenCookies(servletResponse, response.getAccessToken());
 
     return ResponseEntity.ok(response); //Json 데이터로 전달
+    }
+
+    @PostMapping("/logout")
+    @ResponseBody
+    public ResponseEntity<?> logout_post(
+            HttpServletRequest request, HttpServletResponse response
+    ){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        customLogoutHandler.logout(request,response,authentication);
+        
+        return ResponseEntity.ok("로그아웃 처리 완료");
     }
     
     //아이디 찾기
@@ -116,14 +133,15 @@ public class LoginController {
     @PostMapping("/verify-code")
     @ResponseBody
     public ResponseEntity<?> verifyCode(@RequestBody Map<String,String> request){
+        String userid = request.get("userid");
         String email = request.get("email");
         String code = request.get("code");
-        
+        log.info("userid {},email{},code,{}",userid,email,code);
         boolean isValid = authService.verifyCode(email,code);
         if(isValid){
             authService.removeCode(email); //코드 삭제
             
-            String token = jwtTokenProvider.generateResetToken(email); //비밀번호 재설정을 위한 토큰 생성
+            String token = jwtTokenProvider.generateResetToken(userid,email); //비밀번호 재설정을 위한 토큰 생성
 
             Map<String,String> response = new HashMap<>();
             response.put("message","인증 성공");
@@ -141,13 +159,34 @@ public class LoginController {
     @ResponseBody
     public ResponseEntity<?> resetPassword(@RequestHeader("Authorization") String token , @RequestBody Map<String,String> request){
         String newPassword = request.get("newPassword");
+//        String userid = request.get("userid");
 
-        String email = jwtTokenProvider.decodeResetToken(token);
+        String userid = jwtTokenProvider.decodeResetToken(token);
 
-        authService.updatePassword(email,newPassword);
+        authService.updatePassword(userid,newPassword);
 
         return ResponseEntity.ok(Collections.singletonMap("message","비밀번호가 성공적으로 변경되었습니다"));
     }
+
+    //리액트에서 인증정보 가져오기
+    @GetMapping("/auth-check")
+    @ResponseBody
+    public ResponseEntity<?> checkAuth(){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null || !authentication.isAuthenticated()){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok().build();
+    }
+
+
+
+
+
+
+
+
 
 
 //    @PostMapping("/refresh")

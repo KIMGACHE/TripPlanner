@@ -11,6 +11,7 @@ import lombok.*;
 public class LoginRequest {
     private String userid;
     private String password;
+    private String username;
     private String role;
     private boolean rememberMe; //리멤버미 여부
 

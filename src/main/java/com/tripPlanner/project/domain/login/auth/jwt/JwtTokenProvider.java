@@ -122,15 +122,17 @@ public class JwtTokenProvider {
         
         //토큰에서 필요한 정보 추출
         String userid = claims.getSubject(); //userid 추출
+        String username = (String) claims.get("username");
         String provider = (String) claims.get("provider");
         String role = (String) claims.get("role");
 
-        log.info("복호화된 토큰 정보: userid={}, provider={}, role={}", userid, provider, role);
+        log.info("복호화된 토큰 정보: userid={}, provider={}, role={}, username={}", userid, provider, role,username);
 
         // PrincipalDetail 생성
         PrincipalDetail principalDetail = new PrincipalDetail(
                 LoginRequest.builder()
                         .userid(userid)
+                        .username(username)
                         .provider(provider)
                         .role(role)
                         .build(),null
@@ -228,9 +230,11 @@ public class JwtTokenProvider {
     }
 
     //비밀번호 재설정을 위한 토큰을 발급하는 메서드
-    public String generateResetToken(String email){
+    public String generateResetToken(String userid, String email){
+        Claims claims = Jwts.claims().setSubject(userid);
+        claims.put("email",email);
         return Jwts.builder()
-                .setSubject(email)
+                .setClaims(claims)
                 .signWith(SignatureAlgorithm.HS256,secretKey)
                 .compact();
     }

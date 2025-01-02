@@ -6,7 +6,6 @@ import com.tripPlanner.project.domain.login.auth.handler.Oauth2LoginSuccessHandl
 import com.tripPlanner.project.domain.login.auth.jwt.JwtAuthenticationFilter;
 import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
 import com.tripPlanner.project.domain.login.service.AuthService;
-import com.tripPlanner.project.domain.login.service.PrincipalDetailService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -70,8 +68,9 @@ public class SecurityConfig {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true) //세션 무효화
-                .deleteCookies("accessToken", "SESSION") //쿠키 삭제
+                .deleteCookies("accessToken", "MY_SESSION") //쿠키 삭제
                 .addLogoutHandler(new CustomLogoutHandler(redisTemplate))
+                .clearAuthentication(true)
         );
 
         //Remember Me 설정
