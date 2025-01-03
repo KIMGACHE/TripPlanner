@@ -1,5 +1,6 @@
 package com.tripPlanner.project.domain.signin.service;
 
+import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
 import com.tripPlanner.project.domain.signin.UploadProperties;
 import com.tripPlanner.project.domain.signin.dto.UserDto;
 import com.tripPlanner.project.domain.signin.entity.UserEntity;
@@ -30,6 +31,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender emailSender;
+    private final JwtTokenProvider jwtTokenProvider;
+
+
     private final ConcurrentHashMap<String, String> authCodes = new ConcurrentHashMap<>();
 
     private final ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
@@ -38,6 +42,7 @@ public class UserService {
     public void init() {
         taskScheduler.initialize();
     }
+
 
     // 회원가입 처리
     public String joinUser(UserDto userDto) throws Exception {
@@ -60,9 +65,10 @@ public class UserService {
 
         // 이미지가 없을 경우 기본 이미지 설정
         if (userDto.getImg() == null || userDto.getImg().trim().isEmpty()) {
-            userDto.setImg("/uploads/basic/anonymous.jpg");
+            userDto.setImg("/upload/basic/anonymous.jpg");
         }
 
+        System.out.println("Service username :" + userDto.getUsername());
         // 비밀번호 암호화 후 저장
         UserEntity user = UserEntity.builder()
                 .userid(userDto.getUserid())
@@ -107,7 +113,7 @@ public class UserService {
 
         log.info("이미지 저장 완료: {}", dest.getAbsolutePath());
 
-        return "/uploads/" + UploadProperties.profilePath + "/" + userid + "/" + savedFileName;
+        return "/upload/" + UploadProperties.profilePath + "/" + userid + "/" + savedFileName;
     }
 
     // 이메일 인증번호 생성 및 발송
@@ -197,76 +203,23 @@ public class UserService {
         return key.toString();
     }
 
-    /**
-     * 회원 탈퇴 처리
-     */
-    @Transactional
-    public void deleteUser(String userId) {
-        Optional<UserEntity> user = userRepository.findByUserid(userId);
 
-        if (user.isEmpty()) {
-            throw new RuntimeException("해당 사용자를 찾을 수 없습니다.");
-        }
 
-        userRepository.delete(user.get());
-        log.info("사용자 삭제 완료: {}", userId);
+    //Mypage
+    public Map<String, Object> getMyPageData(String userId) {
+        // 사용자 정보 가져오기
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        // 반환할 사용자 데이터 구성
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("userid", user.getUserid());
+        userData.put("profileImage", user.getImg());
+
+        return userData;
     }
 
-//    /**
-//     * 사용자 정보 조회
-//     */
-//    @Transactional(readOnly = true)
-//    public UserDto getUserProfile(String userId) {
-//        UserEntity user = userRepository.findByUserid(userId)
-//                .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
-//
-//        return UserDto.builder()
-//                .userid(user.getUserid())
-//                .username(user.getUsername())
-//                .email(user.getEmail())
-//                .birth(user.getBirth())
-//                .gender(user.getGender())
-//                .build();
-//    }
-//
-//    /**
-//     * 사용자 비밀번호 변경
-//     */
-//    @Transactional
-//    public String changePassword(String userId, String oldPassword, String newPassword) {
-//        UserEntity user = userRepository.findByUserid(userId)
-//                .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
-//
-//        // 기존 비밀번호 검증
-//        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-//            return "현재 비밀번호가 일치하지 않습니다.";
-//        }
-//
-//        // 비밀번호 업데이트
-//        user.setPassword(passwordEncoder.encode(newPassword));
-//        userRepository.save(user);
-//
-//        log.info("비밀번호 변경 완료: {}", userId);
-//        return "비밀번호가 변경되었습니다.";
-//    }
-//
-//    /**
-//     * 사용자 이메일 업데이트
-//     */
-//    @Transactional
-//    public String updateEmail(String userId, String newEmail) {
-//        UserEntity user = userRepository.findByUserid(userId)
-//                .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
-//
-//        if (userRepository.findByUseridAndEmail(newEmail).isPresent()) {
-//            return "이미 사용 중인 이메일입니다.";
-//        }
-//
-//        user.setEmail(newEmail);
-//        userRepository.save(user);
-//
-//        log.info("이메일 변경 완료: {}", userId);
-//        return "이메일이 변경되었습니다.";
-//    }
 
 }
+
+

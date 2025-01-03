@@ -15,10 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import reactor.core.publisher.Mono;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -27,7 +24,7 @@ public class DestinationService {
     private DestinationRepository destinationRepository;
 
     @Transactional
-    public Map<String,Object> addDestination(Planner planner,int day,List<Map<String,Object>> destination) {
+    public Map<String,Object> addDestination(Planner planner, int day, List<Map<String,Object>> destination) {
         try {
             Map<String, Object> map = new LinkedHashMap<>();
             for (int i = 1; i <= day; i++) {
@@ -114,4 +111,52 @@ public class DestinationService {
                 });
     }
 
+    public Map<String, Object> updateDestination(Planner planner, int day, ArrayList<Map<String, Object>> destination) {
+        try {
+            Map<String, Object> map = new LinkedHashMap<>();
+
+            List<Destination> delete = destinationRepository.findByPlanner_PlannerID(planner.getPlannerID());
+            delete.forEach(el -> destinationRepository.delete(el));
+
+            for (int i = 1; i <= day; i++) {
+                final int dayNumber = i;
+
+                List<Map<String, Object>> list = destination.stream()
+                        .filter(el -> (Integer) el.get("day") == dayNumber).toList();
+
+                AtomicInteger count = new AtomicInteger(1);
+                list.forEach((el) -> {
+                    final int index = count.getAndIncrement();
+                    Map<String,Object> data = (Map<String,Object>)el.get("data");
+                    String image = (String)el.get("image");
+                    Destination elements = Destination.builder()
+                            .destinationID(new DestinationID(planner.getPlannerID(), (Integer) el.get("day"), index))
+                            .name((String)data.get("businessName"))
+                            .x((Double)data.get("xCoordinate"))
+                            .y((Double)data.get("yCoordinate"))
+                            .address((String)data.get("streetFullAddress"))
+                            .category((String)data.get("businessCategory"))
+                            .image(image)
+                            .build();
+                    destinationRepository.save(elements);
+                });
+
+            }
+
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Transactional
+    public List<Destination> bringPlanner(int plannerid) {
+        try {
+            return destinationRepository.findByPlanner_PlannerID(plannerid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

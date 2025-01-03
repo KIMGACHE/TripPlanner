@@ -7,12 +7,9 @@ import com.tripPlanner.project.domain.login.dto.LoginRequest;
 import com.tripPlanner.project.domain.login.dto.LoginResponse;
 import com.tripPlanner.project.domain.login.service.AuthService;
 import com.tripPlanner.project.domain.login.service.LoginService;
-import com.tripPlanner.project.domain.signin.entity.UserEntity;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -70,6 +67,7 @@ public class LoginController {
     }
     
     //아이디 찾기
+
     @PostMapping(value="/findId")
     @ResponseBody
     public ResponseEntity<?> findUserid(@RequestBody Map<String,String> request){
@@ -167,6 +165,7 @@ public class LoginController {
 
         return ResponseEntity.ok(Collections.singletonMap("message","비밀번호가 성공적으로 변경되었습니다"));
     }
+
 
     //리액트에서 인증정보 가져오기
     @GetMapping("/auth-check")

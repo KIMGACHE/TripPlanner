@@ -21,6 +21,7 @@ public class FoodDto {
     public String streetPostalCode;
     public String streetFullAddress;
     public String businessCategory;
+    public String image;
 
     // Dto -> Entity
     public static Food dtoToEntity(FoodDto foodDto) {

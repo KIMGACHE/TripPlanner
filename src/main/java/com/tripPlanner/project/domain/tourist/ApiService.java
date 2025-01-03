@@ -123,7 +123,7 @@ public class ApiService {
         if (pageNo != null) {
             url += "&pageNo=" + pageNo;
         }
-//        System.out.println("keyword url : " + url);
+        System.out.println("keyword url : " + url);
 
         // WebClient를 사용하여 API 호출
         return webClient.get()

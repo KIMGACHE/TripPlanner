@@ -23,6 +23,9 @@ public class FoodService {
     @Autowired 
     private FoodRepository foodRepository;
 
+    @Autowired
+    private PlannerApiService plannerApiService;
+
     public List<FoodDto> listFood(double x, double y,int zoom_level) {
         double xStart = x-zoomLevel_x[zoom_level];
         double yStart = y-zoomLevel_y[zoom_level];
@@ -48,12 +51,12 @@ public class FoodService {
             if(areaname.equals("강원도"))
                 areaname = "강원";
             if(word.equals("")) {
+                log.info("키워드를 입력하지않음");
                 foods = foodRepository.searchAreaFood(areaname);
             } else {
                 foods = foodRepository.searchFood(word,areaname);
+
             }
-
-
             List<FoodDto> list = new ArrayList<FoodDto>();
 
             FoodDto foodDto = new FoodDto();
