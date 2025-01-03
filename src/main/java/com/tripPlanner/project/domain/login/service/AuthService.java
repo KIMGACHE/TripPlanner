@@ -4,6 +4,8 @@ import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
 import com.tripPlanner.project.domain.login.dto.LoginResponse;
 import com.tripPlanner.project.domain.signin.entity.UserEntity;
 import com.tripPlanner.project.domain.signin.repository.UserRepository;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+
 
 
     @Service
@@ -105,9 +108,9 @@ import java.util.concurrent.ConcurrentHashMap;
         userRepository.save(userEntity);
     }
 
-    public List<UserEntity> findUserIdByEmail(String email){
-        return userRepository.findAllByEmail(email);
-    }
+//    public List<UserEntity> findUserIdByEmail(String email){
+//        return userRepository.findAllByEmail(email);
+//    }
 
     public boolean existsByUserid(String userid){
         return userRepository.existsByUserid(userid);

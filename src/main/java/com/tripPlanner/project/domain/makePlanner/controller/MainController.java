@@ -4,17 +4,21 @@ package com.tripPlanner.project.domain.makePlanner.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tripPlanner.project.domain.makePlanner.dto.FoodDto;
+import com.tripPlanner.project.domain.makePlanner.entity.Destination;
 import com.tripPlanner.project.domain.makePlanner.entity.Planner;
 import com.tripPlanner.project.domain.makePlanner.service.*;
 import com.tripPlanner.project.domain.makePlanner.dto.AccomDto;
-import com.tripPlanner.project.domain.tourist.ApiService;
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +44,9 @@ public class MainController {
     @Autowired
     private PlannerApiService plannerApiService;
 
+    @Autowired
+    private PlaceApiService apiService;
+
     @ResponseBody
     @PostMapping(value="/getImages", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> getImages(@RequestBody Map<String,Object> map) throws JsonProcessingException {
@@ -49,8 +56,6 @@ public class MainController {
         Map<String,Object> datas = new HashMap<>();
 
         String businessName = (String)map.get("businessName");
-
-//        System.out.println("businessName : "+businessName);
 
         datas.put("image",plannerApiService.getPlaceImage(businessName).block());
 
@@ -116,11 +121,12 @@ public class MainController {
         String description = (String)map.get("description");
         boolean isPublic = (Boolean)map.get("isPublic");
         int day = (Integer)map.get("day");
+        String userid = (String)map.get("userid");
         ArrayList<Map<String,Object>> destination = (ArrayList<Map<String,Object>>)map.get("destination");
 
-        log.info("POST /planner/addPlanner..."+destination);
+        log.info("POST /planner/addPlanner...");
 
-        Planner planner = plannerService.addPlanner(title,areaName,description,day,isPublic);
+        Planner planner = plannerService.addPlanner(title,areaName,description,day,isPublic,userid);
         Map<String,Object> datas = destinationService.addDestination(planner, day, destination);
 
         return new ResponseEntity(datas, HttpStatus.OK);
@@ -128,7 +134,7 @@ public class MainController {
 
     @ResponseBody
     @PostMapping(value="/searchDestination", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String,Object>> search_destination(@RequestBody Map<String,Object> map) {
+    public ResponseEntity<Map<String,Object>> search_destination(@RequestBody Map<String,Object> map) throws ParseException {
         String type = (String)map.get("type");
         String word = (String)map.get("word");
         String areaname = (String)map.get("areaname");
@@ -143,12 +149,99 @@ public class MainController {
             List<AccomDto> searchList = accomService.searchAccom(word,areaname);
             datas.put("data",searchList);
         } else if(type.equals("관광지")) {
+            System.out.println("호출");
+            String keyword = word;
+            String regionCode = (String)map.get("areacode");
+            String hashtag = "";
+            int pageNoNum = (Integer)map.get("pageNo");
+            String pageNo = Integer.toString(pageNoNum);
+            String arrange = "A";
+            String contentTypeId = "12";
+            System.out.println("keyword : " + keyword + ", regionCode : " + regionCode + ", pageNo : " + pageNo);
 
+            // regionCode만 있는 경우
+            if (keyword.isEmpty() && !regionCode.isEmpty()) {
+                System.out.println("지역 코드만 있을 때 반응");
+                datas.put("data",apiService.getAreaBasedList(regionCode, hashtag, pageNo, arrange, contentTypeId).block());
+            }
+
+            System.out.println("다 없음");
+            Mono<String> areaBasedListResult = apiService.getAreaBasedList(regionCode, hashtag, pageNo, arrange, contentTypeId);
+            Mono<String> searchKeywordResult = apiService.getSearchKeyword(keyword.trim(), pageNo, arrange, contentTypeId);
+
+            Mono<String> result = Mono.zip(areaBasedListResult, searchKeywordResult)
+                    .flatMap(tuple -> {
+                        String areaBasedList = tuple.getT1();
+                        String searchKeyword = tuple.getT2();
+                        return apiService.findCommonDataByCat2AndAreaCode(areaBasedList, searchKeyword);
+                    })
+                    .switchIfEmpty(Mono.just("[]"))
+                    .doOnTerminate(() -> System.out.println("findCommonDataByCat2AndAreaCode 호출 종료"));
+
+            JSONParser jsonParser = new JSONParser();
+            Object obj = jsonParser.parse(result.block());
+            JSONObject jsonObj = (JSONObject) obj;
+
+            datas.put("data", jsonObj);
         } else {
             System.out.println("error");
         }
 
+        return new ResponseEntity(datas, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @PostMapping(value="/deletePlanner", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String,Object>> delete_Planner(@RequestBody Map<String,Object> map) throws ParseException {
+        Map<String,Object> datas = new HashMap<>();
+
+        int plannerid = (Integer)map.get("plannerid");
+
+        String message = plannerService.deletePlanner(plannerid);
+        datas.put("message",message);
 
         return new ResponseEntity(datas, HttpStatus.OK);
     }
+
+    @ResponseBody
+    @PostMapping(value="/updatePlanner", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String,Object>> update_planner(@RequestBody Map<String,Object> map) {
+        if(map.get("plannerid") == null) {
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+        }
+        int plannerid = (Integer)map.get("plannerid");
+
+        String title = (String)map.get("title");
+        String areaName = (String)map.get("areaName");
+        String description = (String)map.get("description");
+        boolean isPublic = (Boolean)map.get("isPublic");
+        int day = (Integer)map.get("day");
+        String userid = (String)map.get("userid");
+        ArrayList<Map<String,Object>> destination = (ArrayList<Map<String,Object>>)map.get("destination");
+
+        log.info("POST /planner/updatePlanner...");
+
+        Planner planner = plannerService.updatePlanner(plannerid,title,areaName,description,day,isPublic,userid);
+        Map<String,Object> datas = destinationService.updateDestination(planner, day, destination);
+
+        return new ResponseEntity(datas, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @PostMapping(value="/bringPlanner", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String,Object>> bring_planner(@RequestBody Map<String,Object> map) {
+        if(map.get("plannerid") == null) {
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+        }
+        int plannerid = (Integer)map.get("plannerid");
+
+        log.info("POST /planner/updatePlanner...");
+
+        List<Destination> destinations = destinationService.bringPlanner(plannerid);
+        Map<String,Object> datas = new HashMap<>();
+        datas.put("destinations",destinations);
+
+        return new ResponseEntity(datas, HttpStatus.OK);
+    }
+
 }

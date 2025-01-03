@@ -34,7 +34,7 @@ public class Destination {
     @Column(name = "category")
     private String category; // 카테고리
 
-    @Column(name = "image")
+    @Column(name = "image", length=1024)
     private String image; // 장소의 이미지 URL (구글 API사용)
 
     public DestinationDto toDto() {

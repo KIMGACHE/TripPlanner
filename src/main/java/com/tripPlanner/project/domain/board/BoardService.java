@@ -5,6 +5,8 @@ import com.tripPlanner.project.domain.makePlanner.entity.Planner;
 import com.tripPlanner.project.domain.makePlanner.repository.DestinationRepository;
 import com.tripPlanner.project.domain.makePlanner.repository.PlannerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,27 +21,23 @@ public class BoardService {
     private final PlannerRepository plannerRepository;
 
     // 플래너 전체를 가져와서 게시판에 띄우기
-    public List<BoardDto> getPlannersForBoard() {
-        List<Planner> planners = boardRepository.findByIsPublicTrue(); // 공개된 플래너만 가져오기
+    public Page<BoardDto> getPlannersForBoard(Pageable pageable) {
+        // 공개된 플래너를 페이징 처리하여 조회
+        return boardRepository.findByIsPublicTrue(pageable)
+                .map(planner -> BoardDto.builder()
+                        .plannerID(planner.getPlannerID())
+                        .plannerTitle(planner.getPlannerTitle())
+                        .createAt(planner.getCreateAt())
+                        .day(planner.getDay())
+                        .username(planner.getUser().getUsername())
+                        .thumbnailImage(getThumbnailImage(planner.getPlannerID()))
+                        .area((planner.getArea()))
+                        .description(planner.getDescription())
+                        .userId(planner.getUser().getUserid())
+                        .userProfileImg(planner.getUser().getImg())
+                        .isPublic(planner.isPublic())
+                        .build());
 
-        return planners.stream()
-                .map(planner -> {
-                    // 썸네일 이미지 가져오기
-                    String thumbnailImage = getThumbnailImage(planner.getPlannerID());
-                    // BoardDto로 변환 (썸네일 이미지는 BoardService에서 설정)
-                    return BoardDto.builder()
-                            .plannerID(planner.getPlannerID())
-                            .plannerTitle(planner.getPlannerTitle())
-                            .createAt(planner.getCreateAt())
-                            .day(planner.getDay())
-                            .username(planner.getUser().getUsername())
-                            .thumbnailImage(thumbnailImage) // 썸네일 이미지 설정
-                            .area((planner.getArea()))
-                            .description(planner.getDescription())
-                            .userId(planner.getUser().getUserid())
-                            .build();
-                })
-                .collect(Collectors.toList());
     }
 
     public String getThumbnailImage(int plannerID) {
