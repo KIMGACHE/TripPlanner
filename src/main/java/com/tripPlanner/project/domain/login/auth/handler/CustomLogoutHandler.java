@@ -48,6 +48,8 @@ public class CustomLogoutHandler implements LogoutHandler {
             log.info("Redis 에서 토큰을 찾을 수 없습니다");
         }
 
+        deleteRedisRefreshToken(authentication);
+
         log.info("로그아웃 처리 완료");
     }
 
@@ -93,7 +95,28 @@ public class CustomLogoutHandler implements LogoutHandler {
         }else{
             return null;
         }
-
     }
+    
+    //Redis 데이터 삭제 메서드
+    private void deleteRedisRefreshToken(Authentication authentication){
+        if(authentication == null || authentication.getPrincipal() == null){
+            log.warn("인증정보가 존재하지 않습니다. Redis 키를 삭제할 수 없습니다.");
+            return ;
+        }
+
+        Object principal = authentication.getPrincipal();
+        if(principal instanceof PrincipalDetail){
+            String userid = ((PrincipalDetail)principal).getName();
+            String redisKey = REDIS_REFRESHTOKEN_NAME+userid;
+            redisTemplate.delete(redisKey);
+            log.info("Redis 에서 리프레시 토큰 삭제:{}",redisKey);
+        }else{
+            log.warn("principal 타입이 잘못됨. Redis키 삭제 불가능");
+        }
+    }
+
+
+
+
 
 }
