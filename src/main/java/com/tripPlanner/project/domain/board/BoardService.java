@@ -3,6 +3,7 @@ package com.tripPlanner.project.domain.board;
 import com.tripPlanner.project.domain.makePlanner.entity.Destination;
 import com.tripPlanner.project.domain.makePlanner.entity.Planner;
 import com.tripPlanner.project.domain.makePlanner.repository.DestinationRepository;
+import com.tripPlanner.project.domain.makePlanner.repository.PlannerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final DestinationRepository destinationRepository;
+    private final PlannerRepository plannerRepository;
 
     // 플래너 전체를 가져와서 게시판에 띄우기
     public List<BoardDto> getPlannersForBoard() {
@@ -52,4 +54,8 @@ public class BoardService {
         return destination != null ? destination.getImage() : null;
     }
 
+    //여행 계획 반환하는 메서드
+    public int getTotalPlans() {
+        return (int) plannerRepository.count();
+    }
 }

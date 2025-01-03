@@ -20,5 +20,11 @@ public class BoardController {
     public ResponseEntity<List<BoardDto>> getPlannerList() {
         return ResponseEntity.ok(boardService.getPlannersForBoard());
     }
-    
+
+    @GetMapping("/plans/total")
+    public ResponseEntity<Integer> getTotalPlans(){
+        int totalPlans = boardService.getTotalPlans();
+        return ResponseEntity.ok(totalPlans);
+    }
+
 }
