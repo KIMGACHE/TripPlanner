@@ -108,9 +108,9 @@ import java.util.concurrent.ConcurrentHashMap;
         userRepository.save(userEntity);
     }
 
-//    public List<UserEntity> findUserIdByEmail(String email){
-//        return userRepository.findAllByEmail(email);
-//    }
+    public List<UserEntity> findUserIdByEmail(String email){
+        return userRepository.findAllByEmail(email);
+    }
 
     public boolean existsByUserid(String userid){
         return userRepository.existsByUserid(userid);
