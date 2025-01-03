@@ -5,9 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
@@ -27,7 +25,7 @@ public class UserEntity {
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
     @Column(name = "email", nullable = false)
@@ -42,8 +40,7 @@ public class UserEntity {
     @Column(name = "birth" , length = 8)
     private int birth;
 
-//    @Column(name = "like")
-//    private
+
 
     private String provider;
     private String providerId;
