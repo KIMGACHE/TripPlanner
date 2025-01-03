@@ -58,6 +58,7 @@ public class LoginService {
         PrincipalDetail principalDetail = new PrincipalDetail(
                 LoginRequest.builder()
                         .userid(userEntity.getUserid())
+                        .username(userEntity.getUsername())
                         .role(userEntity.getRole())
                         .provider(userEntity.getProvider())
                         .build(),

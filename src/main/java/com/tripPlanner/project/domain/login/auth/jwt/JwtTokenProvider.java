@@ -49,11 +49,13 @@ public class JwtTokenProvider {
         
         //PrincipalDetail 에서 필요한 정보 추출
         String userid = principalDetail.getLoginRequest().getUserid();
+        String username = principalDetail.getUsername();
         String provider = principalDetail.getLoginRequest().getProvider();
         String role = principalDetail.getLoginRequest().getRole();
         log.info("userid : {} , 프로바이더 : {} , 롤 ~ : {}",userid,provider,role);
 
         Claims claims = Jwts.claims().setSubject(userid); // Jwt payload에 userid 저장
+        claims.put("username",username);
         claims.put("provider",provider);
         claims.put("role",role);  //일단 확인해보고 안되면 고정 값 넣기
 
@@ -120,15 +122,17 @@ public class JwtTokenProvider {
         
         //토큰에서 필요한 정보 추출
         String userid = claims.getSubject(); //userid 추출
+        String username = (String) claims.get("username");
         String provider = (String) claims.get("provider");
         String role = (String) claims.get("role");
 
-        log.info("복호화된 토큰 정보: userid={}, provider={}, role={}", userid, provider, role);
+        log.info("복호화된 토큰 정보: userid={}, provider={}, role={}, username={}", userid, provider, role,username);
 
         // PrincipalDetail 생성
         PrincipalDetail principalDetail = new PrincipalDetail(
                 LoginRequest.builder()
                         .userid(userid)
+                        .username(username)
                         .provider(provider)
                         .role(role)
                         .build(),null
@@ -167,20 +171,19 @@ public class JwtTokenProvider {
         return false; //유효하지 않은 경우 !
     }
 
-    //토큰 만료시간 정보 추출 메서드   ,,현재 미사용
-    public Date getExpirationDateFromToken(String token){
-        return Jwts.parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getExpiration(); //만료 시간 확인
-    }
+//    //토큰 만료시간 정보 추출 메서드   ,,현재 미사용
+//    public Date getExpirationDateFromToken(String token){
+//        return Jwts.parserBuilder()
+//                .setSigningKey(secretKey)
+//                .build()
+//                .parseClaimsJws(token)
+//                .getBody()
+//                .getExpiration(); //만료 시간 확인
+//    }
     
     //엑세스 토큰 재생성 메서드
     public String regenAccessToken(Authentication authentication,String refreshToken){
         log.info("엑세스 토큰을 재생성합니다");
-        String accessToken = generateAccessToken(authentication);
 
         if(!validateToken(refreshToken)){
             //토큰이 유효하지 않을 때
@@ -189,18 +192,24 @@ public class JwtTokenProvider {
         }
         //redis 에 있는 refreshToken 조회
         String userid = getUserIdFromToken(refreshToken);
-        Optional<TokenEntity> tokenEntityOptional = tokenRepository.findByRefreshToken(refreshToken);
-        if(tokenEntityOptional.isEmpty()){
-            log.warn("redis 에서 리프레시 토큰을 찾을 수 없습니다");
-            throw new IllegalArgumentException("redis 에서 리프레시 토큰을 찾을 수 없습니다");
+
+        log.info("리프레시 토큰에서 추출한 사용자ID {} ",userid);
+
+        String redisKey = "refreshToken"+userid;
+        String storedRefreshToken = redisTemplate.opsForValue().get(redisKey);
+
+        if(storedRefreshToken == null){
+            log.warn("Redis에서 리프레시 토큰을 찾을 수 없습니다");
+            throw new IllegalArgumentException("Redis에서 리프레시 토큰을 찾을 수 없습니다");
         }
-        TokenEntity tokenEntity = tokenEntityOptional.get();
-        if(!tokenEntity.getRefreshToken().equals(refreshToken)){
-            log.warn("redis에 있는 리프레시 토큰 값과 일치하지 않습니다");
-            throw new IllegalArgumentException("redis에 있는 리프레시 토큰 값과 일치하지 않습니다");
+
+        if(storedRefreshToken.equals(refreshToken)){
+            log.warn("Redis에 저장된 리프레시 토큰과 요청된 리프레시 토큰이 일치하지 않습니다");
+            throw new IllegalArgumentException("Redis에 저장된 리프레시 토큰과 요청된 리프레시 토큰이 일치하지 않습니다");
         }
-        
-        log.warn("리프레시 토큰 검증완료. 엑세스 토큰을 재발급합니다.");
+
+        String accessToken = generateAccessToken(authentication);
+        log.info("새로운 엑세스 토큰이 생성되었습니다: {}", accessToken);
         return accessToken;
     }
     
@@ -218,6 +227,24 @@ public class JwtTokenProvider {
     public boolean isTokenBlacklisted(String token){
         String blacklistedTokens = "blacklistedTokens";
         return Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(blacklistedTokens,token));
+    }
+
+    //비밀번호 재설정을 위한 토큰을 발급하는 메서드
+    public String generateResetToken(String userid, String email){
+        Claims claims = Jwts.claims().setSubject(userid);
+        claims.put("email",email);
+        return Jwts.builder()
+                .setClaims(claims)
+                .signWith(SignatureAlgorithm.HS256,secretKey)
+                .compact();
+    }
+
+    public String decodeResetToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token.replace("Bearer ", ""))
+                .getBody()
+                .getSubject(); // 이메일 반환
     }
 
 }
