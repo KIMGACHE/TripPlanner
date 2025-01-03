@@ -75,11 +75,11 @@ public class MainController {
         String streetFullAddress = (String)map.get("streetFullAddress");
         Double xCoordinate = (Double)map.get("coordinate_x");
         Double yCoordinate = (Double)map.get("coordinate_y");
-        datas.put("businessName",businessName);
-        datas.put("businessCategory",businessCategory);
-        datas.put("streetFullAddress",streetFullAddress);
-        datas.put("xCoordinate",xCoordinate);
-        datas.put("yCoordinate",yCoordinate);
+        datas.put("name",businessName);
+        datas.put("category",businessCategory);
+        datas.put("address",streetFullAddress);
+        datas.put("x",xCoordinate);
+        datas.put("y",yCoordinate);
 
         return new ResponseEntity<Map<String,Object>>(datas, HttpStatus.OK);
     }
@@ -193,10 +193,12 @@ public class MainController {
     @ResponseBody
     @PostMapping(value="/deletePlanner", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String,Object>> delete_Planner(@RequestBody Map<String,Object> map) throws ParseException {
+        log.info("POST /planner/deletePlanner...");
+
         Map<String,Object> datas = new HashMap<>();
 
-        int plannerid = (Integer)map.get("plannerid");
-
+        int plannerid = Integer.parseInt((String)map.get("plannerid"));
+        System.out.println(plannerid);
         String message = plannerService.deletePlanner(plannerid);
         datas.put("message",message);
 
@@ -222,7 +224,7 @@ public class MainController {
         log.info("POST /planner/updatePlanner...");
 
         Planner planner = plannerService.updatePlanner(plannerid,title,areaName,description,day,isPublic,userid);
-        Map<String,Object> datas = destinationService.updateDestination(planner, day, destination);
+        Map<String,Object> datas = destinationService.addDestination(planner, day, destination);
 
         return new ResponseEntity(datas, HttpStatus.OK);
     }
@@ -230,12 +232,12 @@ public class MainController {
     @ResponseBody
     @PostMapping(value="/bringPlanner", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String,Object>> bring_planner(@RequestBody Map<String,Object> map) {
-        if(map.get("plannerid") == null) {
-            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
-        }
+//        if(map.get("plannerid") == null) {
+//            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+//        }
         int plannerid = (Integer)map.get("plannerid");
 
-        log.info("POST /planner/updatePlanner...");
+        log.info("POST /planner/bringPlanner...",plannerid);
 
         List<Destination> destinations = destinationService.bringPlanner(plannerid);
         Map<String,Object> datas = new HashMap<>();
