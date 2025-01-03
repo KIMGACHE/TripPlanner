@@ -22,7 +22,7 @@ public class Planner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int plannerID; // 여행 일정 ID
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "userid", nullable = false)
     private UserEntity user; // 사용자
 

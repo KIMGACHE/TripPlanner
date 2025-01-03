@@ -15,7 +15,7 @@ public class Destination {
     @EmbeddedId
     private DestinationID destinationID;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "plannerID", referencedColumnName = "plannerID", insertable = false, updatable = false)
     private Planner planner; // Planner와의 관계 설정 (외래 키)
 
