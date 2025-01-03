@@ -43,7 +43,7 @@ public class DestinationController {
     ) {
         System.out.println("ㅎㅇ");
         System.out.println("plannerID : " + plannerID);
-        String userId = userDetails.getUsername();
+        String userId = userDetails.getName();
         System.out.println("userID : " + userId);
         LikeStatusResponse response = likeService.getLikeStatus(plannerID, userId);
         return ResponseEntity.ok(response);
@@ -55,7 +55,7 @@ public class DestinationController {
             @RequestBody LikeRequest likeRequest,
             @AuthenticationPrincipal PrincipalDetail userDetails
     ) {
-        String userId = userDetails.getUsername();
+        String userId = userDetails.getName();
         System.out.println("userID : " + userId);
         LikeStatusResponse response = likeService.toggleLike(likeRequest.getPlannerID(), userId);
         return ResponseEntity.ok(response);
