@@ -37,10 +37,15 @@ public class UserEntity {
     @Column(name = "role", nullable = false)
     private String role;
 
+<<<<<<< HEAD:src/main/java/com/tripPlanner/project/domain/signin/entity/UserEntity.java
     @Column(name = "birth" , length = 8)
     private int birth;
 
 
+=======
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private String birth;
+>>>>>>> 이영훈:src/main/java/com/tripPlanner/project/domain/signin/UserEntity.java
 
     private String provider;
     private String providerId;
