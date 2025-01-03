@@ -1,4 +1,4 @@
-package com.tripPlanner.project.domain.mypage.Service;
+package com.tripPlanner.project.domain.Mypage.Service;
 
 import com.tripPlanner.project.domain.Mypage.entity.UpdateUserRequest;
 import org.springframework.stereotype.Service;

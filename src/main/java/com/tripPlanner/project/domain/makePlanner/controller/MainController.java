@@ -4,6 +4,7 @@ package com.tripPlanner.project.domain.makePlanner.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tripPlanner.project.domain.makePlanner.dto.FoodDto;
+import com.tripPlanner.project.domain.makePlanner.entity.Destination;
 import com.tripPlanner.project.domain.makePlanner.entity.Planner;
 import com.tripPlanner.project.domain.makePlanner.service.*;
 import com.tripPlanner.project.domain.makePlanner.dto.AccomDto;
@@ -46,20 +47,20 @@ public class MainController {
     @Autowired
     private PlaceApiService apiService;
 
-//    @ResponseBody
-//    @PostMapping(value="/getImages", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<Map<String, Object>> getImages(@RequestBody Map<String,Object> map) throws JsonProcessingException {
-//        log.info("POST /planner/getImages...");
-//
-//        // 값을 담을 map객체
-//        Map<String,Object> datas = new HashMap<>();
-//
-//        String businessName = (String)map.get("businessName");
-//
-//        datas.put("image",plannerApiService.getPlaceImage(businessName).block());
-//
-//        return new ResponseEntity<Map<String,Object>>(datas, HttpStatus.OK);
-//    }
+    @ResponseBody
+    @PostMapping(value="/getImages", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Object>> getImages(@RequestBody Map<String,Object> map) throws JsonProcessingException {
+        log.info("POST /planner/getImages...");
+
+        // 값을 담을 map객체
+        Map<String,Object> datas = new HashMap<>();
+
+        String businessName = (String)map.get("businessName");
+
+        datas.put("image",plannerApiService.getPlaceImage(businessName).block());
+
+        return new ResponseEntity<Map<String,Object>>(datas, HttpStatus.OK);
+    }
 
     @ResponseBody
     @PostMapping(value="/findDestination", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
@@ -185,6 +186,60 @@ public class MainController {
         } else {
             System.out.println("error");
         }
+
+        return new ResponseEntity(datas, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @PostMapping(value="/deletePlanner", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String,Object>> delete_Planner(@RequestBody Map<String,Object> map) throws ParseException {
+        Map<String,Object> datas = new HashMap<>();
+
+        int plannerid = (Integer)map.get("plannerid");
+
+        String message = plannerService.deletePlanner(plannerid);
+        datas.put("message",message);
+
+        return new ResponseEntity(datas, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @PostMapping(value="/updatePlanner", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String,Object>> update_planner(@RequestBody Map<String,Object> map) {
+        if(map.get("plannerid") == null) {
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+        }
+        int plannerid = (Integer)map.get("plannerid");
+
+        String title = (String)map.get("title");
+        String areaName = (String)map.get("areaName");
+        String description = (String)map.get("description");
+        boolean isPublic = (Boolean)map.get("isPublic");
+        int day = (Integer)map.get("day");
+        String userid = (String)map.get("userid");
+        ArrayList<Map<String,Object>> destination = (ArrayList<Map<String,Object>>)map.get("destination");
+
+        log.info("POST /planner/updatePlanner...");
+
+        Planner planner = plannerService.updatePlanner(plannerid,title,areaName,description,day,isPublic,userid);
+        Map<String,Object> datas = destinationService.updateDestination(planner, day, destination);
+
+        return new ResponseEntity(datas, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @PostMapping(value="/bringPlanner", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String,Object>> bring_planner(@RequestBody Map<String,Object> map) {
+        if(map.get("plannerid") == null) {
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+        }
+        int plannerid = (Integer)map.get("plannerid");
+
+        log.info("POST /planner/updatePlanner...");
+
+        List<Destination> destinations = destinationService.bringPlanner(plannerid);
+        Map<String,Object> datas = new HashMap<>();
+        datas.put("destinations",destinations);
 
         return new ResponseEntity(datas, HttpStatus.OK);
     }

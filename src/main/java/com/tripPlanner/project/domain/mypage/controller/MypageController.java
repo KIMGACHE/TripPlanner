@@ -1,4 +1,4 @@
-package com.tripPlanner.project.domain.mypage.controller;
+package com.tripPlanner.project.domain.Mypage.controller;
 
 import com.tripPlanner.project.domain.Mypage.entity.UpdateUserRequest;
 import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
@@ -33,7 +33,7 @@ public class MypageController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final com.tripPlanner.project.domain.mypage.Service.MypageService mypageService;
+    private final com.tripPlanner.project.domain.Mypage.Service.MypageService mypageService;
 
     private final String UPLOAD_DIR = "C:/upload/profile/";
 
