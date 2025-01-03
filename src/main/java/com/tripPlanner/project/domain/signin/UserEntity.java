@@ -40,7 +40,7 @@ public class UserEntity {
     private String role;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate birth;
+    private String birth;
 
     private String provider;
     private String providerId;

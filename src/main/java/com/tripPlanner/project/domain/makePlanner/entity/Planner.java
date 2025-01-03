@@ -1,12 +1,15 @@
 package com.tripPlanner.project.domain.makePlanner.entity;
 
 import com.tripPlanner.project.domain.board.BoardDto;
+import com.tripPlanner.project.domain.destination.Like;
 import com.tripPlanner.project.domain.makePlanner.dto.PlannerDto;
 import com.tripPlanner.project.domain.signin.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -43,6 +46,9 @@ public class Planner {
 
     @Column(name = "area", nullable = false)
     private String area;
+
+    @OneToMany(mappedBy = "plannerId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes = new ArrayList<>();
 
     public PlannerDto toDto(Planner planner,String thumbnailImage) {
         return PlannerDto.builder()

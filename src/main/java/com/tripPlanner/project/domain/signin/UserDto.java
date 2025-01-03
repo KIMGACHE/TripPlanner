@@ -20,7 +20,7 @@ public class UserDto {
     private String password;
     private String repassword;
     private String email;
-    private LocalDate birth;
+    private String birth;
     private String gender;
     private String role;
 }
