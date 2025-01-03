@@ -160,7 +160,6 @@ public class LoginController {
     @ResponseBody
     public ResponseEntity<?> resetPassword(@RequestHeader("Authorization") String token , @RequestBody Map<String,String> request){
         String newPassword = request.get("newPassword");
-//        String userid = request.get("userid");
 
         String userid = jwtTokenProvider.decodeResetToken(token);
 

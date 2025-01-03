@@ -23,5 +23,11 @@ public class BoardController {
     public Page<BoardDto> getPlannerList(@PageableDefault(size = 10) Pageable pageable) {
         return boardService.getPlannersForBoard(pageable);
     }
-    
+
+    @GetMapping("/plans/total")
+    public ResponseEntity<Integer> getTotalPlans(){
+        int totalPlans = boardService.getTotalPlans();
+        return ResponseEntity.ok(totalPlans);
+    }
+
 }
