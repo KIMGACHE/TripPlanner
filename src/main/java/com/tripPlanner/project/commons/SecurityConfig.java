@@ -5,7 +5,7 @@ import com.tripPlanner.project.domain.login.auth.handler.CustomLogoutHandler;
 import com.tripPlanner.project.domain.login.auth.handler.Oauth2LoginSuccessHandler;
 import com.tripPlanner.project.domain.login.auth.jwt.JwtAuthenticationFilter;
 import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
-import com.tripPlanner.project.domain.login.service.PrincipalDetailService;
+import com.tripPlanner.project.domain.login.service.AuthService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -36,6 +35,7 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final Oauth2LoginSuccessHandler oauth2LoginSuccessHandler;
     private final RedisTemplate<String, String> redisTemplate;
+    private final AuthService authService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -69,8 +69,9 @@ public class SecurityConfig {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true) //세션 무효화
-                .deleteCookies("accessToken", "SESSION") //쿠키 삭제
+                .deleteCookies("accessToken", "MY_SESSION") //쿠키 삭제
                 .addLogoutHandler(new CustomLogoutHandler(redisTemplate))
+                .clearAuthentication(true)
         );
 
         //Remember Me 설정
@@ -93,7 +94,7 @@ public class SecurityConfig {
   
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtTokenProvider);
+        return new JwtAuthenticationFilter(jwtTokenProvider,redisTemplate,authService);
     }
 
 

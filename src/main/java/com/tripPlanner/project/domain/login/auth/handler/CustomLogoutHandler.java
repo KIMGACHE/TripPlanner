@@ -1,5 +1,6 @@
 package com.tripPlanner.project.domain.login.auth.handler;
 
+import com.tripPlanner.project.domain.login.auth.PrincipalDetail;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,9 +10,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.stereotype.Component;
 
 @Slf4j
 @RequiredArgsConstructor
+@Component
 public class CustomLogoutHandler implements LogoutHandler {
 
     private final RedisTemplate<String,String> redisTemplate;
@@ -38,7 +41,7 @@ public class CustomLogoutHandler implements LogoutHandler {
             //리프레시 토큰 블랙리스트로 이동
             String blackListKey = "blacklistedTokens";
 //            long expiration = 3600; //블랙리스트 저장 시간(1시간)
-            redisTemplate.opsForSet().add(blackListKey,refreshToken);  //유효기간 설정은 잠시 보류
+            redisTemplate.opsForSet().add(blackListKey,refreshToken);  //유효기간 설정은 보류
             log.info("리프레시 토큰이 블랙리스트 처리되었습니다.");
             log.info("처리된 블랙리스트 토큰 {}",refreshToken);
         }else{
@@ -79,16 +82,18 @@ public class CustomLogoutHandler implements LogoutHandler {
             System.out.println("어덴티케이션 없음");
             return null;
         }
-        String userid = authentication.getName();
-        String redisKey = REDIS_REFRESHTOKEN_NAME + userid;
-        System.out.println("레디스 아이디 : " + redisKey);
-        return redisTemplate.opsForValue().get(redisKey);
+
+        Object principal = authentication.getPrincipal();
+
+        if(principal instanceof PrincipalDetail){
+            String userid = ((PrincipalDetail) principal).getName();
+            String redisKey = REDIS_REFRESHTOKEN_NAME+userid;
+            System.out.println("레디스 아이디 : " + redisKey);
+            return redisTemplate.opsForValue().get(redisKey);
+        }else{
+            return null;
+        }
+
     }
-
-    private void getOauth2LogoutURL(Authentication authentication){
-
-    }
-
-
 
 }

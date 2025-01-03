@@ -46,7 +46,7 @@ public class Oauth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         JwtToken jwtToken = jwtTokenProvider.generateToken(authentication,false);
         log.info("jwtToken ..{}",jwtToken);
 
-        response.setHeader("Authorization", "Bearer" + jwtToken.getAccessToken());
+        response.setHeader("Authorization", "Bearer " + jwtToken.getAccessToken());
         response.setHeader("Refresh-Token", jwtToken.getRefreshToken());
 
         //redis 리프레시 토큰 저장
