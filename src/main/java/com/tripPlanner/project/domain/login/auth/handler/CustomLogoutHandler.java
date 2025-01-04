@@ -1,6 +1,7 @@
 package com.tripPlanner.project.domain.login.auth.handler;
 
 import com.tripPlanner.project.domain.login.auth.PrincipalDetail;
+import com.tripPlanner.project.domain.login.service.AuthService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 public class CustomLogoutHandler implements LogoutHandler {
 
     private final RedisTemplate<String,String> redisTemplate;
+    private final AuthService authService;
     private static final String COOKIE_NAME = "accessToken";
     private static final String REDIS_REFRESHTOKEN_NAME = "refreshToken:";
 
@@ -31,7 +33,7 @@ public class CustomLogoutHandler implements LogoutHandler {
             log.warn("로그아웃 요청에 필요한 토큰이 없습니다");
         }else{
             log.info("로그아웃 요청. 엑세스 토큰을 제거합니다.");
-            invalidateCookie(response);
+            authService.invalidateCookie(response);
 
         }
 
@@ -67,15 +69,6 @@ public class CustomLogoutHandler implements LogoutHandler {
             }
         }
         return null;
-    }
-
-    //쿠키를 바로 삭제하는 메서드
-    private void invalidateCookie(HttpServletResponse response){
-        Cookie cookie = new Cookie("accessToken",null);
-        cookie.setMaxAge(0);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        response.addCookie(cookie);
     }
 
     //Redis 에 있는 리프레시 토큰 가져오는 메서드

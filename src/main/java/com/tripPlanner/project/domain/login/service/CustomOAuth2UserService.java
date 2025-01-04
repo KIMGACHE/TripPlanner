@@ -54,7 +54,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService{
                 .password(null)
                 .username(userEntity.getUsername())
                 .role(userEntity.getRole())
-                .rememberMe(false)
+                .rememberMe(true)
                 .provider(provider)
                 .providerId(providerId)
                 .build();

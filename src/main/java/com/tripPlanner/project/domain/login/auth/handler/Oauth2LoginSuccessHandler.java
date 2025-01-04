@@ -35,19 +35,17 @@ public class Oauth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         //oauth2 User 정보 추출
         OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) authentication;
-        log.info(String.valueOf(oauth2Token));
 
         String provider = oauth2Token.getAuthorizedClientRegistrationId();
         String providerId = CustomOAuth2UserService.getProviderId(oAuth2User,provider);
-        log.info("provider {} ,providerId {}",provider,providerId);
         String userid = provider + "_" + providerId;
 
         //토큰 생성
-        JwtToken jwtToken = jwtTokenProvider.generateToken(authentication,false);
+        JwtToken jwtToken = jwtTokenProvider.generateToken(authentication,true);
         log.info("jwtToken ..{}",jwtToken);
 
         response.setHeader("Authorization", "Bearer " + jwtToken.getAccessToken());
-        response.setHeader("Refresh-Token", jwtToken.getRefreshToken());
+        response.setHeader("userid",userid);
 
         //redis 리프레시 토큰 저장
         long expiration = 2 * 24 * 60 * 60 * 1000; // 2일
@@ -58,18 +56,8 @@ public class Oauth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         //쿠키 저장
         authService.setTokenCookies(response,jwtToken.getAccessToken());
 
-        if("application/json".equals(request.getHeader("Accept"))){
-            response.getHeader("Accept");
-            response.getWriter().write(new ObjectMapper().writeValueAsString(jwtToken));
-        }else{
-            log.info("메인페이지로 갑니다.");
-            response.sendRedirect("/"); //메인페이지 리다이렉트
-        }
-//
-//        // 추가로 JSON 응답 (선택)
-//        response.setContentType("application/json;charset=UTF-8");
-//        response.getWriter().write(new ObjectMapper().writeValueAsString(jwtToken));
-
+        response.sendRedirect("http://localhost:3000");
+        log.info("리액트 홈페이지 이동");
 
         log.info("JWT 토큰 생성 및 반환 완료: {}" , jwtToken);
 
