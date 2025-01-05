@@ -32,12 +32,10 @@ public class DestinationService {
 
                 List<Map<String, Object>> list = destination.stream()
                         .filter(el -> (Integer) el.get("day") == dayNumber).toList();
-                System.out.println("!!!!!!!!!!!! list : "+list);
                 AtomicInteger count = new AtomicInteger(1);
                 list.forEach((el) -> {
                     final int index = count.getAndIncrement();
                     Map<String,Object> data = (Map<String,Object>)el.get("data");
-                    String image = (String)el.get("image");
                     Destination elements = Destination.builder()
                             .destinationID(new DestinationID(planner.getPlannerID(), (Integer) el.get("day"), index))
                             .name((String)data.get("name"))
@@ -45,7 +43,7 @@ public class DestinationService {
                             .y((Double)data.get("y"))
                             .address((String)data.get("address"))
                             .category((String)data.get("category"))
-                            .image(image)
+                            .image((String)data.get("image"))
                             .build();
                     destinationRepository.save(elements);
                 });

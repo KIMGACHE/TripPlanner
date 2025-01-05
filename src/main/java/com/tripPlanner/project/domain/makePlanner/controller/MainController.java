@@ -11,6 +11,7 @@ import com.tripPlanner.project.domain.makePlanner.entity.Planner;
 import com.tripPlanner.project.domain.makePlanner.service.*;
 import com.tripPlanner.project.domain.makePlanner.dto.AccomDto;
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
@@ -176,24 +177,36 @@ public class MainController {
 
             if (!keyword.isEmpty() && !regionCode.isEmpty()) {
                 System.out.println("다 있음");
-                Mono<String> areaBasedListResult = apiService.getAreaBasedList(regionCode, hashtag, pageNo, arrange, contentTypeId);
                 Mono<String> searchKeywordResult = apiService.getSearchKeyword(keyword.trim(), pageNo, arrange, contentTypeId);
 
-                Mono<String> result = Mono.zip(areaBasedListResult, searchKeywordResult)
-                        .flatMap(tuple -> {
-                            String areaBasedList = tuple.getT1();
-                            String searchKeyword = tuple.getT2();
-                            return apiService.findCommonDataByCat2AndAreaCode(areaBasedList, searchKeyword);
-                        })
-                        .switchIfEmpty(Mono.just("[]"))
-                        .doOnTerminate(() -> System.out.println("findCommonDataByCat2AndAreaCode 호출 종료"));
-
                 JSONParser jsonParser = new JSONParser();
-                Object obj = jsonParser.parse(result.block());
+                Object obj = jsonParser.parse(searchKeywordResult.block());
                 JSONObject jsonObj = (JSONObject) obj;
-
                 datas.put("data", jsonObj);
             }
+
+
+//            if (!keyword.isEmpty() && !regionCode.isEmpty()) {
+//                System.out.println("다 있음");
+//                Mono<String> areaBasedListResult = apiService.getAreaBasedList(regionCode, hashtag, pageNo, arrange, contentTypeId);
+//                Mono<String> searchKeywordResult = apiService.getSearchKeyword(keyword.trim(), pageNo, arrange, contentTypeId);
+//
+//                Mono<String> result = Mono.zip(areaBasedListResult, searchKeywordResult)
+//                        .flatMap(tuple -> {
+//                            String areaBasedList = tuple.getT1();
+//                            String searchKeyword = tuple.getT2();
+//                            return apiService.findCommonDataByCat2AndAreaCode(areaBasedList, searchKeyword);
+//                        })
+//                        .switchIfEmpty(Mono.just("[]"))
+//                        .doOnTerminate(() -> System.out.println("findCommonDataByCat2AndAreaCode 호출 종료"));
+//
+//                JSONParser jsonParser = new JSONParser();
+//                Object obj = jsonParser.parse(result.block());
+//                JSONObject jsonObj = (JSONObject) obj;
+//                System.out.println(jsonObj);
+//                datas.put("data", jsonObj);
+//            }
+
         } else {
             System.out.println("error");
             return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
