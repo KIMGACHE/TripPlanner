@@ -22,6 +22,7 @@ public class PlannerDto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int plannerID;
     @Column
+
     private UserEntity user;
     @Column
     private String plannerTitle;
@@ -38,6 +39,8 @@ public class PlannerDto {
     @Column
     private String area;
 
+
+
     public static Planner dtoToEntity(PlannerDto plannerDto) {
         return Planner.builder()
                 .plannerID(plannerDto.getPlannerID())
@@ -51,5 +54,17 @@ public class PlannerDto {
                 .area(plannerDto.getArea())
                 .build();
     }
+
+
+    // Planner 엔티티를 PlannerDto로 변환하는 생성자
+    public PlannerDto(Planner planner) {
+        this.plannerID = planner.getPlannerID();
+        this.plannerTitle = planner.getPlannerTitle();
+        this.area = planner.getArea();
+        this.day = planner.getDay();
+        this.description = planner.getDescription();
+        this.isPublic = planner.isPublic();
+    }
+
 
 }

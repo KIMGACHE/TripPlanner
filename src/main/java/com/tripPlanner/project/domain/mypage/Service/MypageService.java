@@ -1,10 +1,22 @@
 package com.tripPlanner.project.domain.Mypage.Service;
 
 import com.tripPlanner.project.domain.Mypage.entity.UpdateUserRequest;
+import com.tripPlanner.project.domain.makePlanner.dto.PlannerDto;
+import com.tripPlanner.project.domain.makePlanner.repository.PlannerRepository;
+import com.tripPlanner.project.domain.signin.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
+@Slf4j
 public class MypageService {
+
+    @Autowired
+    private UserRepository userRepository;
 
     public void validatePassword(String password) {
         String passwordRegex = "^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z\\d@$!%*?&]{8,15}$";
@@ -27,6 +39,12 @@ public class MypageService {
         if (!email.matches(emailRegex)) {
             throw new IllegalArgumentException("유효한 이메일 형식을 입력하세요.");
         }
+//        // 이메일 중복 검사
+//        log.info("Validating email: {}", email); // 디버깅 추가
+//        if (userRepository.existsByEmail(email)) {
+//            log.warn("이미 사용 중인 이메일입니다: {}", email); // 디버깅 추가
+//            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+//        }
     }
 
     public void validateUsername(String username) {
@@ -49,5 +67,31 @@ public class MypageService {
         if (request.getPassword() != null) {
             validatePassword(request.getPassword());
         }
+    }
+
+    @Autowired
+    private PlannerRepository plannerRepository;
+
+//    public List<PlannerDto> getPlannersByUserId(String userId) {
+//        return plannerRepository.findByUser_Userid(userId).stream()
+//                .map(planner -> new PlannerDto(planner))
+//                .collect(Collectors.toList());
+//    }
+
+
+    public List<PlannerDto> getPlannersByUserId(String userId) {
+        log.info("Retrieving planners for user ID: {}", userId); // 디버깅 추가
+        return plannerRepository.findByUser_Userid(userId).stream()
+                .map(planner -> PlannerDto.builder()
+                        .plannerID(planner.getPlannerID())
+                        .plannerTitle(planner.getPlannerTitle())
+                        .area(planner.getArea())
+                        .day(planner.getDay())
+                        .description(planner.getDescription())
+                        .isPublic(planner.isPublic())
+                        .createAt(planner.getCreateAt())
+                        .updateAt(planner.getUpdateAt())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

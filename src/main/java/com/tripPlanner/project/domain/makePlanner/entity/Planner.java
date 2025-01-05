@@ -5,6 +5,8 @@ import com.tripPlanner.project.domain.makePlanner.dto.PlannerDto;
 import com.tripPlanner.project.domain.signin.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +23,8 @@ public class Planner {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid", nullable = false)
-    private UserEntity user; // 사용자
+    @OnDelete(action = OnDeleteAction.CASCADE) // 부모(UserEntity) 삭제 시 연쇄 삭제
+    private UserEntity user; // 사용자와의 관계
 
     @Column(name = "plannerTitle", nullable = false)
     private String plannerTitle;
