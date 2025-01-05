@@ -154,7 +154,6 @@ public class DestinationService {
         try {
             return destinationRepository.findByPlanner_PlannerID(plannerid);
         } catch (Exception e) {
-            System.out.println("여기가 문젠가?");
             e.printStackTrace();
             return null;
         }

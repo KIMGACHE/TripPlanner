@@ -6,6 +6,8 @@ import com.tripPlanner.project.domain.makePlanner.dto.PlannerDto;
 import com.tripPlanner.project.domain.signin.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,8 +24,9 @@ public class Planner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int plannerID; // 여행 일정 ID
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private UserEntity user; // 사용자
 
     @Column(name = "plannerTitle", nullable = false)

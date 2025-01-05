@@ -36,6 +36,7 @@ public class FoodDto {
                 .streetPostalCode(foodDto.getStreetPostalCode())
                 .address(foodDto.getAddress())
                 .category(foodDto.getCategory())
+                .image(foodDto.getImage())
                 .build();
     }
 
@@ -52,6 +53,7 @@ public class FoodDto {
                 .streetPostalCode(food.getStreetPostalCode())
                 .address(food.getAddress())
                 .category(food.getCategory())
+                .image(food.getImage())
                 .build();
     }
 }

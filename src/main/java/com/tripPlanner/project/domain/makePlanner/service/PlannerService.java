@@ -64,16 +64,15 @@ public class PlannerService {
         }
     }
 
+    @Transactional
     public String deletePlanner(int plannerid) {
         try {
             long id = plannerid;
             Optional<Planner> result = plannerRepository.findById(id);
-            List<Destination> result_dest = destinationRepository.findByPlanner_PlannerID(plannerid);
-            if(result.isEmpty() || result_dest.isEmpty()) {
+            if(result.isEmpty()) {
                 return "해당 플래너가 존재하지 않습니다.";
             } else {
                 Planner planner = result.get();
-                result_dest.forEach(destination -> destinationRepository.delete(destination));
                 plannerRepository.delete(planner);
                 return "플래너를 정상적으로 삭제하였습니다.";
             }

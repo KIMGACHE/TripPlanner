@@ -46,4 +46,7 @@ public class Food {
 
     @Column(name="business_category")
     private String category;
+
+    @Column(name="image")
+    private String image;
 }

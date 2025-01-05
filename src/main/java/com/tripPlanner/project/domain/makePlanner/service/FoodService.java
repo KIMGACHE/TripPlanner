@@ -55,7 +55,6 @@ public class FoodService {
                 foods = foodRepository.searchAreaFood(areaname);
             } else {
                 foods = foodRepository.searchFood(word,areaname);
-
             }
             List<FoodDto> list = new ArrayList<FoodDto>();
 
@@ -67,5 +66,19 @@ public class FoodService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Transactional
+    public List<FoodDto> getImage(List<FoodDto> foods) {
+        List<FoodDto> getResults = new ArrayList<FoodDto>();
+        try {
+            foods.forEach(el->{
+                el.setImage(plannerApiService.getPlaceImage(el.getName()).block());
+                getResults.add(el);
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return getResults;
     }
 }
