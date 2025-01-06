@@ -7,7 +7,9 @@ WEB PROJECT PLANING
 
 ## ▶️ 개발 동기
 <strong>
-    <p> 수두룩 빽빽 </p>
+    <p> 수두룩 빽빽
+        허허허
+    </p>
  
 </strong>
 <br/>
