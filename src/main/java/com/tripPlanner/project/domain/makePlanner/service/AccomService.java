@@ -65,4 +65,18 @@ public class AccomService {
             throw new RuntimeException(e);
         }
     }
+
+    @Transactional
+    public List<AccomDto> getImage(List<AccomDto> accoms) {
+        List<AccomDto> getResults = new ArrayList<AccomDto>();
+        try {
+            accoms.forEach(el->{
+                el.setImage(plannerApiService.getPlaceImage(el.getName()).block());
+                getResults.add(el);
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return getResults;
+    }
 }

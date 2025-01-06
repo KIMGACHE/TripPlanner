@@ -7,6 +7,8 @@ import com.tripPlanner.project.domain.login.entity.TokenEntity;
 import com.tripPlanner.project.domain.login.entity.TokenRepository;
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -227,13 +229,26 @@ public class JwtTokenProvider {
     }
 
     //비밀번호 재설정을 위한 토큰을 발급하는 메서드
-    public String generateResetToken(String userid, String email){
+    public String generateResetToken(String userid, String email) {
         Claims claims = Jwts.claims().setSubject(userid);
-        claims.put("email",email);
+        claims.put("email", email);
         return Jwts.builder()
                 .setClaims(claims)
-                .signWith(SignatureAlgorithm.HS256,secretKey)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+    }
+
+    public String resolveToken(HttpServletRequest request) {
+
+        // 쿠키에서 토큰 추출
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("accessToken".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 
 

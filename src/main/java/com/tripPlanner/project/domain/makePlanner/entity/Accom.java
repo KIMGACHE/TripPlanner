@@ -21,13 +21,13 @@ public class Accom {
     private int id;
 
     @Column(name="business_name")
-    private String businessName;
+    private String name;
 
     @Column(name="x_coordinate")
-    private double xCoordinate;
+    private double x;
 
     @Column(name="y_coordinate")
-    private double yCoordinate;
+    private double y;
 
     @Column(name="location_phone_number")
     private String locationPhoneNumber;
@@ -42,10 +42,10 @@ public class Accom {
     private String streetPostalCode;
 
     @Column(name="street_full_address")
-    private String streetFullAddress;
+    private String address;
 
     @Column(name="business_category")
-    private String businessCategory;
+    private String category;
 
     @Column(name="hygiene_category")
     private String hygieneCategory;

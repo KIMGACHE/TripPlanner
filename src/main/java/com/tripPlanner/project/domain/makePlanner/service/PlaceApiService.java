@@ -106,7 +106,7 @@ public class PlaceApiService {
         // URL을 수동으로 구성
         String url = "https://apis.data.go.kr/B551011/KorService1/searchKeyword1"
                 + "?serviceKey=" + serviceKey
-                + "&numOfRows=7"
+                + "&numOfRows=10"
                 + "&MobileApp=AppTest"
                 + "&MobileOS=ETC"
                 + "&arrange=" + arrange
@@ -161,7 +161,7 @@ public class PlaceApiService {
         // URL을 수동으로 구성
         String url = "https://apis.data.go.kr/B551011/KorService1/areaBasedList1"
                 + "?serviceKey=" + serviceKey
-                + "&numOfRows=7"
+                + "&numOfRows=10"
                 + "&MobileApp=AppTest"
                 + "&MobileOS=ETC"
                 + "&arrange=" + arrange
