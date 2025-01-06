@@ -70,7 +70,7 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true) //세션 무효화
                 .deleteCookies("accessToken", "MY_SESSION") //쿠키 삭제
-                .addLogoutHandler(new CustomLogoutHandler(redisTemplate))
+                .addLogoutHandler(new CustomLogoutHandler(redisTemplate,authService))
                 .clearAuthentication(true)
         );
 
@@ -85,7 +85,6 @@ public class SecurityConfig {
         http.oauth2Login(oauth2 -> oauth2
                 .loginPage("/user/login")
                 .successHandler(oauth2LoginSuccessHandler)
-//                .defaultSuccessUrl("/")
                 .failureUrl("/login?error=true")
         );
 

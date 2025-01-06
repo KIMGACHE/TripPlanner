@@ -16,12 +16,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
 import java.util.Date;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -110,17 +108,16 @@ public class JwtTokenProvider {
                     .getBody(); // 토큰 페이로드 가져옴
             String userid = claims.getSubject(); //Subject 에서 userid 추출
             return userid;
-        }catch(Exception e){
-            log.warn("토큰에서 사용자 정보를 추출할 수 없습니다{}", e.getMessage());
-            throw new IllegalArgumentException("유효하지 않은 토큰입니다");
+        }catch(ExpiredJwtException e){
+            return e.getClaims().getSubject();
         }
     }
 
     //토큰 복호화 메서드
-    public Authentication getTokenInfo(String accessToken){
+    public Authentication getTokenInfo(String token){
         log.info("복호화 간다잇 ~~");
         //토큰 분해
-        Claims claims = parseClaims(accessToken);
+        Claims claims = parseClaims(token);
         
         //토큰에서 필요한 정보 추출
         String userid = claims.getSubject(); //userid 추출
@@ -173,7 +170,7 @@ public class JwtTokenProvider {
         return false; //유효하지 않은 경우 !
     }
 
-//    //토큰 만료시간 정보 추출 메서드   ,,현재 미사용
+//    //토큰 만료시간 정보 추출 메서드
 //    public Date getExpirationDateFromToken(String token){
 //        return Jwts.parserBuilder()
 //                .setSigningKey(secretKey)
@@ -210,9 +207,9 @@ public class JwtTokenProvider {
             throw new IllegalArgumentException("Redis에 저장된 리프레시 토큰과 요청된 리프레시 토큰이 일치하지 않습니다");
         }
 
-        String accessToken = generateAccessToken(authentication);
-        log.info("새로운 엑세스 토큰이 생성되었습니다: {}", accessToken);
-        return accessToken;
+        String newAccessToken = generateAccessToken(authentication);
+        log.info("새로운 엑세스 토큰이 생성되었습니다: {}", newAccessToken);
+        return newAccessToken;
     }
     
     //Redis 토큰저장 메서드
@@ -239,15 +236,6 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
-    }
-
-
-    public String decodeResetToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(token.replace("Bearer ", ""))
-                .getBody()
-                .getSubject(); // 이메일 반환
     }
 
     public String resolveToken(HttpServletRequest request) {

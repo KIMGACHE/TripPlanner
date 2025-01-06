@@ -52,7 +52,8 @@ public class LoginController {
         if(!response.isSuccess()){
             return ResponseEntity.badRequest().body(response);
         }
-        authService.setTokenCookies(servletResponse, response.getAccessToken());
+        authService.setTokenCookies(servletResponse, response.getAccessToken()); //쿠키 저장
+        servletResponse.setHeader("userid",loginRequest.getUserid());
 
     return ResponseEntity.ok(response); //Json 데이터로 전달
     }
@@ -161,7 +162,7 @@ public class LoginController {
     public ResponseEntity<?> resetPassword(@RequestHeader("Authorization") String token , @RequestBody Map<String,String> request){
         String newPassword = request.get("newPassword");
 
-        String userid = jwtTokenProvider.decodeResetToken(token);
+        String userid = jwtTokenProvider.getUserIdFromToken(token);
 
         authService.updatePassword(userid,newPassword);
 
@@ -181,37 +182,29 @@ public class LoginController {
         return ResponseEntity.ok().build();
     }
 
+    //리프레시 토큰으로 엑세스 토큰 재발급
+    @PostMapping("/refresh")
+    @ResponseBody
+    public ResponseEntity<LoginResponse> refreshAccessToken(
+        @RequestBody Map<String ,String> request,
+        HttpServletResponse response
+    ){
+        String accessToken = request.get("accessToken");
+        String refreshToken = request.get("refreshToken");
 
+        //AuthService 호출
+        LoginResponse loginResponse = authService.refreshAccessToken(accessToken,refreshToken);
 
+        //실패 시 바로 응답
+        if(!loginResponse.isSuccess()){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(loginResponse);
+        }
 
+        //새로운 엑세스 토큰 쿠키 저장
+        authService.setTokenCookies(response,accessToken);
 
-
-
-
-
-
-//    @PostMapping("/refresh")
-//    @ResponseBody
-//    public ResponseEntity<LoginResponse> refreshAccessToken(
-//        @RequestBody Map<String ,String> request,
-//        HttpServletResponse response
-//    ){
-//        String accessToken = request.get("accessToken");
-//        String refreshToken = request.get("refreshToken");
-//
-//        //AuthService 호출
-//        LoginResponse loginResponse = authService.refreshAccessToken(accessToken,refreshToken);
-//
-//        //실패 시 바로 응답
-//        if(!loginResponse.isSuccess()){
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(loginResponse);
-//        }
-//
-//        //새로운 엑세스 토큰 쿠키 저장
-//        authService.setTokenCookies(response,accessToken);
-//
-//        return ResponseEntity.ok(loginResponse);
-//    }
+        return ResponseEntity.ok(loginResponse);
+    }
 
 
 

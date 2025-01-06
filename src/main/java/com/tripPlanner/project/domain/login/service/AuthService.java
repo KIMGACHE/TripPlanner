@@ -6,6 +6,7 @@ import com.tripPlanner.project.domain.signin.entity.UserEntity;
 import com.tripPlanner.project.domain.signin.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -120,6 +121,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
         return userRepository.findByUseridAndEmail(userid,email);
     }
+
+        //쿠키를 바로 삭제하는 메서드
+        public static void invalidateCookie(HttpServletResponse response){
+            Cookie cookie = new Cookie("accessToken",null);
+            cookie.setMaxAge(0);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+        }
 
 
 

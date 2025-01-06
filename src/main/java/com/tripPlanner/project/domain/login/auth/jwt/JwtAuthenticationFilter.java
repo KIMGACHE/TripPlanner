@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Optional;
 
 @Slf4j
@@ -51,6 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String refreshToken = resolveRefreshToken(request);
 
             if (refreshToken != null) {
+
                 Authentication authentication = jwtTokenProvider.getTokenInfo(refreshToken);
                 var loginResponse = authService.refreshAccessToken(authentication, refreshToken);
 
@@ -71,7 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json");
                 response.getWriter().write("{\"message\" : \"시간이 만료되어 로그아웃되었습니다.\"} ");
-
+//                authService.invalidateCookie(response);
                 return;
             }
         }
@@ -112,24 +114,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return null;
     }
 
-    //리프레시 토큰 확인 후 정보 추출
-    private String resolveRefreshToken(HttpServletRequest request) {
+    private String resolveRefreshToken(HttpServletRequest request){
         String userid = request.getHeader("userid");
-        if (userid == null) {
-            log.info("유저 아이디가 헤더에 없음");
-            return null;
-        }
-        log.info("Redis에서 User-Id를 기반으로 리프레시 토큰 조회 중: {}", userid);
 
-        // Redis에서 리프레시 토큰 조회
-        String redisKey = "refreshToken:" + userid;
+        String redisKey = "refreshToken"+ userid;
         String refreshToken = redisTemplate.opsForValue().get(redisKey);
-
+        log.info("추출한 유저 아이디: {}",userid);
         if (refreshToken == null) {
             log.warn("Redis에서 리프레시 토큰을 찾을 수 없습니다. User-Id: {}", userid);
             return null;
         }
-        log.info("Redis에서 리프레시 토큰 조회 성공: {}", refreshToken);
         return refreshToken;
     }
 
