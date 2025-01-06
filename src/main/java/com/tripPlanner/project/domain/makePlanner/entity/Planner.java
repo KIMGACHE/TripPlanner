@@ -26,8 +26,9 @@ public class Planner {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid", nullable = false)
+
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private UserEntity user; // 사용자
+    private UserEntity user;
 
     @Column(name = "plannerTitle", nullable = false)
     private String plannerTitle;
