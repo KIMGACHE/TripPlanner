@@ -38,68 +38,6 @@ public class PlaceApiService {
                 .build();
     }
 
-    // 검색어, 지역, 태그를 모두 입력했을 때 실행할 메서드
-    public Mono<String> findCommonDataByCat2AndAreaCode(String areaBasedListResult, String searchKeywordResult) {
-        try {
-            // JSON 파싱
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode areaBasedListNode = mapper.readTree(areaBasedListResult);
-            JsonNode searchKeywordNode = mapper.readTree(searchKeywordResult);
-
-            // items 추출
-            JsonNode areaBasedListItems = areaBasedListNode.path("items").path("item");
-            JsonNode searchKeywordItems = searchKeywordNode.path("items").path("item");
-
-            System.out.println("areaBasedListItems : " + areaBasedListItems);
-            System.out.println("searchKeywordItems : " + searchKeywordItems);
-
-            // 공통 데이터를 저장할 리스트
-            List<JsonNode> commonItems = new ArrayList<>();
-
-
-            for (JsonNode areaItem : areaBasedListItems) {
-                String areaItemContentId = areaItem.path("contentid").asText();
-                String areaItemHashtag = areaItem.path("hashtag").asText();  // hashtag 값 추출
-                String areaItemKeyword = areaItem.path("keyword").asText();  // keyword 값 추출
-
-                for (JsonNode searchItem : searchKeywordItems) {
-                    String searchItemContentId = searchItem.path("contentid").asText();
-
-                    String searchItemHashtag = searchItem.path("hashtag").asText(); // hashtag 값 추출
-                    String searchItemKeyword = searchItem.path("keyword").asText(); // keyword 값 추출
-
-                    // hashtag와 keyword가 모두 일치하는지 확인
-                    if (areaItemContentId.equals(searchItemContentId) &&
-                            areaItemHashtag.equals(searchItemHashtag) &&
-                            areaItemKeyword.equals(searchItemKeyword)) {
-                        commonItems.add(areaItem);
-                    }
-                }
-            }
-
-
-            // 결과 JSON 생성
-            ObjectNode resultBody = mapper.createObjectNode();
-            ObjectNode itemsNode = mapper.createObjectNode();
-
-            // items 내부에 item 배열 추가
-            itemsNode.set("item", mapper.valueToTree(commonItems));
-
-            // items와 totalCount 추가
-            resultBody.set("items", itemsNode);
-            resultBody.put("totalCount", commonItems.size());
-
-            // JSON 변환 후 반환
-            String resultJson = mapper.writeValueAsString(resultBody);
-            return Mono.just(resultJson);
-
-        } catch (JsonProcessingException e) {
-            // JSON 처리 중 예외 발생 시 Mono.error로 반환
-            return Mono.error(new RuntimeException("Error processing JSON", e));
-        }
-    }
-
-
     // 검색어에 맞춰 데이터를 가져오는 함수 (관광지 코스)
     public Mono<String> getSearchKeyword(String keyword, String pageNo, String arrange, String contentTypeId, String areaCode) {
 //        System.out.println("service의 getSearchKeyword함수 Keyword : " + keyword);
@@ -141,21 +79,6 @@ public class PlaceApiService {
                     }
                 });
     }
-
-    // 구글 Places API 호출 함수
-    public Mono<String> getGooglePlacesData(String keyword) {
-        // 구글 Places API 요청 URL 생성
-        String googlePlacesUrl = "https://maps.googleapis.com/maps/api/place/textsearch/json"
-                + "?query=" + keyword
-                + "&key=" + googleKey;
-
-        return webClient.get()
-                .uri(googlePlacesUrl)
-                .retrieve()
-                .bodyToMono(String.class)
-                .flatMap(response -> Mono.just(response));  // 구글 Places API 응답 그대로 반환
-    }
-
 
     // 지역 및 해시태그에 맞춰 데이터를 가져오는 함수
     public Mono<String> getAreaBasedList(String regionCode, String hashtag, String pageNo, String arrange, String contentTypeId) {
