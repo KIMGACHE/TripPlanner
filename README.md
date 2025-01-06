@@ -35,6 +35,7 @@
 
 </div>
 <br/>
+<hr>
 
 ### 개발 기간
 
@@ -42,15 +43,46 @@
 - 기능 구현 : 2024-12-06 ~ 2025-01-02
 - UI 구현 : 2025-01-03 ~ 2025-01-09
 
-## ▶️ 역할
-|조원|주역할|보조역할|
-|---------------|----------------|------------------------|
-|공통|요구사항분석 및 시스템 설계|-| 
-|김병관|-|-| 
-|이영훈|-|-| 
-|박대해|로그인 기능 및 시큐리티 전반 담당|메인페이지 디자인 작업보조| 
-|진찬민|-|-| 
-<br/>
+
+
+## 4. 역할 분담
+
+### 🍊김병관
+
+- **UI**
+    - 페이지 : 
+- **기능**
+    - ㅂㅂ
+
+<br>
+    
+### 👻박대해
+
+- **UI**
+    - 페이지 : 로그인 페이지 , 메인페이지 디자인 수정
+- **기능**
+    - 로그인 기능 , 비밀번호 찾기 , 아이디 찾기
+    - 스프링 시큐리티 JWT토큰 사용 인증정보 생성
+
+<br>
+
+### 😎이영훈
+
+- **UI**
+    - 페이지 :
+- **기능**
+    - ㅂㅂ
+
+<br>
+
+### 🐬진찬민
+
+- **UI**
+    - 페이지 : 
+- **기능**
+    - ㅂㅂ
+    
+<br>
 
 ## ▶️ 개발 환경
 |-|개발 환경|
@@ -65,8 +97,8 @@
 |Repository Hosting|GitHub|
 |Testing Framework|JUnit5|
 |Security|Spring Security|
-|협업 툴||Notion,Discord|
-|디자인||Figma|
+|협업 툴|Notion,Discord|
+|디자인|Figma|
 <br/>
 
 ## ▶️ 사용 API
@@ -77,11 +109,10 @@
 <br/>
 
 ## ▶️ SKILLS
-#### BE
+#### BACKEND
 ![JAVA](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=Java&logoColor=white)
 ![SpringBoot](https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
 ![SpringSecurity](https://img.shields.io/badge/springsecurity-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)
-![thymeleaf](https://img.shields.io/badge/thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white)
 ---
 
 #### FE
@@ -89,7 +120,6 @@
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=Axios&logoColor=white)
-![BootStrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
 ---
 
 #### DATABASE
@@ -106,9 +136,13 @@
 <br/>
 
 ## ▶️ 주요 기능
-|서비스|주요 기능|
-|---------------|----------------|
-| -|<ul><li>-</li><li>-</li></ul>|
+<ul>
+<li>여행 계획 CRUD</li>
+<li>한국관광공사 추천 관광코스</li>
+<li>좋아요를 눌러 관심목록 생성</li>
+<li>회원가입 및 로그인</li>
+  
+</ul>|
 
 <br/>
 
@@ -131,9 +165,6 @@
 <br/>
 ---
 
-<strong><p>상품구매</p></strong>
-<br/>
----
 
 <strong><p>비밀번호 찾기</p></strong>
 <br/>
@@ -149,12 +180,7 @@
 <br/>
 
 
-### 상품 서비스
-| URI           | REQUEST METHOD | DESCRIPTION            |
-|---------------|----------------|------------------------|
-| - | -        | - | 
 
----
 <br/>
 
 ### 게시판 서비스
@@ -166,32 +192,12 @@
 <br/>
 
 
-### 장바구니 서비스
-| URI           | REQUEST METHOD | DESCRIPTION            |
-|---------------|----------------|------------------------|
-|-        |-              | -|
 
----
-<br/>
-
-
-### 주문/결제 서비스
-| URI           | REQUEST METHOD | DESCRIPTION            |
-|---------------|----------------|------------------------|
-|-         | -             | -|
-
----
-<br/>
-
-### 배송지 서비스
-| URI                | REQUEST METHOD | DESCRIPTION                  |
-|--------------------|----------------|------------------------------|
-|-       | -           | - |
-
----
-<br/>
 
 📃: File Tree
 ---
+
+## 10. 프로젝트 후기
 ```
+
 [프로젝트 경로(TREE)]
