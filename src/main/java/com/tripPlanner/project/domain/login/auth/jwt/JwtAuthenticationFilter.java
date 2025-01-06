@@ -49,33 +49,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } else {
             log.warn("만료 된 토큰입니다. 리프레시 토큰을 확인합니다");
 
-            String refreshToken = resolveRefreshToken(request);
-
-            if (refreshToken != null) {
-
-                Authentication authentication = jwtTokenProvider.getTokenInfo(refreshToken);
-                var loginResponse = authService.refreshAccessToken(authentication, refreshToken);
-
-                //토큰발급이 성공할 시에
-                if (loginResponse.isSuccess()) {
-                    authService.setTokenCookies(response, loginResponse.getAccessToken());
-                    log.info("새로운 엑세스 토큰으로 SecurityContext에 인증 정보 재설정 완료");
-                    //다시 시큐리티 인증정보 등록
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                } else {
-                    log.warn("리프레시 토큰 검증 실패: {}", loginResponse.getMessage());
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    return;
-                }
-
-            } else {
-                log.warn("리프레시 토큰이 존재하지 않음. 인증 실패.");
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.setContentType("application/json");
-                response.getWriter().write("{\"message\" : \"시간이 만료되어 로그아웃되었습니다.\"} ");
-//                authService.invalidateCookie(response);
-                return;
-            }
         }
         filterChain.doFilter(request, response);
     }
@@ -117,7 +90,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private String resolveRefreshToken(HttpServletRequest request){
         String userid = request.getHeader("userid");
 
-        String redisKey = "refreshToken"+ userid;
+        String redisKey = "refreshToken:"+ userid;
         String refreshToken = redisTemplate.opsForValue().get(redisKey);
         log.info("추출한 유저 아이디: {}",userid);
         if (refreshToken == null) {
