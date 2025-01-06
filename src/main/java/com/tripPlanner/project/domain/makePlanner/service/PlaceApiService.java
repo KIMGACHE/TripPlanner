@@ -108,7 +108,7 @@ public class PlaceApiService {
                 + "?serviceKey=" + serviceKey
                 + "&numOfRows=10"
                 + "&MobileApp=AppTest"
-                + "&MobileOS=ETC"g
+                + "&MobileOS=ETC"
                 + "&areaCode=" + areaCode
                 + "&arrange=" + arrange
                 + "&contentTypeId=" + contentTypeId
