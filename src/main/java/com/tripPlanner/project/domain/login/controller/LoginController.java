@@ -187,13 +187,14 @@ public class LoginController {
     @ResponseBody
     public ResponseEntity<LoginResponse> refreshAccessToken(
         @RequestBody Map<String ,String> request,
-        HttpServletResponse response
+        HttpServletResponse response,
+        Authentication authentication
     ){
         String accessToken = request.get("accessToken");
         String refreshToken = request.get("refreshToken");
 
         //AuthService 호출
-        LoginResponse loginResponse = authService.refreshAccessToken(accessToken,refreshToken);
+        LoginResponse loginResponse = authService.refreshAccessToken(authentication,refreshToken);
 
         //실패 시 바로 응답
         if(!loginResponse.isSuccess()){
