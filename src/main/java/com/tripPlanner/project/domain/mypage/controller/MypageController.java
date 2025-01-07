@@ -295,7 +295,12 @@ public class MypageController {
         }
     }
 
-
+    // LikeContorller
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<PlannerDto>> getLikedPlanners(@PathVariable String userId) {
+        List<PlannerDto> planners = mypageService.getLikedPlanners(userId);
+        return ResponseEntity.ok(planners);
+    }
 
 
 

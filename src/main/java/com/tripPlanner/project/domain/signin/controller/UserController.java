@@ -1,7 +1,9 @@
 package com.tripPlanner.project.domain.signin.controller;
 
 
+import com.tripPlanner.project.domain.destination.LikeService;
 import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
+import com.tripPlanner.project.domain.makePlanner.dto.PlannerDto;
 import com.tripPlanner.project.domain.signin.repository.UserRepository;
 import com.tripPlanner.project.domain.signin.service.UserService;
 import com.tripPlanner.project.domain.signin.dto.UserDto;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -102,3 +105,4 @@ public class UserController {
         }
     }
 }
+

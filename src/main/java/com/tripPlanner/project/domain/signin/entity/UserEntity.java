@@ -1,5 +1,6 @@
 package com.tripPlanner.project.domain.signin.entity;
 
+import com.tripPlanner.project.domain.destination.Like;
 import com.tripPlanner.project.domain.makePlanner.entity.Planner;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -54,6 +55,10 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE) // 외래 키 제약 조건에 따른 삭제
     private List<Planner> planners; // User와 연결된 Planner 목록
+
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE) // User 삭제 시 Like 삭제
+    private List<Like> likes;
 
     @PrePersist // 엔티티 저장 직전에 호출
     public void prePersist() {

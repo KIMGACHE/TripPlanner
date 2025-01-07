@@ -51,7 +51,8 @@ public class Planner {
     @Column(name = "area", nullable = false)
     private String area;
 
-    @OneToMany(mappedBy = "plannerId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "plannerId", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE) // Planner 삭제 시 Like 삭제
     private List<Like> likes = new ArrayList<>();
 
     public PlannerDto toDto(Planner planner,String thumbnailImage) {
@@ -83,4 +84,5 @@ public class Planner {
                 this.isPublic
         );
     }
+
 }

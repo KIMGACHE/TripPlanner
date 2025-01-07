@@ -1,13 +1,19 @@
 package com.tripPlanner.project.domain.destination;
 
 
+import com.tripPlanner.project.domain.makePlanner.entity.Planner;
+import com.tripPlanner.project.domain.signin.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface LikeRepository extends JpaRepository<Like, Long> {
+import java.util.List;
 
-    boolean existsByPlannerIdAndUserId(Long plannerID, String userId);
+public interface LikeRepository extends JpaRepository<Like, Planner> {
 
-    void deleteByPlannerIdAndUserId(Long plannerID, String userId);
+    boolean existsByPlannerIdAndUserId(Planner plannerID, UserEntity userId);
 
-    int countByPlannerId(Long plannerID);
+    void deleteByPlannerIdAndUserId(Planner plannerID, UserEntity userId);
+
+    int countByPlannerId(Planner plannerID);
+
+    List<Like> findByUserUserId(UserEntity userId);
 }
