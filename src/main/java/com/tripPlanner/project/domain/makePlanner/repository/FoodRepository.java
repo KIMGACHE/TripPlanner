@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface FoodRepository extends JpaRepository<Food,String>  {
-    @Query("SELECT fd FROM Food AS fd WHERE (fd.xCoordinate BETWEEN :xStart AND :xEnd) AND (fd.yCoordinate BETWEEN :yStart AND :yEnd)")
+    @Query("SELECT fd FROM Food AS fd WHERE (fd.x BETWEEN :xStart AND :xEnd) AND (fd.y BETWEEN :yStart AND :yEnd)")
     List<Food> selectFoodAll(
             @Param("xStart") double xStart,
             @Param("yStart") double yStart,
@@ -18,13 +18,13 @@ public interface FoodRepository extends JpaRepository<Food,String>  {
             @Param("yEnd") double yEnd
     );
 
-    @Query("SELECT fd FROM Food AS fd WHERE (fd.locationFullAddress LIKE %:areaname% or fd.streetFullAddress LIKE %:areaname%) and fd.businessName LIKE %:word%")
+    @Query("SELECT fd FROM Food AS fd WHERE (fd.locationFullAddress LIKE %:areaname% or fd.address LIKE %:areaname%) and fd.name LIKE %:word%")
     List<Food> searchFood(
             @Param("word") String word,
             @Param("areaname") String areaname
     );
 
-    @Query("SELECT fd FROM Food AS fd WHERE fd.locationFullAddress LIKE %:areaname% or fd.streetFullAddress LIKE %:areaname% ")
+    @Query("SELECT fd FROM Food AS fd WHERE fd.locationFullAddress LIKE %:areaname% or fd.address LIKE %:areaname% ")
     List<Food> searchAreaFood(
             @Param("areaname") String areaname
     );

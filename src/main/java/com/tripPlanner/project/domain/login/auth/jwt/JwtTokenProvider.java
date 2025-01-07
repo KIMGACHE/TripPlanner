@@ -7,6 +7,8 @@ import com.tripPlanner.project.domain.login.entity.TokenEntity;
 import com.tripPlanner.project.domain.login.entity.TokenRepository;
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -159,7 +161,7 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token);
             return true; //유효하다면 true
         }catch(ExpiredJwtException e){
-            log.warn("엑세스 토큰 만료됨 {}" , e.getMessage());
+            log.warn("토큰 만료됨 {}" , e.getMessage());
         }catch(JwtException e){
             log.warn("토큰이 유효하지 않음 {}",e.getMessage());
         }catch(Exception e){
@@ -192,15 +194,15 @@ public class JwtTokenProvider {
 
         log.info("리프레시 토큰에서 추출한 사용자ID {} ",userid);
 
-        String redisKey = "refreshToken"+userid;
+        String redisKey = "refreshToken:"+userid;
         String storedRefreshToken = redisTemplate.opsForValue().get(redisKey);
-
+        log.info("stroed리프레시 {}", storedRefreshToken);
         if(storedRefreshToken == null){
             log.warn("Redis에서 리프레시 토큰을 찾을 수 없습니다");
             throw new IllegalArgumentException("Redis에서 리프레시 토큰을 찾을 수 없습니다");
         }
 
-        if(storedRefreshToken.equals(refreshToken)){
+        if(!storedRefreshToken.equals(refreshToken)){
             log.warn("Redis에 저장된 리프레시 토큰과 요청된 리프레시 토큰이 일치하지 않습니다");
             throw new IllegalArgumentException("Redis에 저장된 리프레시 토큰과 요청된 리프레시 토큰이 일치하지 않습니다");
         }
@@ -227,14 +229,15 @@ public class JwtTokenProvider {
     }
 
     //비밀번호 재설정을 위한 토큰을 발급하는 메서드
-    public String generateResetToken(String userid, String email){
+    public String generateResetToken(String userid, String email) {
         Claims claims = Jwts.claims().setSubject(userid);
-        claims.put("email",email);
+        claims.put("email", email);
         return Jwts.builder()
                 .setClaims(claims)
-                .signWith(SignatureAlgorithm.HS256,secretKey)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
+
 
 
 }

@@ -1,12 +1,13 @@
 package com.tripPlanner.project.domain.signin.service;
 
+
 import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
+
 import com.tripPlanner.project.domain.signin.UploadProperties;
 import com.tripPlanner.project.domain.signin.dto.UserDto;
 import com.tripPlanner.project.domain.signin.entity.UserEntity;
 import com.tripPlanner.project.domain.signin.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

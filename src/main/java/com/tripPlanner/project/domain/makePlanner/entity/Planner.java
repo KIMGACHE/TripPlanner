@@ -1,12 +1,17 @@
 package com.tripPlanner.project.domain.makePlanner.entity;
 
 import com.tripPlanner.project.domain.board.BoardDto;
+import com.tripPlanner.project.domain.destination.Like;
 import com.tripPlanner.project.domain.makePlanner.dto.PlannerDto;
 import com.tripPlanner.project.domain.signin.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Table(name = "Planner")
@@ -21,7 +26,8 @@ public class Planner {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid", nullable = false)
-    private UserEntity user; // 사용자
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private UserEntity user;
 
     @Column(name = "plannerTitle", nullable = false)
     private String plannerTitle;
@@ -43,6 +49,9 @@ public class Planner {
 
     @Column(name = "area", nullable = false)
     private String area;
+
+    @OneToMany(mappedBy = "plannerId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes = new ArrayList<>();
 
     public PlannerDto toDto(Planner planner,String thumbnailImage) {
         return PlannerDto.builder()

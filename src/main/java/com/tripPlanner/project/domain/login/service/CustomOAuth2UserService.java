@@ -4,6 +4,7 @@ import com.tripPlanner.project.domain.login.auth.PrincipalDetail;
 import com.tripPlanner.project.domain.login.dto.LoginRequest;
 
 
+import com.tripPlanner.project.domain.makePlanner.entity.Planner;
 import com.tripPlanner.project.domain.signin.entity.UserEntity;
 import com.tripPlanner.project.domain.signin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -116,6 +119,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService{
                 .email(email)
                 .gender(gender)
                 .role("ROLE_USER")
+                .planners(new ArrayList<>()) // 초기화된 planners 설정
                 .provider(provider)
                 .providerId(providerId)
                 .build();

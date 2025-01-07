@@ -7,6 +7,7 @@ import com.tripPlanner.project.domain.signin.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
         private final UserRepository userRepository;
         private final PasswordEncoder passwordEncoder;
         private final JavaMailSender javaMailSender;
+        private final RedisTemplate<String,String> redisTemplate;
 
         private final ConcurrentHashMap<String,String> verificationCodes = new ConcurrentHashMap<>();
 
@@ -131,7 +133,19 @@ import java.util.concurrent.ConcurrentHashMap;
             response.addCookie(cookie);
         }
 
+    public String resolveRefreshToken(HttpServletRequest request){
+        String userid = request.getHeader("userid");
 
+        String redisKey = "refreshToken:"+ userid;
+        String refreshToken = redisTemplate.opsForValue().get(redisKey);
+        log.info("추출한 유저 아이디: {}",userid);
+        log.info("리프레시 토큰은 ?: {}",refreshToken);
+        if (refreshToken == null) {
+            log.warn("Redis에서 리프레시 토큰을 찾을 수 없습니다. User-Id: {}", userid);
+            return null;
+            }
+        return refreshToken;
+        }
 
 
 

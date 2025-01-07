@@ -3,6 +3,8 @@ package com.tripPlanner.project.domain.makePlanner.entity;
 import com.tripPlanner.project.domain.makePlanner.dto.DestinationDto;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -17,6 +19,7 @@ public class Destination {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plannerID", referencedColumnName = "plannerID", insertable = false, updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Planner planner; // Planner와의 관계 설정 (외래 키)
 
     @Column(name = "name")

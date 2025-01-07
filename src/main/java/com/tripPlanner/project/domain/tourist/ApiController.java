@@ -15,7 +15,7 @@ public class ApiController {
     private final ApiService apiService;
 
     @GetMapping("/tourist-info")
-    public Mono<String> getTouristInfo(@RequestParam(value = "id") String contentId) {
+    public Mono<String> getTouristInfo(@RequestParam(value = "contentId") String contentId) {
 
         if (!contentId.isEmpty()) {
             return apiService.getDetailCommon(contentId);
@@ -113,7 +113,7 @@ public class ApiController {
 
     // 관광지 코스 상세페이지로 진입할 때 contentid를 파라미터로 받아서 맵핑
     @GetMapping("/travelcourse-info")
-    public Mono<String> getTravelCourseInfo(@RequestParam(value = "id") String contentId) {
+    public Mono<String> getTravelCourseInfo(@RequestParam(value = "contentId") String contentId) {
         String contentTypeId = "25";
         if (!contentId.isEmpty()) {
             return apiService.getDetailInfo(contentId, contentTypeId);

@@ -12,30 +12,31 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FoodDto {
     public String id;
-    public String businessName;
-    public double xCoordinate;
-    public double yCoordinate;
+    public String name;
+    public double x;
+    public double y;
     public String locationPhoneNumber;
     public String locationPostalCode;
     public String locationFullAddress;
     public String streetPostalCode;
-    public String streetFullAddress;
-    public String businessCategory;
+    public String address;
+    public String category;
     public String image;
 
     // Dto -> Entity
     public static Food dtoToEntity(FoodDto foodDto) {
         return Food.builder()
                 .id(foodDto.getId())
-                .businessName(foodDto.getBusinessName())
-                .xCoordinate(foodDto.getXCoordinate())
-                .yCoordinate(foodDto.getYCoordinate())
+                .name(foodDto.getName())
+                .x(foodDto.getX())
+                .y(foodDto.getY())
                 .locationPhoneNumber(foodDto.getLocationPhoneNumber())
                 .locationPostalCode(foodDto.getLocationPostalCode())
                 .locationFullAddress(foodDto.getLocationFullAddress())
                 .streetPostalCode(foodDto.getStreetPostalCode())
-                .streetFullAddress(foodDto.getStreetFullAddress())
-                .businessCategory(foodDto.getBusinessCategory())
+                .address(foodDto.getAddress())
+                .category(foodDto.getCategory())
+                .image(foodDto.getImage())
                 .build();
     }
 
@@ -43,15 +44,16 @@ public class FoodDto {
     public static FoodDto entityToDto(Food food) {
         return FoodDto.builder()
                 .id(food.getId())
-                .businessName(food.getBusinessName())
-                .xCoordinate(food.getXCoordinate())
-                .yCoordinate(food.getYCoordinate())
+                .name(food.getName())
+                .x(food.getX())
+                .y(food.getY())
                 .locationPhoneNumber(food.getLocationPhoneNumber())
                 .locationPostalCode(food.getLocationPostalCode())
                 .locationFullAddress(food.getLocationFullAddress())
                 .streetPostalCode(food.getStreetPostalCode())
-                .streetFullAddress(food.getStreetFullAddress())
-                .businessCategory(food.getBusinessCategory())
+                .address(food.getAddress())
+                .category(food.getCategory())
+                .image(food.getImage())
                 .build();
     }
 }

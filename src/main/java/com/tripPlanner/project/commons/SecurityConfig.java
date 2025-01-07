@@ -51,9 +51,11 @@ public class SecurityConfig {
 
         // 정적 경로
         http.authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll() //스웨거 확인용 주소
                         .requestMatchers("/login", "/oauth2/**","/join", "/", "/board","**", "/**", "/api/search").permitAll() // 인증 없이 허용할 경로
                         .requestMatchers("/css/**", "/js/**", "image/**", "/favicon.ico").permitAll() //정적 자원 허용
-                        .requestMatchers("/api/user/**","/makePlanner","/user/mypage","/listDestination" ).hasRole("USER") //user 권한만 접근할 수 있는 경로
+                        .requestMatchers("/upload/**").permitAll()
+                        .requestMatchers("/api/user/**","/makePlanner","/user/mypage/**","/listDestination" ).hasRole("USER") //user 권한만 접근할 수 있는 경로
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") //user 권한만 접근할 수 있는 경로
                         .requestMatchers("/logout", "/admin",
 

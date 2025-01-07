@@ -6,8 +6,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+
 public class LikeRequest {
-    private String plannerID;
-    private String userId;
+    private Long plannerID;
 }

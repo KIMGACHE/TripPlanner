@@ -1,11 +1,15 @@
 package com.tripPlanner.project.domain.destination;
 
+import com.tripPlanner.project.domain.login.auth.PrincipalDetail;
+import com.tripPlanner.project.domain.login.service.PrincipalDetailService;
 import com.tripPlanner.project.domain.makePlanner.dto.DestinationDto;
 import com.tripPlanner.project.domain.makePlanner.entity.Destination;
 import com.tripPlanner.project.domain.makePlanner.repository.DestinationRepository;
 import com.tripPlanner.project.domain.makePlanner.service.DestinationService;
 import com.tripPlanner.project.domain.tourist.ApiRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -18,6 +22,7 @@ public class DestinationController {
 
     private final DestinationRepository destinationRepository;
     private final DestinationService destinationService;
+    private final LikeService likeService;
 
     // 플래너 ID에 해당하는 destination 리스트 반환
     @GetMapping("/planner/board/destination")
@@ -30,13 +35,31 @@ public class DestinationController {
                 .collect(Collectors.toList());
     }
 
+    // 좋아요 상태 및 카운트 조회
+    @GetMapping("/planner/board/likeStatus")
+    public ResponseEntity<LikeStatusResponse> getLikeStatus(
+            @RequestParam(name = "plannerID") Long plannerID,
+            @AuthenticationPrincipal PrincipalDetail userDetails
+    ) {
+        System.out.println("ㅎㅇ");
+        System.out.println("plannerID : " + plannerID);
+        String userId = userDetails.getName();
+        System.out.println("userID : " + userId);
+        LikeStatusResponse response = likeService.getLikeStatus(plannerID, userId);
+        return ResponseEntity.ok(response);
+    }
 
-    // 좋아요 기능
-//    @PostMapping("/like")
-//    public ResponseEntity<?> handleLike(@RequestBody LikeRequest likeRequest) {
-//        int updatedLikes = destinationService.updateLike(likeRequest.getPlannerID(), likeRequest.getUserId());
-//        return ResponseEntity.ok(new LikesResponse(updatedLikes));
-//    }
+    // 좋아요 토글
+    @PostMapping("/planner/board/toggleLike")
+    public ResponseEntity<LikeStatusResponse> toggleLike(
+            @RequestBody LikeRequest likeRequest,
+            @AuthenticationPrincipal PrincipalDetail userDetails
+    ) {
+        String userId = userDetails.getName();
+        System.out.println("userID : " + userId);
+        LikeStatusResponse response = likeService.toggleLike(likeRequest.getPlannerID(), userId);
+        return ResponseEntity.ok(response);
+    }
 
     // destination 리스트 클릭 시 tourist페이지로 가서 정보를 띄워주게 할 contentId를 얻어오기
     @PostMapping("/destination-to-tourist")
