@@ -47,6 +47,53 @@
 | [<img src="https://github.com/user-attachments/assets/3c371afc-b1b1-40f5-9290-4bab8e021b70" height=150 width=150> <br/> @yeon1615](https://github.com/yeon1615) | [<img src="https://github.com/user-attachments/assets/2df8160f-5168-47cc-9e1e-58373618cab3" height=150 width=150> <br/> @qkreogo1](https://github.com/Cheorizzang) | [<img src="https://github.com/user-attachments/assets/4eb6b4cd-3def-46df-a1ae-da0ab408428b" height=150 width=150> <br/> @heejiyang](https://github.com/heejiyang) | [<img src="https://github.com/user-attachments/assets/4725d2ff-8736-4dee-87cf-45edccffa656" height=150 width=150> <br/> @journey-ji](https://github.com/journey-ji) |
 
 </div>
+
+<h1>시작하기</h1>
+<br>
+
+## 프로젝트 소개
+
+- 여행가자 는 여행을 갈 때 계획을 생성할 때, 다른 사람들의 정보를 참고해 나만의 여행계획을 만들 수 있게 하는 국내여행 웹사이트입니다.
+- 이용자는 여행계획을 만들 수 있는데, 이 때 식당,특정 명소,숙소 등을 자세하게 기록하여 계획을 만들 수 있습니다.
+- 검색을 통해 내가 가보지 않았던 가게나 장소들의 정보들을 확인할 수 있습니다.
+- 좋아요 기능을 통해 관심목록을 등록하여, 마이페이지에 관심목록을 만들 수 있습니다.
+
+<br>
+
+## ▶️ 개발 동기
+
+여행을 가게 된다면 , 사람들은 여행 계획을 만든다.<br>
+하지만 계획을 만드는데 익숙하지 않은 사람은 계획을 세우는데 애를 먹는다.<br>
+그 때 다른사람들이 만든 계획을 참고해서 나만의 여행계획을 만들면 어떨까?<br>
+하는 생각에 이 프로젝트를 시작하게 되었습니다.
+<br>
+<br>
+
+## 팀원 구성
+
+<div align="center">
+
+| **김병관** | **박대해** | **이영훈** | **진찬민** |
+| :------: |  :------: | :------: | :------: |
+| [<img src="https://github.com/user-attachments/assets/3c371afc-b1b1-40f5-9290-4bab8e021b70" height=150 width=150> <br/> @yeon1615](https://github.com/yeon1615) | [<img src="https://github.com/user-attachments/assets/2df8160f-5168-47cc-9e1e-58373618cab3" height=150 width=150> <br/> @qkreogo1](https://github.com/Cheorizzang) | [<img src="https://github.com/user-attachments/assets/4eb6b4cd-3def-46df-a1ae-da0ab408428b" height=150 width=150> <br/> @heejiyang](https://github.com/heejiyang) | [<img src="https://github.com/user-attachments/assets/4725d2ff-8736-4dee-87cf-45edccffa656" height=150 width=150> <br/> @journey-ji](https://github.com/journey-ji) |
+
+</div>
+<br/>
+
+### 개발 기간
+
+- 전체 개발 기간 : 2024-12-06 ~ 2025-01-09
+- 기능 구현 : 2024-12-06 ~ 2025-01-02
+- UI 구현 : 2025-01-03 ~ 2025-01-09
+
+## ▶️ 역할
+|조원|주역할|보조역할|
+|---------------|----------------|------------------------|
+|공통|요구사항분석 및 시스템 설계|-| 
+|김병관|-|-| 
+|이영훈|-|-| 
+|박대해|로그인 기능 및 시큐리티 전반 담당|메인페이지 디자인 작업보조| 
+|진찬민|-|-| 
 <br/>
 <hr>
 
@@ -109,8 +156,8 @@
 |Repository Hosting|GitHub|
 |Testing Framework|JUnit5|
 |Security|Spring Security|
-|협업 툴|Notion,Discord|
-|디자인|Figma|
+|협업 툴||Notion,Discord|
+|디자인||Figma|
 <br/>
 
 ## ▶️ 사용 API
