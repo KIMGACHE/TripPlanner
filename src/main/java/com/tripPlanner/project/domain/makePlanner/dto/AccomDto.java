@@ -12,30 +12,31 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AccomDto {
     public int id;
-    public String businessName;
-    public double xCoordinate;
-    public double yCoordinate;
+    public String name;
+    public double x;
+    public double y;
     public String locationPhoneNumber;
     public String locationPostalCode;
     public String locationFullAddress;
     public String streetPostalCode;
-    public String streetFullAddress;
-    public String businessCategory;
+    public String address;
+    public String category;
     public String hygieneCategory;
+    public String image;
 
     // Dto -> Entity
     public static Accom dtoToEntity(AccomDto accomDto) {
         return Accom.builder()
                 .id(accomDto.getId())
-                .businessName(accomDto.getBusinessName())
-                .xCoordinate(accomDto.getXCoordinate())
-                .yCoordinate(accomDto.getYCoordinate())
+                .name(accomDto.getName())
+                .x(accomDto.getX())
+                .y(accomDto.getY())
                 .locationPhoneNumber(accomDto.getLocationPhoneNumber())
                 .locationPostalCode(accomDto.getLocationPostalCode())
                 .locationFullAddress(accomDto.getLocationFullAddress())
                 .streetPostalCode(accomDto.getStreetPostalCode())
-                .streetFullAddress(accomDto.getStreetFullAddress())
-                .businessCategory(accomDto.getBusinessCategory())
+                .address(accomDto.getAddress())
+                .category(accomDto.getCategory())
                 .hygieneCategory(accomDto.getHygieneCategory())
                 .build();
     }
@@ -44,15 +45,15 @@ public class AccomDto {
     public static AccomDto entityToDto(Accom accom) {
         return AccomDto.builder()
                 .id(accom.getId())
-                .businessName(accom.getBusinessName())
-                .xCoordinate(accom.getXCoordinate())
-                .yCoordinate(accom.getYCoordinate())
+                .name(accom.getName())
+                .x(accom.getX())
+                .y(accom.getY())
                 .locationPhoneNumber(accom.getLocationPhoneNumber())
                 .locationPostalCode(accom.getLocationPostalCode())
                 .locationFullAddress(accom.getLocationFullAddress())
                 .streetPostalCode(accom.getStreetPostalCode())
-                .streetFullAddress(accom.getStreetFullAddress())
-                .businessCategory(accom.getBusinessCategory())
+                .address(accom.getAddress())
+                .category(accom.getCategory())
                 .hygieneCategory(accom.getHygieneCategory())
                 .build();
     }

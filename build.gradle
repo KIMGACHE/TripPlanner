@@ -35,6 +35,7 @@ dependencies {
 
 	// REDIS (RefreshToken)
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.session:spring-session-data-redis'
 
 	// Oauth2 (소셜로그인)
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -49,18 +50,26 @@ dependencies {
 	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.mockito:mockito-core'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation 'org.mariadb.jdbc:mariadb-java-client'
 
-	// thymeleaf (테스트용)
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
-	// PROJ4J
-	implementation group: 'org.locationtech.proj4j', name: 'proj4j', version: '1.3.0'
+	// WebClient (API 요청 보내기 위한 의존성 추가)
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
-	// JACKSON
-	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.18.2'
-	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.18.2'
-	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.18.2'
+	//google Email API
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.0.5'
+
+	//JWT
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+//	 Swagger
+//	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+	// springdoc-openapi
+	implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
 
 }
 
