@@ -1,5 +1,6 @@
 package com.tripPlanner.project.domain.destination;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tripPlanner.project.domain.makePlanner.entity.Planner;
 import com.tripPlanner.project.domain.signin.entity.UserEntity;
 import jakarta.persistence.*;
@@ -30,12 +31,14 @@ public class Like {
 
     @ManyToOne
     @JoinColumn(name = "plannerId", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE) // plannerId 삭제 시 자동으로 Like 삭제
-    private Planner plannerId;  // 플래너 ID를 참조
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonManagedReference // Planner와의 순환 참조 방지
+    private Planner plannerId;
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE) // userId 삭제 시 자동으로 Like 삭제
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonManagedReference // UserEntity와의 순환 참조 방지
     private UserEntity userId;   // 좋아요를 누른 사용자 ID를 참조
 
     @CreationTimestamp

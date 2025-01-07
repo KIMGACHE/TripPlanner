@@ -102,10 +102,10 @@ public class MypageService {
     @Autowired
     private LikeRepository likeRepository;
 
-    public List<PlannerDto> getLikedPlanners(String userId) {
-        List<Like> likes = likeRepository.findByUserUserId(userId);
-        return likes.stream()
-                .map(like -> like.getPlannerId().toDto(like.getPlannerId(), null))
-                .collect(Collectors.toList());
+
+    public List<Like> getLikedPlanners(String userId) {
+        UserEntity user = userRepository.findByUserid(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+        return likeRepository.findByUserId(user);
     }
 }

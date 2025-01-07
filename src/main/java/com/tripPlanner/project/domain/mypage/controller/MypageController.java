@@ -1,6 +1,9 @@
 package com.tripPlanner.project.domain.Mypage.controller;
 
+import com.tripPlanner.project.domain.Mypage.Service.MypageService;
 import com.tripPlanner.project.domain.Mypage.entity.UpdateUserRequest;
+import com.tripPlanner.project.domain.destination.Like;
+import com.tripPlanner.project.domain.destination.LikeDto;
 import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
 import com.tripPlanner.project.domain.makePlanner.dto.PlannerDto;
 import com.tripPlanner.project.domain.makePlanner.entity.Planner;
@@ -8,6 +11,7 @@ import com.tripPlanner.project.domain.makePlanner.repository.PlannerRepository;
 import com.tripPlanner.project.domain.makePlanner.service.PlannerService;
 import com.tripPlanner.project.domain.signin.entity.UserEntity;
 import com.tripPlanner.project.domain.signin.repository.UserRepository;
+import com.tripPlanner.project.domain.signin.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +32,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -114,7 +118,6 @@ public class MypageController {
         log.info("사용자 정보: {}", user);
         return ResponseEntity.ok(user);
     }
-
 
 
     // 사용자 정보 업데이트
@@ -264,10 +267,7 @@ public class MypageController {
     }
 
 
-
-        private final PlannerRepository plannerRepository;
-
-
+    private final PlannerRepository plannerRepository;
 
 
     // 사용자 플래너 목록 반환
@@ -295,11 +295,71 @@ public class MypageController {
         }
     }
 
+
     // LikeContorller
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<PlannerDto>> getLikedPlanners(@PathVariable String userId) {
-        List<PlannerDto> planners = mypageService.getLikedPlanners(userId);
-        return ResponseEntity.ok(planners);
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/{userid}/liked-planners")
+    public ResponseEntity<?> getLikedPlanners(@PathVariable(name = "userid") String userid) {
+        System.out.println("/{userid}/liked-planners" + userid);
+        log.info("Received request for liked planners with userid: {}", userid);
+
+        Optional<UserEntity> userOptional = userRepository.findById(userid);
+
+        if (userOptional.isEmpty()) {
+            log.warn("User not found for userid: {}", userid);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
+        }
+
+        UserEntity user = userOptional.get();
+
+        log.info("User found: {}", user.getUsername());
+
+        // Like 데이터를 DTO로 변환
+        List<LikeDto> likedPlanners = user.getLikes().stream()
+                .map(like -> new LikeDto(
+                        like.getId(),
+                        like.getPlannerId().getPlannerTitle(),
+                        like.getPlannerId().getArea(),
+                        like.getPlannerId().getDay(),
+                        like.getPlannerId().getDescription(),
+                        like.getCreatedAt()
+                ))
+                .collect(Collectors.toList());
+
+        log.info("좋아요한 플래너  : {}", likedPlanners.isEmpty());
+
+        return ResponseEntity.ok(likedPlanners);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteUser(HttpServletRequest request) {
+        log.info("회원탈퇴 요청");
+
+        // 쿠키에서 JWT 토큰 추출
+        String accessToken = getAccessTokenFromCookies(request);
+        if (accessToken == null || !jwtTokenProvider.validateToken(accessToken)) {
+            log.warn("유효하지 않은 액세스 토큰입니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 액세스 토큰입니다.");
+        }
+
+        // JWT 토큰에서 사용자 ID 추출
+        String userId = jwtTokenProvider.getUserIdFromToken(accessToken);
+        Optional<UserEntity> optionalUser = userRepository.findByUserid(userId);
+
+        if (optionalUser.isEmpty()) {
+            log.warn("유저가 존재하지 않습니다: {}", userId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("유저를 찾을 수 없습니다.");
+        }
+
+        try {
+            // 유저 삭제
+            userRepository.delete(optionalUser.get());
+            log.info("유저 삭제 성공: {}", userId);
+            return ResponseEntity.ok("회원탈퇴가 완료되었습니다.");
+        } catch (Exception e) {
+            log.error("회원탈퇴 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원탈퇴 중 오류가 발생했습니다.");
+        }
     }
 
 

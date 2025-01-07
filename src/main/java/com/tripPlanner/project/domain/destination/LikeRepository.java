@@ -15,5 +15,5 @@ public interface LikeRepository extends JpaRepository<Like, Planner> {
 
     int countByPlannerId(Planner plannerID);
 
-    List<Like> findByUserUserId(UserEntity userId);
+    List<Like> findByUserId(UserEntity userId);
 }
