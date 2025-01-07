@@ -177,7 +177,7 @@ public class MainController {
 
             if (!keyword.isEmpty() && !regionCode.isEmpty()) {
                 System.out.println("다 있음");
-                Mono<String> searchKeywordResult = apiService.getSearchKeyword(keyword.trim(), pageNo, arrange, contentTypeId);
+                Mono<String> searchKeywordResult = apiService.getSearchKeyword(keyword.trim(), pageNo, arrange, contentTypeId, regionCode);
 
                 JSONParser jsonParser = new JSONParser();
                 Object obj = jsonParser.parse(searchKeywordResult.block());
