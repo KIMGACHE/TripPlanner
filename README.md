@@ -64,7 +64,7 @@
 ### 👻박대해
 
 - **주역할**
-    - 로그인 기능 및 시큐리티 전반 담당
+    - JWT기반 로그인 기능 및 시큐리티 전반 담당
 - **보조역할**
     - 메인페이지 디자인 작업보조
 
@@ -101,8 +101,8 @@
 |Repository Hosting|GitHub|
 |Testing Framework|JUnit5|
 |Security|Spring Security|
-|협업 툴||Notion,Discord|
-|디자인||Figma|
+|협업 툴|Notion,Discord|
+|디자인|Figma|
 <br/>
 
 ## ▶️ 사용 API
@@ -258,20 +258,133 @@
  ┃ ┗ 📂resources
  ┃ ┃ ┣ 📂static
  ┃ ┃ ┃ ┗ 📜index.html
- ┃ ┃ ┗ 📜application.properties
+ ┃ ┃ ┗ 📜application.properties 
+ 
+ 📦src
+ ┣ 📂auth
+ ┃ ┗ 📜PrivateRoute.jsx
+ ┣ 📂board
+ ┃ ┣ 📜Board.jsx
+ ┃ ┣ 📜Board.scss
+ ┃ ┣ 📜BoardInfo.jsx
+ ┃ ┣ 📜Destination.jsx
+ ┃ ┣ 📜Destination.scss
+ ┃ ┣ 📜DestinationDetails.jsx
+ ┃ ┗ 📜DestinationDetails.scss
+ ┣ 📂components
+ ┃ ┣ 📜Body.jsx
+ ┃ ┣ 📜Header.jsx
+ ┃ ┣ 📜Header.scss
+ ┃ ┣ 📜Main.jsx
+ ┃ ┗ 📜Main.scss
+ ┣ 📂images
+ ┃ ┣ 📜favIcon.png
+ ┃ ┣ 📜findway.png
+ ┃ ┣ 📜footPrint.png
+ ┃ ┣ 📜homepageIcon.png
+ ┃ ┣ 📜likeIcon.png
+ ┃ ┣ 📜logo.png
+ ┃ ┣ 📜logoImage.png
+ ┃ ┣ 📜logotitle.png
+ ┃ ┣ 📜main.jpg
+ ┃ ┣ 📜noImage.png
+ ┃ ┣ 📜trip1.png
+ ┃ ┗ 📜trip2.png
+ ┣ 📂join
+ ┃ ┣ 📜Join.jsx
+ ┃ ┗ 📜Join.scss
+ ┣ 📂login
+ ┃ ┣ 📂components
+ ┃ ┃ ┣ 📜EmailAuthPage.jsx
+ ┃ ┃ ┣ 📜FindIdPage.jsx
+ ┃ ┃ ┣ 📜PasswordResetPage.jsx
+ ┃ ┃ ┣ 📜UseridInputPage.jsx
+ ┃ ┃ ┗ 📜VerifyCodePage.jsx
+ ┃ ┣ 📂scss
+ ┃ ┃ ┣ 📜EmailAuthPage.scss
+ ┃ ┃ ┣ 📜FindIdPage.scss
+ ┃ ┃ ┣ 📜ForgotPage.scss
+ ┃ ┃ ┣ 📜LoginForm.scss
+ ┃ ┃ ┣ 📜PasswordResetPage.scss
+ ┃ ┃ ┣ 📜UseridInputPage.scss
+ ┃ ┃ ┗ 📜VerifyCodePage.scss
+ ┃ ┣ 📜ForgotPage.jsx
+ ┃ ┣ 📜LoginForm.jsx
+ ┃ ┣ 📜Logout.jsx
+ ┃ ┗ 📜SocialLoginHandler.jsx
+ ┣ 📂mypage
+ ┃ ┣ 📜Mypage.jsx
+ ┃ ┣ 📜Mypage.scss
+ ┃ ┣ 📜useLikePlanner.js
+ ┃ ┣ 📜useMyPage.js
+ ┃ ┣ 📜useMyPlanner.js
+ ┃ ┗ 📜useProfileImage.js
+ ┣ 📂planner
+ ┃ ┣ 📂makePlanner
+ ┃ ┃ ┣ 📜MakePlanner.jsx
+ ┃ ┃ ┗ 📜MakePlanner.scss
+ ┃ ┣ 📂Map
+ ┃ ┃ ┗ 📜Map.jsx
+ ┃ ┣ 📂PlannerDate
+ ┃ ┃ ┣ 📜PlannerDate.jsx
+ ┃ ┃ ┗ 📜PlannerDate.scss
+ ┃ ┗ 📂SideBar
+ ┃ ┃ ┣ 📜SideBar.jsx
+ ┃ ┃ ┗ 📜SideBar.scss
+ ┣ 📂public
+ ┃ ┣ 📜public.css
+ ┃ ┗ 📜reset.css
+ ┣ 📂tourist
+ ┃ ┣ 📂jsonFile
+ ┃ ┃ ┗ 📜tourist.json
+ ┃ ┣ 📜Tourist.jsx
+ ┃ ┣ 📜Tourist.scss
+ ┃ ┣ 📜TouristInfo.jsx
+ ┃ ┣ 📜TouristInfo.scss
+ ┃ ┣ 📜TravelCourse.jsx
+ ┃ ┣ 📜TravelCourse.scss
+ ┃ ┣ 📜TravelCourseInfo.jsx
+ ┃ ┗ 📜TravelCourseInfo.scss
+ ┣ 📜App.css
+ ┣ 📜App.js
+ ┣ 📜index.js
+ ┗ 📜Mypage.jsx
 ```
-
 [프로젝트 경로(TREE)]
+#
+---
+#
+## ▶️ 주요 END POINT DOC
+
+| URI                           | REQUEST METHOD | DESCRIPTION        |
+|-------------------------------|----------------|--------------------|
+| /user/mypage/userupdate       | PUT            | 회원정보수정       |
+| /user/mypage/upload           | POST           | 이미지업로드       |
+| /user/mypage                  | GET            | 사용자 마이페이지  |
+| /user/mypage/my-planners      | GET            | 내 플래너 조회     |
+| /user/login                   | POST           | 로그인             |
+| /user/logout                  | POST           | 로그아웃           |
+| /user/findId                  | POST           | 아이디 찾기        |
+| /user/reset-password          | POST           | 비밀번호 찾기      |
+| /user/join                    | POST           | 회원가입           |
+| /user/send-auth-code          | POST           | 인증메일 발송      |
+| /tourist-info                 | GET            | 관광지 정보 조회   |
+| /travelcourse-info            | GET            | 여행코스 정보 조회 |
+| /planner/board                | GET            | 여행계획 조회      |
+| /planner/addPlanner           | POST           | 여행계획 생성      |
+| /planner/deletePlanner        | GET            | 여행계획 삭제      |
+| /planner/updatePlanner        | GET            | 여행계획 수정      |
+
+
+---
+
 
 ## ▶️ ERD
-
-
-
-<br/>
+#
 ---
 
 ## ▶️ 유스케이스 다이어그램
-<img src="https://github.com/user-attachments/assets/867a64cf-7683-4def-b324-70242719abd0" height=600 width=1000>
+![uml](https://github.com/user-attachments/assets/867a64cf-7683-4def-b324-70242719abd0)
 <br/>
 ---
 
@@ -280,38 +393,10 @@
 ---
 
 ## ▶️ 시퀀스 다이어그램
-<strong><p>회원가입</p></strong>
-
-
 <br/>
 ---
-
-<br/>
----
-
-## ▶️ 주요 END POINT DOC
-### 회원 서비스
-| URI           | REQUEST METHOD | DESCRIPTION            |
-|---------------|----------------|------------------------|
-| -         | -               | - |
-
----
-<br/>
-
-
-
-<br/>
-
-### 게시판 서비스
-| URI                | REQUEST METHOD | DESCRIPTION                  |
-|--------------------|----------------|------------------------------|
-| -      | -                | - |
-
----
-<br/>
 
 ## 10. 프로젝트 후기
 
 
 <hr>
-
