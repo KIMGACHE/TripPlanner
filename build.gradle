@@ -71,6 +71,8 @@ dependencies {
 	// springdoc-openapi
 	implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
 
+	implementation group: 'com.github.librepdf', name: 'openpdf', version: '1.3.30'
+
 }
 
 tasks.named('test') {
