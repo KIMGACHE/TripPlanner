@@ -47,15 +47,6 @@
 | [<img src="https://github.com/user-attachments/assets/3c371afc-b1b1-40f5-9290-4bab8e021b70" height=150 width=150> <br/> @yeon1615](https://github.com/yeon1615) | [<img src="https://github.com/user-attachments/assets/2df8160f-5168-47cc-9e1e-58373618cab3" height=150 width=150> <br/> @qkreogo1](https://github.com/Cheorizzang) | [<img src="https://github.com/user-attachments/assets/4eb6b4cd-3def-46df-a1ae-da0ab408428b" height=150 width=150> <br/> @heejiyang](https://github.com/heejiyang) | [<img src="https://github.com/user-attachments/assets/4725d2ff-8736-4dee-87cf-45edccffa656" height=150 width=150> <br/> @journey-ji](https://github.com/journey-ji) |
 
 </div>
-<br/>
-<hr>
-
-### 개발 기간
-
-- 전체 개발 기간 : 2024-12-06 ~ 2025-01-09
-- 기능 구현 : 2024-12-06 ~ 2025-01-02
-- UI 구현 : 2025-01-03 ~ 2025-01-09
-
 
 
 ## 4. 역할 분담
@@ -109,8 +100,8 @@
 |Repository Hosting|GitHub|
 |Testing Framework|JUnit5|
 |Security|Spring Security|
-|협업 툴|Notion,Discord|
-|디자인|Figma|
+|협업 툴||Notion,Discord|
+|디자인||Figma|
 <br/>
 
 ## ▶️ 사용 API
@@ -272,10 +263,14 @@
 [프로젝트 경로(TREE)]
 
 ## ▶️ ERD
+
+
+
 <br/>
 ---
 
 ## ▶️ 유스케이스 다이어그램
+<img src="https://github.com/user-attachments/assets/867a64cf-7683-4def-b324-70242719abd0" height=600 width=1000>
 <br/>
 ---
 
@@ -286,11 +281,10 @@
 ## ▶️ 시퀀스 다이어그램
 <strong><p>회원가입</p></strong>
 
+
 <br/>
 ---
 
-
-<strong><p>비밀번호 찾기</p></strong>
 <br/>
 ---
 
