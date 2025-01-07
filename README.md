@@ -1,19 +1,20 @@
-나의 여행파트너, TripPlanner
-=
+![header](https://capsule-render.vercel.app/api?type=rect&color=a2d2ff&height=200&section=header&text=나의&nbsp;여행파트너,&nbsp;여행가자&fontSize=40&fontColor=000814&animation=scaleIn&fontAlignY=50&fontAlign=35)
+
 
 ![개요](https://github.com/user-attachments/assets/0258e317-46b3-4885-a891-70b8bc2ed92f)
 
+---
 
-<h1>시작하기</h1>
-<br>
+# 시작하기
+#
 
 ## 프로젝트 소개
 
-- 여행가자 는 여행을 갈 때 계획을 생성할 때, 다른 사람들의 정보를 참고해 나만의 여행계획을 만들 수 있게 하는 국내여행 웹사이트입니다.
+
+- **여행가자** 는 여행을 갈 때 계획을 생성할 때, 다른 사람들의 정보를 참고해 나만의 여행계획을 만들 수 있게 하는 국내여행 웹사이트입니다.
 - 이용자는 여행계획을 만들 수 있는데, 이 때 식당,특정 명소,숙소 등을 자세하게 기록하여 계획을 만들 수 있습니다.
 - 검색을 통해 내가 가보지 않았던 가게나 장소들의 정보들을 확인할 수 있습니다.
 - 좋아요 기능을 통해 관심목록을 등록하여, 마이페이지에 관심목록을 만들 수 있습니다.
-
 <br>
 
 ## ▶️ 개발 동기 및 주요기능
