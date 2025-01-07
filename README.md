@@ -263,10 +263,14 @@
 [프로젝트 경로(TREE)]
 
 ## ▶️ ERD
+
+
+
 <br/>
 ---
 
 ## ▶️ 유스케이스 다이어그램
+<img src="https://github.com/user-attachments/assets/867a64cf-7683-4def-b324-70242719abd0" height=600 width=1000>
 <br/>
 ---
 
