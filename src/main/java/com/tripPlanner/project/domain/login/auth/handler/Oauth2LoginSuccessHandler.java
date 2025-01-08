@@ -48,15 +48,15 @@ public class Oauth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         response.setHeader("userid",userid);
 
         //redis 리프레시 토큰 저장
-        long expiration = 2 * 24 * 60 * 60 * 1000; // 2일
+        long expiration = 7 * 24 * 60 * 60 * 1000; // 2일
         TokenEntity tokenEntity = new TokenEntity(userid, jwtToken.getRefreshToken(),expiration);
-        jwtTokenProvider.saveRefreshToken(tokenEntity,false);
+        jwtTokenProvider.saveRefreshToken(tokenEntity,true);
         log.info("oauth2 저장된 토큰 엔티티 : {}",tokenEntity);
 
         //쿠키 저장
         authService.setTokenCookies(response,jwtToken.getAccessToken());
 
-        response.sendRedirect("http://localhost:3000");
+        response.sendRedirect("http://localhost:3000/oauth2/success?userid=" + userid);
         log.info("리액트 홈페이지 이동");
 
         log.info("JWT 토큰 생성 및 반환 완료: {}" , jwtToken);

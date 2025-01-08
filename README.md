@@ -1,40 +1,90 @@
-WEB PROJECT PLANING
+나의 여행파트너, TripPlanner
 =
 
-## ▶️ 배포 사이트
+![개요](https://github.com/user-attachments/assets/0258e317-46b3-4885-a891-70b8bc2ed92f)
 
-</br>
+
+<h1>시작하기</h1>
+<br>
+
+## 프로젝트 소개
+
+- 여행가자 는 여행을 갈 때 계획을 생성할 때, 다른 사람들의 정보를 참고해 나만의 여행계획을 만들 수 있게 하는 국내여행 웹사이트입니다.
+- 이용자는 여행계획을 만들 수 있는데, 이 때 식당,특정 명소,숙소 등을 자세하게 기록하여 계획을 만들 수 있습니다.
+- 검색을 통해 내가 가보지 않았던 가게나 장소들의 정보들을 확인할 수 있습니다.
+- 좋아요 기능을 통해 관심목록을 등록하여, 마이페이지에 관심목록을 만들 수 있습니다.
+
+<br>
+
+## ▶️ 개발 동기 및 주요기능
+일에 지치고 사람들에게 치이는 현대인들을 위해 빠르고 간편하게 여행을 계획 할 수 있도록 여행가자를 개발하게 되었습니다.
+
+- 본인만의 여행 계획을 만들자 <br>
+  여행가자에서는 본인만의 여행 플래너를 계획할 수 있습니다.<br>
+  여행할 지역의 식당, 숙소, 관광지를 검색하여 플래너에 담을 수 있습니다.<br>
+  N일차 별로 여행 루트를 확인할 수 있고 어느정도 거리가 있는지 확인할 수 있습니다.<br>
+- 마음에 드는 여행 계획을 가져와 자신만의 계획을 세우자<br>
+  다른 사람들의 여행 플래너를 찾아보다 마음에 드는 여행 플래너를 찾았다면 해당 플래너를 가져와 본인만의 플래너로 커스텀할 수 있습니다. <br>
+- 어디로 가야할지 모르겠다면 관광지를 참고하자<br>
+  어느 지역에 무엇을 보러 가야할 지 모르겠다면 카테고리별, 지역별, 키워드별로 관광지를 검색하여 플래너를 계획하는데 참고할 수 있습니다. <br>
+- 계획을 세우기 어렵다면 여행 코스를 참고하자 <br>
+  어떤 식으로 플래너를 계획해야할 지 모르겠다면 지역별, 태그별, 키워드별로 관광 코스를 검색하여 플래너를 계획하는데 참고할 수 있습니다. <br>
+
+  
+여행을 가게 된다면 , 사람들은 여행 계획을 만든다.<br>
+하지만 계획을 만드는데 익숙하지 않은 사람은 계획을 세우는데 애를 먹는다.<br>
+그 때 다른사람들이 만든 계획을 참고해서 나만의 여행계획을 만들면 어떨까?<br>
+하는 생각에 이 프로젝트를 시작하게 되었습니다.
+<br>
+<br>
+
+## 팀원 구성
+
+<div align="center">
+
+| **김병관** | **박대해** | **이영훈** | **진찬민** |
+| :------: |  :------: | :------: | :------: |
+| [<img src="https://github.com/user-attachments/assets/3c371afc-b1b1-40f5-9290-4bab8e021b70" height=150 width=150> <br/> @yeon1615](https://github.com/yeon1615) | [<img src="https://github.com/user-attachments/assets/2df8160f-5168-47cc-9e1e-58373618cab3" height=150 width=150> <br/> @qkreogo1](https://github.com/Cheorizzang) | [<img src="https://github.com/user-attachments/assets/4eb6b4cd-3def-46df-a1ae-da0ab408428b" height=150 width=150> <br/> @heejiyang](https://github.com/heejiyang) | [<img src="https://github.com/user-attachments/assets/4725d2ff-8736-4dee-87cf-45edccffa656" height=150 width=150> <br/> @journey-ji](https://github.com/journey-ji) |
+
+</div>
+
+<h1>시작하기</h1>
+<br>
+
+## 프로젝트 소개
+
+- 여행가자 는 여행을 갈 때 계획을 생성할 때, 다른 사람들의 정보를 참고해 나만의 여행계획을 만들 수 있게 하는 국내여행 웹사이트입니다.
+- 이용자는 여행계획을 만들 수 있는데, 이 때 식당,특정 명소,숙소 등을 자세하게 기록하여 계획을 만들 수 있습니다.
+- 검색을 통해 내가 가보지 않았던 가게나 장소들의 정보들을 확인할 수 있습니다.
+- 좋아요 기능을 통해 관심목록을 등록하여, 마이페이지에 관심목록을 만들 수 있습니다.
+
+<br>
 
 ## ▶️ 개발 동기
-<strong>
-    <p> 개발동기 적기 </p>
- 
-</strong>
+
+여행을 가게 된다면 , 사람들은 여행 계획을 만든다.<br>
+하지만 계획을 만드는데 익숙하지 않은 사람은 계획을 세우는데 애를 먹는다.<br>
+그 때 다른사람들이 만든 계획을 참고해서 나만의 여행계획을 만들면 어떨까?<br>
+하는 생각에 이 프로젝트를 시작하게 되었습니다.
+<br>
+<br>
+
+## 팀원 구성
+
+<div align="center">
+
+| **김병관** | **박대해** | **이영훈** | **진찬민** |
+| :------: |  :------: | :------: | :------: |
+| [<img src="https://github.com/user-attachments/assets/3c371afc-b1b1-40f5-9290-4bab8e021b70" height=150 width=150> <br/> @yeon1615](https://github.com/yeon1615) | [<img src="https://github.com/user-attachments/assets/2df8160f-5168-47cc-9e1e-58373618cab3" height=150 width=150> <br/> @qkreogo1](https://github.com/Cheorizzang) | [<img src="https://github.com/user-attachments/assets/4eb6b4cd-3def-46df-a1ae-da0ab408428b" height=150 width=150> <br/> @heejiyang](https://github.com/heejiyang) | [<img src="https://github.com/user-attachments/assets/4725d2ff-8736-4dee-87cf-45edccffa656" height=150 width=150> <br/> @journey-ji](https://github.com/journey-ji) |
+
+</div>
 <br/>
 
-## ▶️ 개발 목표
-<strong>
-    <p>TripPlanner 웹 서비스 구축 및 배포</p>
-</strong>
-<br/>
+### 개발 기간
 
-## ▶️ 참가 인원 
-|NAME|ROLE|GITHUB_LINK|
-|------|---|---|
-|김병관|조장-BACKEND|-|
-|이영훈|조원-BACKEND|-|
-|박대해|조원-BACKEND|-|
-|진찬민|조원-BACKEND|-|
-<br/>
-
-## ▶️ 개발 일정
-|PLAN|일정|DESCRIPTION|
-|---------------|----------------|------------------------|
-|주제 선정 <br/> 요구사항 분석 <br/> 기술스택 결정 <br/> 개발환경 구축|-|작업중| 
-|기본 구조 설계 <br/> 백엔드 개발|-|작업중| 
-|프론트엔드 및 백엔드 개발|-|작업중| 
-|테스트 및 유지보수|-|작업중| 
-<br/>
+- 전체 개발 기간 : 2024-12-06 ~ 2025-01-09
+- 기능 구현 : 2024-12-06 ~ 2025-01-02
+- UI 구현 : 2025-01-03 ~ 2025-01-09
 
 ## ▶️ 역할
 |조원|주역할|보조역할|
@@ -42,16 +92,63 @@ WEB PROJECT PLANING
 |공통|요구사항분석 및 시스템 설계|-| 
 |김병관|-|-| 
 |이영훈|-|-| 
-|박대해|-|-| 
+|박대해|로그인 기능 및 시큐리티 전반 담당|메인페이지 디자인 작업보조| 
 |진찬민|-|-| 
 <br/>
+<hr>
+
+### 개발 기간
+
+- 전체 개발 기간 : 2024-12-06 ~ 2025-01-09
+- 기능 구현 : 2024-12-06 ~ 2025-01-02
+- UI 구현 : 2025-01-03 ~ 2025-01-09
+
+
+
+## 4. 역할 분담
+
+### 🍊김병관
+
+- **주역할**
+    - 플래너 생성,수정,삭제,가져오기 기능 담당
+- **보조역할**
+    - 플래너 생성페이지 디자인
+
+<br>
+    
+### 👻박대해
+
+- **주역할**
+    - 로그인 기능 및 시큐리티 전반 담당
+- **보조역할**
+    - 메인페이지 디자인 작업보조
+
+<br>
+
+### 😎이영훈
+
+- **주역할**
+    - 여행 계획 게시판, 관광지 리스트, 관광지 코스 리스트, 각각의 자세히 보기 페이지 
+- **보조역할**
+    - 메인, 헤더, 전반적인 디자인
+
+<br>
+
+### 🐬진찬민
+
+- **주역할**
+    - ㅂㅂ 
+- **보조역할**
+    - ㅂㅂ
+    
+<br>
 
 ## ▶️ 개발 환경
 |-|개발 환경|
 |---------------|----------------|
-|IDE|IntelliJ Idea|
+|IDE|IntelliJ Idea , VSCode|
 |JDK|JDK 21|
-|SpringBoot Version|3.2.5|
+|SpringBoot Version|3.4.0|
 |Build Tool|gradle|
 |DBMS|MariaDB|
 |Connection Pool|HikariCP|
@@ -59,6 +156,8 @@ WEB PROJECT PLANING
 |Repository Hosting|GitHub|
 |Testing Framework|JUnit5|
 |Security|Spring Security|
+|협업 툴||Notion,Discord|
+|디자인||Figma|
 <br/>
 
 ## ▶️ 사용 API
@@ -69,11 +168,10 @@ WEB PROJECT PLANING
 <br/>
 
 ## ▶️ SKILLS
-#### BE
+#### BACKEND
 ![JAVA](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=Java&logoColor=white)
 ![SpringBoot](https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
 ![SpringSecurity](https://img.shields.io/badge/springsecurity-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)
-![thymeleaf](https://img.shields.io/badge/thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white)
 ---
 
 #### FE
@@ -81,7 +179,6 @@ WEB PROJECT PLANING
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=Axios&logoColor=white)
-![BootStrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
 ---
 
 #### DATABASE
@@ -97,13 +194,129 @@ WEB PROJECT PLANING
 ![jenkins](https://img.shields.io/badge/jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white)
 <br/>
 
-## ▶️ 주요 기능
-|서비스|주요 기능|
-|---------------|----------------|
-| -|<ul><li>-</li><li>-</li></ul>|
 
-<br/>
+📃: File Tree
+---
 
+```
+📦src
+ ┣ 📂main
+ ┃ ┣ 📂generated
+ ┃ ┣ 📂java
+ ┃ ┃ ┗ 📂com
+ ┃ ┃ ┃ ┗ 📂tripPlanner
+ ┃ ┃ ┃ ┃ ┗ 📂project
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂commons    - 공통적으로 사용하는 파일들
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂config
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜PasswordConfig.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜RedisConfig.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂entity
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜Destination.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜DestinationID.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜Planner.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜CookieController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜HomeController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜SecurityConfig.java
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂domain    - 각 역할에 따라 폴더를 나눠서 파일을 생성
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂board    
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜BoardController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜BoardDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜BoardRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜BoardService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂destination
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜DestinationController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜Like.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜LikeRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜LikeRequest.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜LikeService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜LikeStatusResponse.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂login    - 로그인 기능이 있는 파일
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂auth
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂handler
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜CustomLogoutHandler.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜Oauth2LoginSuccessHandler.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂jwt
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JwtAuthenticationFilter.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜JwtTokenProvider.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜PrincipalDetail.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜LoginController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜JwtToken.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜LoginRequest.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜LoginResponse.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂entity
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜TokenEntity.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜TokenRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂service
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜AuthService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜CustomOAuth2UserService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜LoginService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜PrincipalDetailService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜GlobalExceptionHandler.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂makePlanner    - 여행 계획을 생성하는 부분
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MainController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜AccomDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜DestinationDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FoodDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MapDataDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MapDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜PlannerDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂entity
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜Accom.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜Destination.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜DestinationID.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜Food.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜Planner.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜AccomRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜DestinationRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FoodRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜PlannerRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂service
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜AccomService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜DestinationService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜FoodService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜PlaceApiService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜PlannerApiService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜PlannerService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂Mypage    - 마이페이지
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂config
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WebConfig.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MypageController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂entity
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜UpdateUserRequest.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂Service
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MypageService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂signin
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜UserController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜UserDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂entity
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜UserEntity.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜PlannerRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜UserRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂service
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜UserService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜UploadProperties.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂tourist
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜ApiController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜ApiRequest.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜ApiService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WebClientConfig.java
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜ProjectApplication.java
+ ┃ ┗ 📂resources
+ ┃ ┃ ┣ 📂static
+ ┃ ┃ ┃ ┗ 📜index.html
+ ┃ ┃ ┗ 📜application.properties
+```
+
+[프로젝트 경로(TREE)]
 
 ## ▶️ ERD
 <br/>
@@ -123,9 +336,6 @@ WEB PROJECT PLANING
 <br/>
 ---
 
-<strong><p>상품구매</p></strong>
-<br/>
----
 
 <strong><p>비밀번호 찾기</p></strong>
 <br/>
@@ -141,12 +351,7 @@ WEB PROJECT PLANING
 <br/>
 
 
-### 상품 서비스
-| URI           | REQUEST METHOD | DESCRIPTION            |
-|---------------|----------------|------------------------|
-| - | -        | - | 
 
----
 <br/>
 
 ### 게시판 서비스
@@ -157,33 +362,8 @@ WEB PROJECT PLANING
 ---
 <br/>
 
-
-### 장바구니 서비스
-| URI           | REQUEST METHOD | DESCRIPTION            |
-|---------------|----------------|------------------------|
-|-        |-              | -|
-
----
-<br/>
+## 10. 프로젝트 후기
 
 
-### 주문/결제 서비스
-| URI           | REQUEST METHOD | DESCRIPTION            |
-|---------------|----------------|------------------------|
-|-         | -             | -|
+<hr>
 
----
-<br/>
-
-### 배송지 서비스
-| URI                | REQUEST METHOD | DESCRIPTION                  |
-|--------------------|----------------|------------------------------|
-|-       | -           | - |
-
----
-<br/>
-
-📃: File Tree
----
-```
-[프로젝트 경로(TREE)]
