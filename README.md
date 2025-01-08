@@ -111,7 +111,7 @@
 |Oauth2 로그인|구글|[링크](https://developers.google.com/identity/protocols/oauth2?hl=ko)|
 |Oauth2 로그인|네이버|[링크](https://developers.naver.com/docs/login/api/api.md)|
 |Oauth2 로그인|카카오|[링크](https://developers.kakao.com/docs/latest/ko/kakaologin/rest-api)|
-|관광지,관광코스|-|[링크](https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15101578)|
+|관광지,관광코스|공공데이터포털|[링크](https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15101578)|
 
 <br/>
 
