@@ -384,7 +384,7 @@
 ---
 
 ## ▶️ 유스케이스 다이어그램
-![uml](https://github.com/user-attachments/assets/867a64cf-7683-4def-b324-70242719abd0)
+![uml](https://github.com/user-attachments/assets/8e984fba-1fe3-4c18-9c55-b15d1c36361f)
 <br/>
 ---
 
