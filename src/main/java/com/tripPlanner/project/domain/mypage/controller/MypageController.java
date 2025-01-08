@@ -297,6 +297,27 @@ public class MypageController {
 
 
     // LikeContorller
+//    @GetMapping("/{userid}/liked-planners")
+//    public ResponseEntity<?> getLikedPlanners(@PathVariable String userid) {
+//        Optional<UserEntity> userOptional = userRepository.findById(userid);
+//        if (userOptional.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
+//        }
+//
+//        UserEntity user = userOptional.get();
+//        List<LikeDto> likedPlanners = user.getLikes().stream()
+//                .map(like -> new LikeDto(
+//                        (long) like.getPlannerId().getPlannerID(),
+//                        like.getPlannerId().getPlannerTitle(),
+//                        like.getPlannerId().getArea(),
+//                        like.getPlannerId().getDay(),
+//                        like.getPlannerId().getDescription(),
+//                        like.getPlannerId().getCreateAt()
+//                ))
+//                .collect(Collectors.toList());
+//
+//        return ResponseEntity.ok(likedPlanners);
+//    }
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/{userid}/liked-planners")
     public ResponseEntity<?> getLikedPlanners(@PathVariable(name = "userid") String userid) {
@@ -317,17 +338,19 @@ public class MypageController {
         // Like 데이터를 DTO로 변환
         List<LikeDto> likedPlanners = user.getLikes().stream()
                 .map(like -> new LikeDto(
+//                        (long) like.getPlannerId().getPlannerID(),
                         like.getId(),
+                        like.getPlannerId().getPlannerID(),
                         like.getPlannerId().getPlannerTitle(),
                         like.getPlannerId().getArea(),
                         like.getPlannerId().getDay(),
                         like.getPlannerId().getDescription(),
-                        like.getCreatedAt()
+                        like.getPlannerId().getCreateAt()
                 ))
                 .collect(Collectors.toList());
 
         log.info("좋아요한 플래너  : {}", likedPlanners.isEmpty());
-
+        log.info("likedPlanners: {}", likedPlanners);
         return ResponseEntity.ok(likedPlanners);
     }
 
