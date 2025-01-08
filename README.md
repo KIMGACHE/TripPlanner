@@ -376,6 +376,17 @@
 
 
 ---
+# 주요 의존성 목록
+- 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'   # JPA
+- 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'   # 레디스
+- 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'    # 소셜로그인
+- 	compileOnly 'org.projectlombok:lombok'  #lombok
+- 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client' # MariaDB
+- 	testImplementation 'org.mockito:mockito-core'  # Mockito
+- 	implementation 'org.springframework.boot:spring-boot-starter-webflux'   
+- 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.0.5'# JavaMailSender
+-	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'  #  JWT
+-	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.1'    # SWAGGER
 
 
 ## ▶️ ERD
