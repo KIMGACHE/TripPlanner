@@ -380,7 +380,7 @@
 
 
 ## ▶️ ERD
-#
+![erd](https://github.com/user-attachments/assets/6c0391f9-3d98-4623-8a1d-fb510746a925)
 ---
 
 ## ▶️ 유스케이스 다이어그램
