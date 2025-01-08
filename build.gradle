@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.2.1'
+	id 'org.springframework.boot' version '3.4.0'
 	id 'io.spring.dependency-management' version '1.1.6'
 }
 
@@ -66,17 +66,8 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-<<<<<<< HEAD
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'	//Swagger
-=======
-//	 Swagger
-//	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
-	// springdoc-openapi
-	implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
 
-	implementation group: 'com.github.librepdf', name: 'openpdf', version: '1.3.30'
-
->>>>>>> 50c1df247ffdfe2d5b5873e2b86d7929b659f413
 }
 
 tasks.named('test') {
