@@ -121,6 +121,28 @@ public class ApiController {
         return null;
     }
 
+
+    // 코스 자세히 보기에서 몇박몇일 코스인지 정보 가져오기 위함
+    @PostMapping("travelcourse-info-detailIntro")
+    public Mono<String> getTravelCourseDetailIntro(@RequestBody String contentId) {
+        String contentTypeId = "25";
+        // title이 object형태로 받아와지기 때문에 문자열로 변환
+        try {
+            // ObjectMapper로 JSON 파싱
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(contentId);
+            contentId = jsonNode.get("contentId").asText();
+
+            System.out.println("title : " + contentId);
+
+            return apiService.getDetailIntro(contentId, contentTypeId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Mono.error(new RuntimeException("Error parsing request body", e));
+        }
+
+    }
+
     // 관광지 코스 상세페이지
     @PostMapping("/travelcourse-info-detailCommon")
     public Mono<String> getTravelCourseCommons(@RequestBody ApiRequest apiRequest) {
