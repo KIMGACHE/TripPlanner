@@ -44,8 +44,7 @@
 
 | **김병관** | **박대해** | **이영훈** | **진찬민** |
 | :------: |  :------: | :------: | :------: |
-| [<img src="https://github.com/user-attachments/assets/af0d5eb4-895e-4b20-9454-ca2f1c3a38a5" height=150 width=150> <br/> @KIMGACHE](https://github.com/KIMGACHE) | [<img src="https://github.com/user-attachments/assets/2df8160f-5168-47cc-9e1e-58373618cab3" height=150 width=150> <br/> @Dh_park](https://github.com/GotChun) | [<img src="https://github.com/user-attachments/assets/26d9bafc-1819-42e2-ad1d-179ac08d6f3e" height=150 width=150> <br/> @Maze-o](https://github.com/Maze-o) |
-[<img src="https://github.com/user-attachments/assets/8fd65434-e420-4960-aa76-8c2427bf7278" height=150 width=150> <br/> @CoMong](https://github.com/wlscksals) |
+| [<img src="https://github.com/user-attachments/assets/af0d5eb4-895e-4b20-9454-ca2f1c3a38a5" height=150 width=150> <br/> @KIMGACHE](https://github.com/KIMGACHE) | [<img src="https://github.com/user-attachments/assets/2df8160f-5168-47cc-9e1e-58373618cab3" height=150 width=150> <br/> @Dh_park](https://github.com/GotChun) | [<img src="https://github.com/user-attachments/assets/26d9bafc-1819-42e2-ad1d-179ac08d6f3e" height=150 width=150> <br/> @Maze-o](https://github.com/Maze-o) |[<img src="https://github.com/user-attachments/assets/8fd65434-e420-4960-aa76-8c2427bf7278" height=150 width=150> <br/> @CoMong](https://github.com/wlscksals) |
 
 </div>
 
