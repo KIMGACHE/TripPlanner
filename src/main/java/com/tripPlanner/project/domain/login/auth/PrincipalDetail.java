@@ -72,4 +72,6 @@ public class PrincipalDetail implements UserDetails, OAuth2User {
     }
 
 
+    public UserEntity getUserEntity() { return this.getUserEntity();
+    }
 }

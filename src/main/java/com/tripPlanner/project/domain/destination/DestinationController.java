@@ -1,11 +1,12 @@
 package com.tripPlanner.project.domain.destination;
 
 import com.tripPlanner.project.domain.login.auth.PrincipalDetail;
-import com.tripPlanner.project.domain.login.service.PrincipalDetailService;
 import com.tripPlanner.project.domain.makePlanner.dto.DestinationDto;
 import com.tripPlanner.project.domain.makePlanner.entity.Destination;
+import com.tripPlanner.project.domain.makePlanner.entity.Planner;
 import com.tripPlanner.project.domain.makePlanner.repository.DestinationRepository;
 import com.tripPlanner.project.domain.makePlanner.service.DestinationService;
+import com.tripPlanner.project.domain.signin.entity.UserEntity;
 import com.tripPlanner.project.domain.tourist.ApiRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -38,13 +39,15 @@ public class DestinationController {
     // 좋아요 상태 및 카운트 조회
     @GetMapping("/planner/board/likeStatus")
     public ResponseEntity<LikeStatusResponse> getLikeStatus(
-            @RequestParam(name = "plannerID") Long plannerID,
+            @RequestParam(name = "plannerID") Planner plannerID,
             @AuthenticationPrincipal PrincipalDetail userDetails
     ) {
         System.out.println("ㅎㅇ");
         System.out.println("plannerID : " + plannerID);
-        String userId = userDetails.getName();
+        // UserEntity로 변경
+        UserEntity userId = userDetails.getUserEntity();
         System.out.println("userID : " + userId);
+
         LikeStatusResponse response = likeService.getLikeStatus(plannerID, userId);
         return ResponseEntity.ok(response);
     }
@@ -55,7 +58,7 @@ public class DestinationController {
             @RequestBody LikeRequest likeRequest,
             @AuthenticationPrincipal PrincipalDetail userDetails
     ) {
-        String userId = userDetails.getName();
+        UserEntity userId = userDetails.getUserEntity();
         System.out.println("userID : " + userId);
         LikeStatusResponse response = likeService.toggleLike(likeRequest.getPlannerID(), userId);
         return ResponseEntity.ok(response);

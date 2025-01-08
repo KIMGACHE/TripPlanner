@@ -1,8 +1,11 @@
 package com.tripPlanner.project.domain.Mypage.Service;
 
 import com.tripPlanner.project.domain.Mypage.entity.UpdateUserRequest;
+import com.tripPlanner.project.domain.destination.Like;
+import com.tripPlanner.project.domain.destination.LikeRepository;
 import com.tripPlanner.project.domain.makePlanner.dto.PlannerDto;
 import com.tripPlanner.project.domain.makePlanner.repository.PlannerRepository;
+import com.tripPlanner.project.domain.signin.entity.UserEntity;
 import com.tripPlanner.project.domain.signin.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,5 +96,16 @@ public class MypageService {
                         .updateAt(planner.getUpdateAt())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    //Like Service
+    @Autowired
+    private LikeRepository likeRepository;
+
+
+    public List<Like> getLikedPlanners(String userId) {
+        UserEntity user = userRepository.findByUserid(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+        return likeRepository.findByUserId(user);
     }
 }

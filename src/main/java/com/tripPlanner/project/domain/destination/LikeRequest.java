@@ -1,5 +1,6 @@
 package com.tripPlanner.project.domain.destination;
 
+import com.tripPlanner.project.domain.makePlanner.entity.Planner;
 import lombok.*;
 
 @Getter
@@ -8,5 +9,5 @@ import lombok.*;
 @AllArgsConstructor
 
 public class LikeRequest {
-    private Long plannerID;
+    private Planner plannerID;
 }
