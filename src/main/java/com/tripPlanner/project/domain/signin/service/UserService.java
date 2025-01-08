@@ -1,8 +1,11 @@
 package com.tripPlanner.project.domain.signin.service;
 
 
+import com.tripPlanner.project.domain.destination.Like;
+import com.tripPlanner.project.domain.destination.LikeRepository;
 import com.tripPlanner.project.domain.login.auth.jwt.JwtTokenProvider;
 
+import com.tripPlanner.project.domain.makePlanner.dto.PlannerDto;
 import com.tripPlanner.project.domain.signin.UploadProperties;
 import com.tripPlanner.project.domain.signin.dto.UserDto;
 import com.tripPlanner.project.domain.signin.entity.UserEntity;
@@ -23,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -206,7 +210,7 @@ public class UserService {
 
 
 
-    //Mypage
+
     public Map<String, Object> getMyPageData(String userId) {
         // 사용자 정보 가져오기
         UserEntity user = userRepository.findById(userId)
@@ -219,6 +223,9 @@ public class UserService {
 
         return userData;
     }
+
+
+
 
 
 }
