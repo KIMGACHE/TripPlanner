@@ -108,7 +108,10 @@
 ## ▶️ 사용 API
 |용도|제공|API 문서|
 |---------------|----------------|------------------------|
-|-|-|[링크](링크 복붙하기)|
+|Oauth2 로그인|구글|[링크](https://developers.google.com/identity/protocols/oauth2?hl=ko)|
+|Oauth2 로그인|네이버|[링크](https://developers.naver.com/docs/login/api/api.md)|
+|Oauth2 로그인|카카오|[링크](https://developers.kakao.com/docs/latest/ko/kakaologin/rest-api)|
+|-|-|
 
 <br/>
 
