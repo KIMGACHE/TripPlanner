@@ -101,7 +101,7 @@ public class PlaceApiService {
 
 
     // 검색어에 맞춰 데이터를 가져오는 함수 (관광지 코스)
-    public Mono<String> getSearchKeyword(String keyword, String pageNo, String arrange, String contentTypeId) {
+    public Mono<String> getSearchKeyword(String keyword, String pageNo, String arrange, String contentTypeId, String areaCode) {
 //        System.out.println("service의 getSearchKeyword함수 Keyword : " + keyword);
         // URL을 수동으로 구성
         String url = "https://apis.data.go.kr/B551011/KorService1/searchKeyword1"
@@ -109,6 +109,7 @@ public class PlaceApiService {
                 + "&numOfRows=10"
                 + "&MobileApp=AppTest"
                 + "&MobileOS=ETC"
+                + "&areaCode=" + areaCode
                 + "&arrange=" + arrange
                 + "&contentTypeId=" + contentTypeId
                 + "&keyword=" + keyword

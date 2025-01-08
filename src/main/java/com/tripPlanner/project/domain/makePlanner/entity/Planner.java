@@ -1,5 +1,7 @@
 package com.tripPlanner.project.domain.makePlanner.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tripPlanner.project.domain.board.BoardDto;
 import com.tripPlanner.project.domain.destination.Like;
 import com.tripPlanner.project.domain.makePlanner.dto.PlannerDto;
@@ -26,8 +28,8 @@ public class Planner {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid", nullable = false)
-
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonManagedReference // UserEntity와의 순환 참조 방지
     private UserEntity user;
 
     @Column(name = "plannerTitle", nullable = false)
@@ -51,7 +53,9 @@ public class Planner {
     @Column(name = "area", nullable = false)
     private String area;
 
-    @OneToMany(mappedBy = "plannerId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "plannerId", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonBackReference // Like와의 순환 참조 방지
     private List<Like> likes = new ArrayList<>();
 
     public PlannerDto toDto(Planner planner,String thumbnailImage) {
@@ -83,4 +87,7 @@ public class Planner {
                 this.isPublic
         );
     }
+
+
+
 }

@@ -1,19 +1,19 @@
-나의 여행파트너, TripPlanner
-=
+![header](https://capsule-render.vercel.app/api?type=rect&color=a2d2ff&height=200&section=header&text=나의&nbsp;여행파트너,&nbsp;여행가자&fontSize=40&fontColor=000814&animation=scaleIn&fontAlignY=50&fontAlign=35)
+
 
 ![개요](https://github.com/user-attachments/assets/0258e317-46b3-4885-a891-70b8bc2ed92f)
 
+---
 
-<h1>시작하기</h1>
-<br>
+# 시작하기
 
 ## 프로젝트 소개
 
-- 여행가자 는 여행을 갈 때 계획을 생성할 때, 다른 사람들의 정보를 참고해 나만의 여행계획을 만들 수 있게 하는 국내여행 웹사이트입니다.
+
+- **여행가자** 는 여행을 갈 때 계획을 생성할 때, 다른 사람들의 정보를 참고해 나만의 여행계획을 만들 수 있게 하는 국내여행 웹사이트입니다.
 - 이용자는 여행계획을 만들 수 있는데, 이 때 식당,특정 명소,숙소 등을 자세하게 기록하여 계획을 만들 수 있습니다.
 - 검색을 통해 내가 가보지 않았던 가게나 장소들의 정보들을 확인할 수 있습니다.
 - 좋아요 기능을 통해 관심목록을 등록하여, 마이페이지에 관심목록을 만들 수 있습니다.
-
 <br>
 
 ## ▶️ 개발 동기 및 주요기능
@@ -48,61 +48,6 @@
 
 </div>
 
-<h1>시작하기</h1>
-<br>
-
-## 프로젝트 소개
-
-- 여행가자 는 여행을 갈 때 계획을 생성할 때, 다른 사람들의 정보를 참고해 나만의 여행계획을 만들 수 있게 하는 국내여행 웹사이트입니다.
-- 이용자는 여행계획을 만들 수 있는데, 이 때 식당,특정 명소,숙소 등을 자세하게 기록하여 계획을 만들 수 있습니다.
-- 검색을 통해 내가 가보지 않았던 가게나 장소들의 정보들을 확인할 수 있습니다.
-- 좋아요 기능을 통해 관심목록을 등록하여, 마이페이지에 관심목록을 만들 수 있습니다.
-
-<br>
-
-## ▶️ 개발 동기
-
-여행을 가게 된다면 , 사람들은 여행 계획을 만든다.<br>
-하지만 계획을 만드는데 익숙하지 않은 사람은 계획을 세우는데 애를 먹는다.<br>
-그 때 다른사람들이 만든 계획을 참고해서 나만의 여행계획을 만들면 어떨까?<br>
-하는 생각에 이 프로젝트를 시작하게 되었습니다.
-<br>
-<br>
-
-## 팀원 구성
-
-<div align="center">
-
-| **김병관** | **박대해** | **이영훈** | **진찬민** |
-| :------: |  :------: | :------: | :------: |
-| [<img src="https://github.com/user-attachments/assets/3c371afc-b1b1-40f5-9290-4bab8e021b70" height=150 width=150> <br/> @yeon1615](https://github.com/yeon1615) | [<img src="https://github.com/user-attachments/assets/2df8160f-5168-47cc-9e1e-58373618cab3" height=150 width=150> <br/> @qkreogo1](https://github.com/Cheorizzang) | [<img src="https://github.com/user-attachments/assets/4eb6b4cd-3def-46df-a1ae-da0ab408428b" height=150 width=150> <br/> @heejiyang](https://github.com/heejiyang) | [<img src="https://github.com/user-attachments/assets/4725d2ff-8736-4dee-87cf-45edccffa656" height=150 width=150> <br/> @journey-ji](https://github.com/journey-ji) |
-
-</div>
-<br/>
-
-### 개발 기간
-
-- 전체 개발 기간 : 2024-12-06 ~ 2025-01-09
-- 기능 구현 : 2024-12-06 ~ 2025-01-02
-- UI 구현 : 2025-01-03 ~ 2025-01-09
-
-## ▶️ 역할
-|조원|주역할|보조역할|
-|---------------|----------------|------------------------|
-|공통|요구사항분석 및 시스템 설계|-| 
-|김병관|-|-| 
-|이영훈|-|-| 
-|박대해|로그인 기능 및 시큐리티 전반 담당|메인페이지 디자인 작업보조| 
-|진찬민|-|-| 
-<br/>
-<hr>
-
-### 개발 기간
-
-- 전체 개발 기간 : 2024-12-06 ~ 2025-01-09
-- 기능 구현 : 2024-12-06 ~ 2025-01-02
-- UI 구현 : 2025-01-03 ~ 2025-01-09
-
 
 
 ## 4. 역할 분담
@@ -119,7 +64,7 @@
 ### 👻박대해
 
 - **주역할**
-    - 로그인 기능 및 시큐리티 전반 담당
+    - JWT기반 로그인 기능 및 시큐리티 전반 담당
 - **보조역할**
     - 메인페이지 디자인 작업보조
 
@@ -128,9 +73,9 @@
 ### 😎이영훈
 
 - **주역할**
-    - ㅂㅂ
+    - 여행 계획 게시판, 관광지 리스트, 관광지 코스 리스트, 각각의 자세히 보기 페이지 
 - **보조역할**
-    - ㅂㅂ
+    - 메인, 헤더, 전반적인 디자인
 
 <br>
 
@@ -156,8 +101,8 @@
 |Repository Hosting|GitHub|
 |Testing Framework|JUnit5|
 |Security|Spring Security|
-|협업 툴||Notion,Discord|
-|디자인||Figma|
+|협업 툴|Notion,Discord|
+|디자인|Figma|
 <br/>
 
 ## ▶️ 사용 API
@@ -313,16 +258,133 @@
  ┃ ┗ 📂resources
  ┃ ┃ ┣ 📂static
  ┃ ┃ ┃ ┗ 📜index.html
- ┃ ┃ ┗ 📜application.properties
+ ┃ ┃ ┗ 📜application.properties 
+ 
+ 📦src
+ ┣ 📂auth
+ ┃ ┗ 📜PrivateRoute.jsx
+ ┣ 📂board
+ ┃ ┣ 📜Board.jsx
+ ┃ ┣ 📜Board.scss
+ ┃ ┣ 📜BoardInfo.jsx
+ ┃ ┣ 📜Destination.jsx
+ ┃ ┣ 📜Destination.scss
+ ┃ ┣ 📜DestinationDetails.jsx
+ ┃ ┗ 📜DestinationDetails.scss
+ ┣ 📂components
+ ┃ ┣ 📜Body.jsx
+ ┃ ┣ 📜Header.jsx
+ ┃ ┣ 📜Header.scss
+ ┃ ┣ 📜Main.jsx
+ ┃ ┗ 📜Main.scss
+ ┣ 📂images
+ ┃ ┣ 📜favIcon.png
+ ┃ ┣ 📜findway.png
+ ┃ ┣ 📜footPrint.png
+ ┃ ┣ 📜homepageIcon.png
+ ┃ ┣ 📜likeIcon.png
+ ┃ ┣ 📜logo.png
+ ┃ ┣ 📜logoImage.png
+ ┃ ┣ 📜logotitle.png
+ ┃ ┣ 📜main.jpg
+ ┃ ┣ 📜noImage.png
+ ┃ ┣ 📜trip1.png
+ ┃ ┗ 📜trip2.png
+ ┣ 📂join
+ ┃ ┣ 📜Join.jsx
+ ┃ ┗ 📜Join.scss
+ ┣ 📂login
+ ┃ ┣ 📂components
+ ┃ ┃ ┣ 📜EmailAuthPage.jsx
+ ┃ ┃ ┣ 📜FindIdPage.jsx
+ ┃ ┃ ┣ 📜PasswordResetPage.jsx
+ ┃ ┃ ┣ 📜UseridInputPage.jsx
+ ┃ ┃ ┗ 📜VerifyCodePage.jsx
+ ┃ ┣ 📂scss
+ ┃ ┃ ┣ 📜EmailAuthPage.scss
+ ┃ ┃ ┣ 📜FindIdPage.scss
+ ┃ ┃ ┣ 📜ForgotPage.scss
+ ┃ ┃ ┣ 📜LoginForm.scss
+ ┃ ┃ ┣ 📜PasswordResetPage.scss
+ ┃ ┃ ┣ 📜UseridInputPage.scss
+ ┃ ┃ ┗ 📜VerifyCodePage.scss
+ ┃ ┣ 📜ForgotPage.jsx
+ ┃ ┣ 📜LoginForm.jsx
+ ┃ ┣ 📜Logout.jsx
+ ┃ ┗ 📜SocialLoginHandler.jsx
+ ┣ 📂mypage
+ ┃ ┣ 📜Mypage.jsx
+ ┃ ┣ 📜Mypage.scss
+ ┃ ┣ 📜useLikePlanner.js
+ ┃ ┣ 📜useMyPage.js
+ ┃ ┣ 📜useMyPlanner.js
+ ┃ ┗ 📜useProfileImage.js
+ ┣ 📂planner
+ ┃ ┣ 📂makePlanner
+ ┃ ┃ ┣ 📜MakePlanner.jsx
+ ┃ ┃ ┗ 📜MakePlanner.scss
+ ┃ ┣ 📂Map
+ ┃ ┃ ┗ 📜Map.jsx
+ ┃ ┣ 📂PlannerDate
+ ┃ ┃ ┣ 📜PlannerDate.jsx
+ ┃ ┃ ┗ 📜PlannerDate.scss
+ ┃ ┗ 📂SideBar
+ ┃ ┃ ┣ 📜SideBar.jsx
+ ┃ ┃ ┗ 📜SideBar.scss
+ ┣ 📂public
+ ┃ ┣ 📜public.css
+ ┃ ┗ 📜reset.css
+ ┣ 📂tourist
+ ┃ ┣ 📂jsonFile
+ ┃ ┃ ┗ 📜tourist.json
+ ┃ ┣ 📜Tourist.jsx
+ ┃ ┣ 📜Tourist.scss
+ ┃ ┣ 📜TouristInfo.jsx
+ ┃ ┣ 📜TouristInfo.scss
+ ┃ ┣ 📜TravelCourse.jsx
+ ┃ ┣ 📜TravelCourse.scss
+ ┃ ┣ 📜TravelCourseInfo.jsx
+ ┃ ┗ 📜TravelCourseInfo.scss
+ ┣ 📜App.css
+ ┣ 📜App.js
+ ┣ 📜index.js
+ ┗ 📜Mypage.jsx
 ```
-
 [프로젝트 경로(TREE)]
+#
+---
+#
+## ▶️ 주요 END POINT DOC
+
+| URI                           | REQUEST METHOD | DESCRIPTION        |
+|-------------------------------|----------------|--------------------|
+| /user/mypage/userupdate       | PUT            | 회원정보수정       |
+| /user/mypage/upload           | POST           | 이미지업로드       |
+| /user/mypage                  | GET            | 사용자 마이페이지  |
+| /user/mypage/my-planners      | GET            | 내 플래너 조회     |
+| /user/login                   | POST           | 로그인             |
+| /user/logout                  | POST           | 로그아웃           |
+| /user/findId                  | POST           | 아이디 찾기        |
+| /user/reset-password          | POST           | 비밀번호 찾기      |
+| /user/join                    | POST           | 회원가입           |
+| /user/send-auth-code          | POST           | 인증메일 발송      |
+| /tourist-info                 | GET            | 관광지 정보 조회   |
+| /travelcourse-info            | GET            | 여행코스 정보 조회 |
+| /planner/board                | GET            | 여행계획 조회      |
+| /planner/addPlanner           | POST           | 여행계획 생성      |
+| /planner/deletePlanner        | GET            | 여행계획 삭제      |
+| /planner/updatePlanner        | GET            | 여행계획 수정      |
+
+
+---
+
 
 ## ▶️ ERD
-<br/>
+#
 ---
 
 ## ▶️ 유스케이스 다이어그램
+![uml](https://github.com/user-attachments/assets/8e984fba-1fe3-4c18-9c55-b15d1c36361f)
 <br/>
 ---
 
@@ -331,39 +393,10 @@
 ---
 
 ## ▶️ 시퀀스 다이어그램
-<strong><p>회원가입</p></strong>
-
 <br/>
 ---
-
-
-<strong><p>비밀번호 찾기</p></strong>
-<br/>
----
-
-## ▶️ 주요 END POINT DOC
-### 회원 서비스
-| URI           | REQUEST METHOD | DESCRIPTION            |
-|---------------|----------------|------------------------|
-| -         | -               | - |
-
----
-<br/>
-
-
-
-<br/>
-
-### 게시판 서비스
-| URI                | REQUEST METHOD | DESCRIPTION                  |
-|--------------------|----------------|------------------------------|
-| -      | -                | - |
-
----
-<br/>
 
 ## 10. 프로젝트 후기
 
 
 <hr>
-
