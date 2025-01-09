@@ -41,14 +41,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.httpBasic(AbstractHttpConfigurer::disable);
-        // 폼로그인 비활성화 (jwt사용하기 위해)
-        http.formLogin(AbstractHttpConfigurer::disable);
         http.csrf(AbstractHttpConfigurer::disable);
         //CORS 설정 활성화
         http.cors((config) -> {
             corsConfigurationSource();
         });
+        http.httpBasic(AbstractHttpConfigurer::disable);
+        // 폼로그인 비활성화 (jwt사용하기 위해)
+        http.formLogin(AbstractHttpConfigurer::disable);
 
         // 정적 경로
         http.authorizeHttpRequests(auth -> auth
