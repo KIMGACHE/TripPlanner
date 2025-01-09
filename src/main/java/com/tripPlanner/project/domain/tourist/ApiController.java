@@ -10,6 +10,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "https://tripplanner.store")
 public class ApiController {
 
     private final ApiService apiService;
