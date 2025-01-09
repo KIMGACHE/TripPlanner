@@ -110,17 +110,26 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+        // 허용할 도메인들을 명시
         configuration.addAllowedOrigin("https://tripplanner.store");
         configuration.addAllowedOrigin("https://www.tripplannerbn.shop");
-        configuration.addAllowedMethod("*"); //모든 HTTP 메서드 허용 / 추후 수정
-        configuration.addAllowedHeader("*"); //모든 헤더 허용 /추후 수정
-        configuration.setAllowCredentials(true); //자격 증명 허용
-        configuration.addAllowedOriginPattern("*");
+
+        // CORS 요청을 허용할 HTTP 메서드들
+        configuration.addAllowedMethod("*"); // 모든 HTTP 메서드 허용 / 추후 수정
+
+        // CORS 요청에서 허용할 헤더들
+        configuration.addAllowedHeader("*"); // 모든 헤더 허용 / 추후 수정
+
+        // 자격 증명(쿠키 등)을 포함한 요청을 허용
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        // 모든 경로에 대해 CORS 설정을 적용
         source.registerCorsConfiguration("/**", configuration);
+
         return source;
     }
+
 
 
     @Bean
