@@ -108,14 +108,12 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.addAllowedOrigin("http://localhost:3000"); //리액트 url 허용
-        configuration.addAllowedOrigin("http://localhost:9000"); //리액트 url 허용
         configuration.addAllowedOrigin("https://tripplanner.store");
         configuration.addAllowedOrigin("https://www.tripplannerbn.shop");
         configuration.addAllowedMethod("*"); //모든 HTTP 메서드 허용 / 추후 수정
         configuration.addAllowedHeader("*"); //모든 헤더 허용 /추후 수정
         configuration.setAllowCredentials(true); //자격 증명 허용
+        configuration.addAllowedOriginPattern("*");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
