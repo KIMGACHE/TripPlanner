@@ -53,7 +53,7 @@ public class SecurityConfig {
         // 정적 경로
         http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll() //스웨거 확인용 주소
-                        .requestMatchers(HttpMethod.OPTIONS).permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/login", "/oauth2/**","/join", "/", "/board","**", "/**", "/api/search").permitAll() // 인증 없이 허용할 경로
                         .requestMatchers("/css/**", "/js/**", "image/**", "/favicon.ico").permitAll() //정적 자원 허용
                         .requestMatchers("/upload/**").permitAll()
